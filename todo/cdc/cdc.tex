@@ -1,0 +1,62 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[frenchb]{babel}
+\usepackage[top=3cm, bottom=3cm, left=3cm, right=3cm]{geometry}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{fancybox}
+
+\hypersetup{
+	colorlinks=true
+}
+
+\title{Cahier des charges pour le jeu Cancer}
+\author{Luc Chabassier <luc.linux@mailoo.org>}
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+
+\section{Introduction}
+Ce document doit servir de référence dans le dévellopement du jeu Cancer. Les techniques de gameplay seront détaillées plus bas. Dans ce jeu, vous êtes une cellule cancéreuse qui veut ralier à sa cause un maximum d'autres cellules, avec pour objectif final la domination du corp. L'idée m'est venue en regardant ce \href{http://www.jeuxvideo.com/chroniques-video/00000345/3615-usul-jeux-inde-00000217.htm}{3615 Usul}, où l'idée est exprimée par le "développeur indépendant".
+
+\section{L'histoire}
+Vous êtes une gentille cellule qui fait son travail dans le corp, entourée de ses amies cellules. Mais un jour, un méchant agent mutagène viens vous transformer en une cellule cancéreuse. À cause de votre apparence désormais repoussante, vos amies cellules vous ignorent. Vous le vivez comme une trahison et décidez de toutes les faires muter à leur tour pour leur montrer qu'à l'intérieure vous êtes la même. Pour ce faire, tous les moyens sont bon, de la création d'une nouvelle amitié à la menace en passant par la force brutale. Pour finir le jeu, il faut conquérir l'intégralité du corp. Si vous y arrivez, l'humain dans lequel vous êtes se transforme en un monstre hideux.
+
+\section{Le jeu}
+C'est dans cette section que le gameplay sera décrit en détail.
+
+\subsection{Le corp}\label{corp}
+Le corp est décomposé en différents \hyperref[organe]{organes}. Au début, le jeu se déroule dans un seul \hyperref[organe]{organe}. Une foix que vous en avez pris le contrôle, vous avez accès aux \hyperref[organe]{organes} reliés à celui que vous contrôlez par des veines ou des artères. Et ainsi de suite : pour accéder à un \hyperref[organe]{organe}, vous devez contrôler un autre \hyperref[organe]{organe} relié par un vaisseau sanguin et envoyer des agents mutagènes par ce vaisseau sanguin. Envoyer un agent mutagène n'est pas gage de réussite : plus le vaisseau sanguin est long, plus ils ont de chance de se faire arrêter par les anticorps. De plus, certains \hyperref[organe]{organes} sont mieux défendus que d'autres. Enfin, le sens du vaisseau sanguin est important : il doit aller de votre \hyperref[organe]{organe} à celui que vous ciblez pour être empruntable. Le contrôle de tous les \hyperref[organe]{organes} signifie la fin du jeu.
+
+\subsection{Un organe}\label{organe}
+Chaque organe est composé de \hyperref[cellule]{cellules}. Au départ, vous n'en possédez qu'une seule. Vous devez faire muter les autres \hyperref[cellule]{cellules}. Vous faire muter une \hyperref[cellule]{cellule}, vous devez prendre contact avec elle. Vous avez plusieurs possibilitées. D'abord, si vous êtes en contact avec elle, vous pouvez tenter le \hyperref[dialogue]{dialogue}, la \hyperref[force]{force} ou encore \hyperref[intimi]{l'intimidation}. Le principe consiste à chaque foix à faire avaler des agents mutagènes à la \hyperref[cellule]{cellule}. Ensuite, si vous êtes reliés à elle par un vaisseau sanguin qui va de vous vers elle, vous pouver tenter l'envoie de médiateur et d'agent mutagènes. Les médiateurs envoyésvont se fixer sur une \hyperref[cellule]{cellule} au hasard qui touche le vaisseau sanguin. Une foix qu'il a rejoint la \hyperref[cellule]{cellule}, vous pouvez ou tenter le \hyperref[dialogue]{dialogue} ou \hyperref[intimi]{l'intimidation}. Une foix la \hyperref[cellule]{cellule} convaincue, le médiateur va capter les agents mutagènes passant par le vaisseau sanguin jusqu'à mutation de la \hyperref[cellule]{cellule}.
+
+Pour chaque organe, vous possédez un capital en nutriments et en oxygène. Vous en gagnez en le captant aux \hyperref[cellule]{cellules} voisines et aux vaisseaux sanguins. Ce capital sert à nourrir vos \hyperref[cellule]{cellules}, à créer des agents mutagènes et à envoyer des médiateurs. Pour prendre le contrôle d'un organe, il faut contrôle plus de 90\% des \hyperref[cellule]{cellules}.
+
+\subsection{Une cellule}\label{cellule}
+Les cellules sont les unités de bases du jeu. Les cellules mutées vous appartiennent et vous devez faire muter les autres. Chaque cellule mutée consomme régulièrement un peu de nutriments, mais peu aussi en faire gagner lorsqu'elle en prend aux veines ou aux cellules non mutées. Une cellule mutée complètement entourée par des cellules mutées et qui ne touche pas de vaisseau sanguin vera sa consommation en nutriments divisée par deux. Si vous n'avez pas assez de nutriments pour toutes vos cellules, vous devez en mettre certaines en hibernation : elles ne consommeront plus rien mais ne pourront plus rien faire. Si toutes vos cellules sont en hibernation, vous avez perdu. Chaque action (créer,dialoguer...) de vos cellules consomme de l'oxygène.
+\subsubsection{Méthodes de mutation}\label{muta}
+Pour faire muter une cellule non mutée, vous devez lui faire accepter la mutation, puis lui envoyer autant d'agents mutagène que nécessaire. Pour la faire passer en état d'acceptation, vous avez trois possibilités.
+\begin{description}
+	\item[Dialogue]\label{dialogue}
+		Le dialogue consiste en une suite de mini-jeux que vous devez réussir. C'est la méthode la moins coûteuse : elle consomme juste un peu d'oxygène. Si vous ne réussissez que certains mini-jeux, cela pourra quand même faire monter le taux d'acceptation. Plus ce taux est élevé au début du dialogue, plus le dialogue le fera augmenter.
+	\item[Force]\label{force}
+		La force est une méthode très coûteuse. Elle nécessite la création d'unitée d'attaque, coûteuses en nutriments et en oxygène. De plus, elle ne fonctionne qu'avec les cellules avec lesquelles vous êtes directement en contact. Enfin, vous n'avez aucune idée de la défense de la cellule cible avant d'avoir commencé l'attaque. Tant que durera l'attaque avant les 50\% de la défense, le taux d'acceptation baissera. Au contraire, si vous dépassez ce niveau, vous ferez augmenter ce taux. Si vous brisez complètement les défenses, la cellule cible passe en d'état d'acceptation immédiatement. Attaquer une même cellule avec plusieures à la fois permet de gagner du temps, mais c'est reès coûteux.
+	\item[Intimidation]\label{intimi}
+		L'intimidation est une méthode intermédiaire. Elle consiste en l'envoit de médiateurs. Il faut en envoyer plus d'un (un seul servant à tenter le dialogue avec une cellule distante). L'intimidation ne peux pas faire baisser le taux d'acceptation. Par contre, elle est plus efficace si ce taux est faible. Plus vous envoyez de médiateurs, plus l'intimidation est efficace. Elle est aussi plus efficace sur une cellule dont la défense est entamée.
+\end{description}
+
+\section{Programmation}
+Ce jeux sera programmé en c++. Les bibliothèques utilisées seront la \href{http://www.libsdl.org/}{SDL}, \href{https://github.com/lucas8/SDLP\_sprite}{SDLP\_sprite}, \href{https://github.com/lucas8/SDLP\_position}{SDLP\_position}, \href{https://github.com/lucas8/SDLP\_tools}{SDLP\_tools}, \href{https://github.com/lucas8/SDLP\_event}{SDLP\_event}, \href{http://www.boost.org/}{boost} et \href{http://guichan.sourceforge.net/wiki/index.php/Main\_Page}{guichan}. Le versionning sera réalisé avec \href{http://git-scm.com/}{git} et le jeu sera stocké sur \href{https://github.com/}{github}. Étant moi-même sous GNU/Linux (\href{http://www.archlinux.org/}{ArchLinux} plus précisément), le jeu ne sera au départ disponible que pour cet OS. Le portage vers Windows et Mac se fera sans doute ultérieurement.
+
+\section{Conclusion}
+Ce document n'est pas encore complet. De plus, on peut imaginer de nombreuses évolutions au jeu, mais coder tout ceci représente déjà un sacré travail.
+
+\end{document}
+
+

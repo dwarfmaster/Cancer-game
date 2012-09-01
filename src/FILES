@@ -1,0 +1,10 @@
+   File 		Description
+cell.{c,h}pp	Contient la classe Cell, servant à manipuler les cellules.
+config.{c,h}pp	Contient la classe Config, contenant la configuration du jeu, obtenue à partir des fichier de conf et/ou de la ligne de commande.
+main.cpp	Contient la fonction principale du programme.
+menu.{c,h}pp	Contient la classe Menu, servant au menu principal.
+organ.{c,h}pp	Contient la classe Organ, servant à manipuler un organe.
+body.{c,h}pp	Contient la classe Body, servant à manipuler le corp.
+games.{c,h}pp	Contient la classe Games, servant à manipuler les mini-jeux.
+games/		Contient les mini-jeux.
+
