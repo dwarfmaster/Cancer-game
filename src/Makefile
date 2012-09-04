@@ -7,12 +7,17 @@ OBJS=main.o config.o cell.o organ.o body.o menu.o games.o
 GAMESDIR=games/
 GAMESOBJS=`./gamesobjs.sh $(GAMESDIR)`
 
+GRAPHICSDIR=graphics/
+GRAPHICSOBJS=`./graphicsobjs.sh $(GRAPHICSDIR)`
+
 all : $(DEST)
 
 $(DEST) : $(OBJS)
 	cd $(GAMESDIR) && make
 	cd $(GAMESDIR) && make store-objs
-	$(CC) $(CXXFLAGS)    -o $@	$^ $(GAMESOBJS) $(LDFLAGS)
+	cd $(GRAPHICSDIR) && make
+	cd $(GRAPHICSDIR) && make store-objs
+	$(CC) $(CXXFLAGS)    -o $@	$^ $(GAMESOBJS) $(GRAPHICSOBJS) $(LDFLAGS)
 
 main.o : main.cpp
 	$(CC) $(CXXFLAGS) -c -o $@	$<
