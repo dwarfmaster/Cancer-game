@@ -2,7 +2,7 @@ include ../param.mk
 include compil.mk
 
 DEST=../$(PROG)
-OBJS=main.o config.o cell.o organ.o body.o menu.o games.o
+OBJS=main.o config.o cell.o organ.o body.o menu.o games.o exception.o
 
 GAMESDIR=games/
 GAMESOBJS=`./gamesobjs.sh $(GAMESDIR)`
