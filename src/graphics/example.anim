@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<anim time="500">
+	<!-- time est donné en millisecondes (défaut : 1000). Il ne peut y avoir qu'une anim par fichier. Les chemins relatifs seront chargés par rapport au fichier. Le frame seront dans l'ordre telle qu'elles sont mises dans le fichier. -->
+	<frame>/path/to/img.png</frame>
+	<frame>/path/to/other/img.png</frame>
+</anim>
+
+
