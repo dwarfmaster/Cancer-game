@@ -6,19 +6,19 @@ else
 	VIEWER=evince
 endif
 
-all : $(DEST) $(DEST)
+all : $(NAME).$(DEST)
 
-dvi : $(NAME).tex
+$(NAME).dvi : $(NAME).tex
 	latex $<
 
-ps : dvi
+$(NAME).ps : $(NAME).dvi
 	dvips $(NAME).dvi
 
-pdf : $(NAME).tex
+$(NAME).pdf : $(NAME).tex
 	pdflatex $<
 
 view : all
-	$(VIEWER) $(NAME).$(DEST)
+	$(VIEWER) $(NAME).$(DEST) > /dev/null 2>&1
 
 clean :
 	@touch $(NAME).$(DEST)
