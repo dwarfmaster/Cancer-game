@@ -1,6 +1,6 @@
 include ../compil.mk
 
-OBJS=all.o
+OBJS=all.o model.o
 
 all : $(OBJS)
 
