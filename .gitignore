@@ -2,6 +2,12 @@
 *.o
 *.prog
 
+# gettext ignored
+*.pot
+*.po
+*.mo
+src/i18n/pot.mk
+
 # Latex ignored
 *.acn
 *.acr

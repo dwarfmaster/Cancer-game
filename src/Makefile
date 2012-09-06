@@ -10,6 +10,12 @@ GAMESOBJS=`./gamesobjs.sh $(GAMESDIR)`
 GRAPHICSDIR=graphics/
 GRAPHICSOBJS=`./graphicsobjs.sh $(GRAPHICSDIR)`
 
+POTNAME=cancer
+POTFILE=$(POTNAME).pot
+PODIR=i18n/
+POMK=$(PODIR)/pot.mk
+POINSTDIR=/usr/share/locale/
+
 all : $(DEST)
 
 $(DEST) : $(OBJS)
@@ -32,5 +38,16 @@ clean :
 
 rec : clean all
 
-.PHONY:rec clean all
+po-init :
+	mkdir -p $(PODIR)
+
+pot-gen :
+	@touch $(PODIR)/$(POTFILE)
+	@rm -r $(PODIR)/$(POTFILE)
+	xgettext -c -k_i -d cancer-game -s -o i18n/cancer.pot *.cpp $(GAMESDIR)/*.{c,h}pp $(GRAPHICSDIR)/*.{c,h}pp
+	@touch $(POMK)
+	echo -e 'NAME=$(POTNAME)' > $(POMK)
+	echo -e 'DIR=$(POINSTDIR)' >> $(POMK)
+
+.PHONY:rec clean all po-init pot-gen
 
