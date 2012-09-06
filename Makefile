@@ -1,7 +1,7 @@
 include param.mk
 
 SRCDIR=src/
-CDCDIR=todo/cdc/
+CDCDIR=cdc/
 
 all :
 	cd $(SRCDIR) && make
