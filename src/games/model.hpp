@@ -22,10 +22,10 @@ namespace games
 			virtual ~Model();
 
 			virtual void resize(const SDL_Rect&) =0; // Définit la taille de la 'fenêtre' du jeu
-			virtual SDL_Surface* update(); // Appellée à chaque frame
-			virtual SDL_Surface* getScreen(); // Sert à obtenir l'écran
+			virtual SDL_Surface* update() =0; // Appellée à chaque frame
+			virtual SDL_Surface* getScreen() =0; // Sert à obtenir l'écran
 
-			virtual void setEventReceiver(const sdl::Event* ev); // Donne le capteur d'évènements
+			virtual void setEventReceiver(const sdl::Event* ev) =0; // Donne le capteur d'évènements
 			virtual void pressMouse(const sdl::Pointsi& pos) =0; // Indique que la sourie a été pressée à cet endroit
 			virtual void releaseMouse(const sdl::Pointsi& pos) =0; // Indique que la sourie a été relachée à cet endroit
 			virtual void pressKey(const SDL_keysym& key) =0; // Indique qu'une touche a été pressée
