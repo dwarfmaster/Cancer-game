@@ -9,4 +9,6 @@ games.{c,h}pp		Contient la classe Games, servant à manipuler les mini-jeux.
 games/			Contient les mini-jeux.
 exception.{c,h}pp	Définit une exception scpécifique au programme.
 graphics/		Contient les différentes classes inhérentes à l'interface graphique.
+i18n.hpp		Contient les defines et include pour l'internationalisation.
+i18n/			Contient les fichiers de traduction.
 
