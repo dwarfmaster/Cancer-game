@@ -8,6 +8,7 @@
 #include <boost/filesystem/operations.hpp>
 #include <sstream>
 #include "../exception.hpp"
+#include "../i18n.hpp"
 
 namespace graphics
 {
@@ -70,7 +71,7 @@ namespace graphics
 		if(!file.LoadFile())
 		{
 			std::ostringstream oss;
-			oss << "Error tinyxml #" << file.ErrorId() << " while opening " << path.string() << " : \"" << file.ErrorDesc() << "\"";
+			oss << _i("Error tinyxml #") << file.ErrorId() << _i(" while opening ") << path.string() << _i(" : \"") << file.ErrorDesc() << _i("\"");
 			throw Exception( oss.str() );
 		}
 
@@ -79,7 +80,7 @@ namespace graphics
 		if( !elem )
 		{
 			std::ostringstream oss;
-			oss << "Error tinyxml while getting the anim node" << std::endl;
+			oss << _i("Error tinyxml while getting the anim node") << std::endl;
 			throw Exception( oss.str() );
 		}
 
@@ -112,7 +113,8 @@ namespace graphics
 					{
 						clear();
 						std::ostringstream oss;
-						oss << "Error while loading the picture " << imgpath.string() << " : " << IMG_GetError();
+						// Un chemin sera affiche apres picture
+						oss << _i("Error while loading the picture ") << imgpath.string() << _i(" : ") << IMG_GetError();
 						throw Exception( oss.str() );
 					}
 					else
@@ -122,7 +124,8 @@ namespace graphics
 				{
 					clear();
 					std::ostringstream oss;
-					oss << "Error with the picture " << imgpath.string() << " : is not valid";
+					// Entre picture est ':' sera affiche un chemin
+					oss << _i("Error with the picture ") << imgpath.string() << _i(" : is not valid");
 					throw Exception( oss.str() );
 				}
 			}
@@ -130,7 +133,7 @@ namespace graphics
 			{
 				clear();
 				std::ostringstream oss;
-				oss << "Error tinyxml while getting an frame node";
+				oss << _i("Error tinyxml while getting an frame node");
 				throw Exception( oss.str() );
 			}
 

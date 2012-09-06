@@ -1,6 +1,7 @@
 #include "exception.hpp"
 
 #include <SDL/SDL.h>
+#include "i18n.hpp"
 
 Exception::Exception()
 {
@@ -19,12 +20,15 @@ void Exception::set(const std::string& err, const ErrType& errt)
 	switch(errt)
 	{
 		case SDL:
-			m_err += " : ";
+			// Normalement n'a pas besoin de traduction
+			m_err += _i(" : ");
 			m_err += SDL_GetError();
-			m_err += '.';
+			// Normallement n'a pas besoin de traduction.
+			m_err += _i(".");
 			break;
 		default:
-			m_err += '.';
+			// Normallement n'a pas besoin de traduction.
+			m_err += _i(".");
 			break;
 	};
 }
