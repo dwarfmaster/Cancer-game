@@ -7,7 +7,7 @@
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <sstream>
-#include "../exception.hpp"
+#include "../core/exception.hpp"
 #include "../i18n.hpp"
 
 namespace graphics
@@ -72,7 +72,7 @@ namespace graphics
 		{
 			std::ostringstream oss;
 			oss << _i("Error tinyxml #") << file.ErrorId() << _i(" while opening ") << path.string() << _i(" : \"") << file.ErrorDesc() << _i("\"");
-			throw Exception( oss.str() );
+			throw core::Exception( oss.str() );
 		}
 
 		// On cherche l'anim
@@ -81,7 +81,7 @@ namespace graphics
 		{
 			std::ostringstream oss;
 			oss << _i("Error tinyxml while getting the anim node") << std::endl;
-			throw Exception( oss.str() );
+			throw core::Exception( oss.str() );
 		}
 
 		// On obtient le temps
@@ -115,7 +115,7 @@ namespace graphics
 						std::ostringstream oss;
 						// Un chemin sera affiche apres picture
 						oss << _i("Error while loading the picture ") << imgpath.string() << _i(" : ") << IMG_GetError();
-						throw Exception( oss.str() );
+						throw core::Exception( oss.str() );
 					}
 					else
 						m_frames.push_back(img);
@@ -126,7 +126,7 @@ namespace graphics
 					std::ostringstream oss;
 					// Entre picture est ':' sera affiche un chemin
 					oss << _i("Error with the picture ") << imgpath.string() << _i(" : is not valid");
-					throw Exception( oss.str() );
+					throw core::Exception( oss.str() );
 				}
 			}
 			else
@@ -134,7 +134,7 @@ namespace graphics
 				clear();
 				std::ostringstream oss;
 				oss << _i("Error tinyxml while getting an frame node");
-				throw Exception( oss.str() );
+				throw core::Exception( oss.str() );
 			}
 
 			elem = elem->NextSiblingElement("frame");
