@@ -124,7 +124,7 @@ namespace graphics
 				{
 					clear();
 					std::ostringstream oss;
-					// Entre picture est ':' sera affiche un chemin
+					// Après picture sera affiche un chemin
 					oss << _i("Error with the picture ") << imgpath.string() << _i(" : is not valid");
 					throw core::Exception( oss.str() );
 				}
