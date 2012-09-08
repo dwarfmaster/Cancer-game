@@ -1,6 +1,6 @@
 
-#ifndef DEF_EXCEPTION
-#define DEF_EXCEPTION
+#ifndef DEF_CORE_EXCEPTION
+#define DEF_CORE_EXCEPTION
 
 #include <exception>
 #include <string>
@@ -23,5 +23,5 @@ namespace core
 	};//class Exception
 };//namespace core
 
-#endif//DEF_EXCEPTION
+#endif//DEF_CORE_EXCEPTION
 
