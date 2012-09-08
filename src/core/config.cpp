@@ -80,7 +80,7 @@ namespace core
 		m_opts.add_options()
 			("size,s", opt::value<std::string>()->composing(), _i("Set the size of the window, like '800x600'."))
 			("fullscreen,f", _i("Launch the program in fullscreen mode."))
-			("sounds,S", opt::value<path_t>(), _i("Set the path the a sounds theme (file with .muscancer extension)."))
+			("sounds,S", opt::value<path_t>(), _i("Set the path the a sounds theme (a directory)."))
 			("config,c", opt::value<path_t>(), configDesc.c_str() )
 			;
 	}
