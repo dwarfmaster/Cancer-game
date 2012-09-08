@@ -1,6 +1,6 @@
 include ../compil.mk
 
-OBJS=exception.o config.o
+OBJS=exception.o config.o sounds.o
 
 all : $(OBJS)
 
