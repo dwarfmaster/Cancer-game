@@ -80,6 +80,19 @@ Pour faire muter une cellule non mutée, vous devez lui faire accepter la mutati
 \subsubsection{Graphiques}
 Chaque cellule est un hexagone, de couleur différente en fonction de si elle est mutée ou non. Si non, on affiche aussi son taux d'acceptation si il est supérieure à 0 et sa défense restante si elle est inférieure à 100. Son anim et son anim mutée sont définies dans des thèmes.
 
+\subsection{Sons}
+Le jeu possède deux musiques : une pour le menu et une pour le jeu lui-même. Il possède aussi un certain nombre de sons que voici (avec leurs noms) :
+\begin{description}
+	\item[ok] Son est joué lors des validations.
+	\item[cancel] Son joué lors des annulations.
+	\item[select] Son joué lors d'une sélection.
+	\item[wincel] Son joué lors de la mutation d'une cellule.
+	\item[winorg] Son joué lors de l'obtention du contrôle d'un organe.
+	\item[alert] Son joué lors d'un problème.
+	\item[hibern] Son joué lors de la mise en hibernation d'une cellule.
+\end{description}
+Les sons et musiques sont contenus dans un .muscancer qui est en fait des .tar.gz qui contient deux dossiers : un 'music' et un 'sounds'. Le 'music' contient les musiques 'game.ogg' et 'menu.ogg'. Le dossier 'sounds' contient les sons énumérés ci-dessus au format wav.
+
 \subsection{Configuration}
 Vous pouvez changer la résolution, l'état plein écran et le thème sonore.
 
@@ -89,6 +102,7 @@ Ce jeux sera programmé en c++. Les bibliothèques utilisées seront la \href{ht
 \href{http://www.gnu.org/software/gettext/}{GNU gettext} pour la traduction, 
 \href{http://www.libsdl.org/projects/SDL\_mixer/}{SDL\_mixer} pour la musique et les sons, 
 \href{http://www.boost.org/}{boost} pour les chemins de fichiers, 
+\href{https://github.com/libarchive/libarchive}{libarchive} pour archiver et comprimer des fichiers, 
 \href{http://www.grinninglizard.com/tinyxml/index.html}{tinyXml} pour les fichiers xml 
 et \href{http://guichan.sourceforge.net/wiki/index.php/Main\_Page}{guichan} pour la GUI. Le système d'animation et d'encapsulement des SDL\_Surface sera codé directement dans le jeu. Le versionning sera réalisé avec \href{http://git-scm.com/}{git} et le jeu sera hébergé sur \href{https://github.com/}{github}. Étant moi-même sous \href{https://fr.wikipedia.org/wiki/Linux}{GNU/Linux} (\href{http://www.archlinux.org/}{ArchLinux} plus précisément), le jeu ne sera au départ disponible que pour cet OS. Le portage vers Windows et Mac se fera sans doute ultérieurement.
 
