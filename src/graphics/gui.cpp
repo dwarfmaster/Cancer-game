@@ -39,6 +39,7 @@ namespace graphics
 
 		m_top = new gcn::Container;
 		m_top->setDimension( gcn::Rectangle(0, 0, m_rect->w, m_rect->h) );
+		m_top->setOpaque(false);
 		m_gui->setTop(m_top);
 	}
 	
@@ -65,6 +66,9 @@ namespace graphics
 			return false;
 
 		m_contains[name] = new InternalContainer;
+		m_contains[name]->setOpaque(true);
+		m_top->add( m_contains[name] );
+
 		return true;
 	}
 
