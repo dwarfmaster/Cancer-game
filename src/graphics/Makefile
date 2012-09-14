@@ -1,6 +1,6 @@
 include ../compil.mk
 
-OBJS=button.o anim.o internalContainer.o gui.o checkBox.o icon.o listModel.o
+OBJS=button.o anim.o internalContainer.o gui.o checkBox.o icon.o listModel.o selectListener.o
 
 all : $(OBJS)
 
