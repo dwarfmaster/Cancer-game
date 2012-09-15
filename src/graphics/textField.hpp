@@ -1,6 +1,6 @@
 
-#ifndef DEF_GRAPHICS_TEXTBOX
-#define DEF_GRAPHICS_TEXTBOX
+#ifndef DEF_GRAPHICS_TEXTFIELD
+#define DEF_GRAPHICS_TEXTFIELD
 
 #include <guichan.hpp>
 #include <boost/function.hpp>
@@ -49,5 +49,5 @@ namespace graphics
 	};//class TextField
 };//namespace graphics
 
-#endif//DEF_GRAPHICS_TEXTBOX
+#endif//DEF_GRAPHICS_TEXTFIELD
 
