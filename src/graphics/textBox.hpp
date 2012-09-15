@@ -8,13 +8,28 @@
 
 namespace graphics
 {
+	class TextBox;
+
 	namespace internal
 	{
 		class FocusListener;
+
+		class Box : public gcn::TextBox
+		{
+			public:
+				Box(graphics::TextBox* b);
+				Box(const std::string& c, graphics::TextBox* b);
+				virtual void keyPressed(gcn::KeyEvent& ev);
+
+			private:
+				graphics::TextBox* m_parent;
+		};
 	};
 
-	class TextBox : public gcn::TextBox
+	class TextBox : public gcn::ScrollArea
 	{
+		friend internal::Box;
+
 		public:
 			TextBox();
 			TextBox(const std::string& caption);
@@ -25,12 +40,16 @@ namespace graphics
 			std::string emptyMessage() const;
 
 		private:
+			internal::Box* m_text;
+
 			std::string m_message;
 			bool m_empty;
 			graphics::internal::FocusListener* m_listener;
 
+			void prepare();
 			void update();
 			void setupListener();
+			void setupText(const std::string& str);
 			void changeFocus(bool foc);
 	};//class TextBox
 };//namespace graphics
