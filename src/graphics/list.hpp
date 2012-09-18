@@ -32,7 +32,6 @@ namespace graphics
 		private:
 			internal::ListModel* m_model;
 			internal::SelectListener* m_listener;
-			cb_t m_callback;
 	};//class List
 };//namespace graphics
 
