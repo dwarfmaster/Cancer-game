@@ -143,11 +143,19 @@ namespace graphics
 		if( !m_found )
 			return;
 
-		std::string selected = m_files->getListModel()->getElementAt( m_files->getSelected() );
+		std::string selected;
+		if( m_dir )
+			selected = m_dirs->getListModel()->getElementAt( m_dirs->getSelected() );
+		else
+			selected = m_files->getListModel()->getElementAt( m_files->getSelected() );
+
 		if( selected.empty() )
 			return;
 
-		fs::path path = m_path / fs::path(selected);
+		fs::path path = m_path / selected;
+		if( m_dir )
+			path /= "/";
+
 		m_found( path.string() );
 	}
 
@@ -157,7 +165,7 @@ namespace graphics
 		if( tmp.empty() )
 			return;
 
-		m_path = m_path / fs::path(tmp);
+		m_path = m_path / tmp;
 		m_field->setText( m_path.string() );
 		update();
 	}
