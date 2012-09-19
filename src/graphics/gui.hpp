@@ -22,7 +22,7 @@ namespace gcn
 
 namespace graphics
 {
-	class InternalContainer;
+	class DeleterContainer;
 
 	class Gui
 	{
@@ -53,12 +53,12 @@ namespace graphics
 			bool hasFocus(const sdl::Pointsi& posm) const;
 
 		private:
-			std::map<std::string, InternalContainer*> m_contains;
+			std::map<std::string, DeleterContainer*> m_contains;
 			const sdl::AABB m_rect; // Position
 			mutable std::string m_current;
 
-			typedef std::map<std::string, InternalContainer*>::iterator cont_iterator;
-			typedef std::map<std::string, InternalContainer*>::const_iterator ccont_iterator;
+			typedef std::map<std::string, DeleterContainer*>::iterator cont_iterator;
+			typedef std::map<std::string, DeleterContainer*>::const_iterator ccont_iterator;
 
 			SDL_Surface* ecran;
 

@@ -1,13 +1,13 @@
 
-#include "internalContainer.hpp"
+#include "deleterContainer.hpp"
 
 namespace graphics
 {
-	InternalContainer::InternalContainer()
+	DeleterContainer::DeleterContainer()
 		: Container()
 	{}
 
-	InternalContainer::~InternalContainer()
+	DeleterContainer::~DeleterContainer()
 	{
 		WidgetList ws = mWidgets;
 		clear();

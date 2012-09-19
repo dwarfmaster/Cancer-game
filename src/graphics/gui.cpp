@@ -7,7 +7,7 @@
 #include "../i18n.hpp"
 #include "../core/exception.hpp"
 #include <sstream>
-#include "internalContainer.hpp"
+#include "deleterContainer.hpp"
 
 namespace graphics
 {
@@ -68,7 +68,7 @@ namespace graphics
 		if( exists(name) )
 			return false;
 
-		m_contains[name] = new InternalContainer;
+		m_contains[name] = new DeleterContainer;
 		m_contains[name]->setOpaque(true);
 		m_top->add( m_contains[name] );
 
