@@ -289,6 +289,9 @@ namespace graphics
 		for(fs::path::iterator it = process.begin(); it != --process.end(); ++it)
 			m_path /= *it;
 
+		if( m_path.empty() )
+			m_path = "/";
+
 		update();
 	}
 

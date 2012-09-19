@@ -16,6 +16,7 @@ namespace graphics
 	class Button;
 	class CheckBox;
 
+	// Cette classe ne gère pas bien les chemins relatifs : utilisez toujours des chemins absolus
 	class FileExplorer : public gcn::Container
 	{
 		public:
