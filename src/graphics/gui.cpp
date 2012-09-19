@@ -52,6 +52,9 @@ namespace graphics
 		delete m_input;
 		delete m_graphs;
 		delete m_loader;
+
+		for(cont_iterator it = m_contains.begin(); it != m_contains.end(); ++it)
+			delete it->second;
 	}
 
 	sdl::AABB Gui::size() const

@@ -12,7 +12,7 @@ namespace graphics
 		WidgetList ws = mWidgets;
 		clear();
 
-		for(WidgetListIterator it = mWidgets.begin(); it != mWidgets.end(); ++it)
+		for(WidgetListIterator it = ws.begin(); it != ws.end(); ++it)
 			delete *it;
 	}
 
