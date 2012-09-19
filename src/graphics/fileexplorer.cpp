@@ -38,12 +38,19 @@ namespace graphics
 
 	FileExplorer::~FileExplorer()
 	{
-		for(std::list<Widget*>::iterator it = mWidgets.begin(); it != mWidgets.end(); ++it)
-			delete *it;
-
+		delete m_field;
 		delete m_dirs;
 		if( !m_dir )
+		{
 			delete m_files;
+			delete m_scrlfile;
+		}
+
+		delete m_valid;
+		delete m_enter;
+		delete m_up;
+		delete m_call;
+		delete m_scrldir;
 	}
 
 	FileExplorer::reglist_t FileExplorer::getRegs() const
