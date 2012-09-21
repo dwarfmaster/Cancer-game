@@ -1,6 +1,7 @@
 # C++ ignored
 *.o
 *.prog
+*objs
 
 # gettext ignored
 *.pot
