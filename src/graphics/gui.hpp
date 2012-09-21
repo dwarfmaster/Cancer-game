@@ -19,17 +19,27 @@ namespace gcn
 	class Container;
 	class ImageFont;
 };
+namespace boost
+{
+	namespace filesystem
+	{
+		class path;
+	};
+};
 
 namespace graphics
 {
 	class DeleterContainer;
+	class Theme;
 
 	class Gui
 	{
 		public:
-			Gui(const sdl::AABB& size);
+			Gui(const sdl::AABB& size, const boost::filesystem::path& patht);
 			~Gui();
 			sdl::AABB size() const;
+			Theme* getTheme();
+			const Theme* getTheme() const;
 
 			bool addContainer(const std::string& name);
 			bool deleteContainer(const std::string& name);
@@ -56,6 +66,7 @@ namespace graphics
 			std::map<std::string, DeleterContainer*> m_contains;
 			const sdl::AABB m_rect; // Position
 			mutable std::string m_current;
+			Theme* m_theme;
 
 			typedef std::map<std::string, DeleterContainer*>::iterator cont_iterator;
 			typedef std::map<std::string, DeleterContainer*>::const_iterator ccont_iterator;

@@ -8,10 +8,11 @@
 #include "../core/exception.hpp"
 #include <sstream>
 #include "deleterContainer.hpp"
+#include "theme.hpp"
 
 namespace graphics
 {
-	Gui::Gui(const sdl::AABB& size)
+	Gui::Gui(const sdl::AABB& size, const boost::filesystem::path& patht)
 		: m_rect(size), ecran(NULL),
 		m_input(NULL), m_graphs(NULL), m_loader(NULL),
 		m_gui(NULL), m_top(NULL), m_font(NULL)
@@ -30,7 +31,16 @@ namespace graphics
 		m_graphs->setTarget(ecran);
 		m_input = new gcn::SDLInput;
 
-		m_font = new gcn::ImageFont("rc/font.png", " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+/():;%&`'*#=[]\""); // TODO : permettre changement dynamique du chemin de l'image
+		m_theme = new Theme(patht);
+		if( !m_theme )
+		{
+			std::ostringstream oss;
+			// Est suivit d'un chemin
+			oss << _i("Can't load graphics theme at \"") << patht.string() << _i("\"");
+			throw core::Exception( oss.str() );
+		}
+
+		m_font = m_theme->m_font;
 		gcn::Widget::setGlobalFont(m_font);
 
 		m_gui = new gcn::Gui;
@@ -63,6 +73,16 @@ namespace graphics
 		return sdl::makeRect(0, 0, rec.width, rec.height);
 	}
 
+	Theme* Gui::getTheme()
+	{
+		return m_theme;
+	}
+
+	const Theme* Gui::getTheme() const
+	{
+		return m_theme;
+	}
+
 	bool Gui::addContainer(const std::string& name)
 	{
 		if( exists(name) )
@@ -70,6 +90,7 @@ namespace graphics
 
 		m_contains[name] = new DeleterContainer;
 		m_contains[name]->setOpaque(true);
+		m_theme->applyInter( m_contains[name] );
 		m_top->add( m_contains[name] );
 
 		return true;
@@ -204,6 +225,6 @@ namespace graphics
 		}
 		return false;
 	}
-
+			
 };//namespace graphics
 
