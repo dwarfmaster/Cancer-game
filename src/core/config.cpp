@@ -16,6 +16,7 @@ namespace core
 	const char* default_path_config = "conf";
 	const char* default_path_gtheme = "default.gtheme";
 	const char* rc_dir = RCDIR;
+	const char* final_name = FNAME;
 
 	Config::Config()
 		: m_opts(_i("Allowed options"))
@@ -98,7 +99,11 @@ namespace core
 
 		const char* home = std::getenv("HOME");
 		if( home != NULL )
-			m_home = path_t(home) / ".cancer-game";
+		{
+			std::string add(".");
+			add += final_name;
+			m_home = path_t(home) / add;
+		}
 	}
 
 	sdl::AABB Config::maxSize() const
