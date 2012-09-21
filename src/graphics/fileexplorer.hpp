@@ -15,10 +15,13 @@ namespace graphics
 	class List;
 	class Button;
 	class CheckBox;
+	class Theme;
 
 	// Cette classe ne gère pas bien les chemins relatifs : utilisez toujours des chemins absolus
 	class FileExplorer : public gcn::Container
 	{
+		friend Theme;
+
 		public:
 			typedef boost::function<void (boost::filesystem::path)> cb_t;
 			typedef std::vector<std::string> reglist_t;

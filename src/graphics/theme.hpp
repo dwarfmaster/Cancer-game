@@ -18,6 +18,7 @@ namespace graphics
 	class Gui;
 	class TabbedArea;
 	class TextBox;
+	class FileExplorer;
 
 	class Theme
 	{
@@ -62,6 +63,7 @@ namespace graphics
 			{ apply(w, TAB); } 
 			void apply(graphics::TabbedArea* w);
 			void apply(graphics::TextBox* w);
+			void apply(graphics::FileExplorer* w);
 
 			void apply(gcn::Widget* w, const Types& type);
 

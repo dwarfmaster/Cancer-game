@@ -5,6 +5,11 @@
 #include "../i18n.hpp"
 #include "tabbedArea.hpp"
 #include "textBox.hpp"
+#include "fileexplorer.hpp"
+#include "textField.hpp"
+#include "list.hpp"
+#include "button.hpp"
+#include "checkBox.hpp"
 #include <sstream>
 #include <tinyxml.h>
 
@@ -148,6 +153,23 @@ namespace graphics
 	{
 		apply(w, TEXT);
 		apply(w->m_text, TEXT);
+	}
+		
+	void Theme::apply(graphics::FileExplorer* w)
+	{
+		apply(w, CONTAINER);
+		apply(w->m_field);
+		apply(w->m_dirs);
+		if( !w->m_dir )
+			apply(w->m_files);
+			
+		apply(w->m_valid);
+		apply(w->m_enter);
+		apply(w->m_up);
+		apply(w->m_call);
+		apply(w->m_scrldir);
+		if( !w->m_dir )
+			apply(w->m_scrlfile);
 	}
 
 	void Theme::apply(gcn::Widget* w, const Types& type)
