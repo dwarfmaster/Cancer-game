@@ -5,15 +5,17 @@
 #include <SDLP_tools.hpp>
 #include <string>
 #include <boost/filesystem/fstream.hpp>
+#include <boost/filesystem/operations.hpp>
 
 namespace opt = boost::program_options;
 typedef boost::filesystem::path path_t;
 
 namespace core
 {
-	const char* default_path_sounds = "/usr/share/cancer-game/default.muscancer";
-	const char* default_config_path = "/usr/share/cancer-game/conf";
-	const char* default_path_gtheme = "/usr/share/cancer-game/default.gtheme";
+	const char* default_path_sounds = "default.muscancer";
+	const char* default_path_config = "conf";
+	const char* default_path_gtheme = "default.gtheme";
+	const char* rc_dir = RCDIR;
 
 	Config::Config()
 		: m_opts(_i("Allowed options"))
@@ -41,7 +43,7 @@ namespace core
 		if( m_vm.count("config") )
 			confPath = m_vm["config"].as<path_t>();
 		else
-			confPath = default_config_path;
+			confPath = getPath(default_path_config);
 
 		boost::filesystem::ifstream file(confPath);
 		if(file)
@@ -69,7 +71,7 @@ namespace core
 		if( m_vm.count("sounds") )
 			return m_vm["sounds"].as<path_t>();
 		else
-			return default_path_sounds;
+			return getPath(default_path_sounds);
 	}
 			
 	path_t Config::gtheme() const
@@ -77,22 +79,26 @@ namespace core
 		if( m_vm.count("gtheme") )
 			return m_vm["gtheme"].as<path_t>();
 		else
-			return default_path_gtheme;
+			return getPath(default_path_gtheme);
 	}
 
 	void Config::setOpts()
 	{
 		std::string configDesc( _i("Precise a configuration file (default = ") );
-		configDesc += default_config_path;
-		configDesc += ").";
+		configDesc += getPath(default_path_config).string();
+		configDesc += _i(").");
 
 		m_opts.add_options()
 			("size,s", opt::value<std::string>()->composing(), _i("Set the size of the window, like '800x600'."))
 			("fullscreen,f", _i("Launch the program in fullscreen mode."))
-			("sounds,S", opt::value<path_t>(), _i("Set the path the a sounds theme (a directory)."))
+			("sounds,S", opt::value<path_t>(), _i("Set the path to the a sounds theme (a directory)."))
 			("config,c", opt::value<path_t>(), configDesc.c_str() )
 			("gtheme,g", opt::value<path_t>(), _i("Set the path to the graphics theme."))
 			;
+
+		const char* home = std::getenv("HOME");
+		if( home != NULL )
+			m_home = path_t(home) / ".cancer-game";
 	}
 
 	sdl::AABB Config::maxSize() const
@@ -168,6 +174,16 @@ namespace core
 			rect.h = 600;
 
 		return rect;
+	}
+			
+	boost::filesystem::path Config::getPath(boost::filesystem::path end) const
+	{
+		if( !m_home.empty()
+				&& boost::filesystem::exists(m_home) 
+				&& boost::filesystem::is_directory(m_home) )
+			return m_home / end;
+		else
+			return rc_dir / end;
 	}
 
 };//namespace core
