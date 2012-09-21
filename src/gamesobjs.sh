@@ -1,7 +1,7 @@
 #/bin/bash
 
 objs=
-files=`cat /tmp/objs`
+files=`cat games/objs`
 
 for file in $files
 do

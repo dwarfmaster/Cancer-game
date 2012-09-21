@@ -17,7 +17,7 @@ objs :
 	@echo $(OBJS)
 
 store-objs :
-	@echo $(OBJS) > /tmp/cobjs
+	@echo $(OBJS) > objs
 
 .PHONY:rec clean all objs store-objs
 

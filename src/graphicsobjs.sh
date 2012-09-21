@@ -1,7 +1,7 @@
 #/bin/bash
 
 objs=
-files=`cat /tmp/gobjs`
+files=`cat graphics/objs`
 
 for file in $files
 do

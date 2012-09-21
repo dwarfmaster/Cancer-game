@@ -1,7 +1,7 @@
 #/bin/bash
 
 objs=
-files=`cat /tmp/cobjs`
+files=`cat core/objs`
 
 for file in $files
 do
