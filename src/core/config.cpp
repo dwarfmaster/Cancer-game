@@ -13,6 +13,7 @@ namespace core
 {
 	const char* default_path_sounds = "/usr/share/cancer-game/default.muscancer";
 	const char* default_config_path = "/usr/share/cancer-game/conf";
+	const char* default_path_gtheme = "/usr/share/cancer-game/default.gtheme";
 
 	Config::Config()
 		: m_opts(_i("Allowed options"))
@@ -70,6 +71,14 @@ namespace core
 		else
 			return default_path_sounds;
 	}
+			
+	path_t Config::gtheme() const
+	{
+		if( m_vm.count("gtheme") )
+			return m_vm["gtheme"].as<path_t>();
+		else
+			return default_path_gtheme;
+	}
 
 	void Config::setOpts()
 	{
@@ -82,6 +91,7 @@ namespace core
 			("fullscreen,f", _i("Launch the program in fullscreen mode."))
 			("sounds,S", opt::value<path_t>(), _i("Set the path the a sounds theme (a directory)."))
 			("config,c", opt::value<path_t>(), configDesc.c_str() )
+			("gtheme,g", opt::value<path_t>(), _i("Set the path to the graphics theme."))
 			;
 	}
 

@@ -10,6 +10,7 @@ namespace core
 {
 	extern const char* default_path_sounds;
 	extern const char* default_config_path;
+	extern const char* default_path_gtheme;
 
 	class Config
 	{
@@ -22,6 +23,7 @@ namespace core
 			sdl::AABB size() const;
 			bool fullscreen() const;
 			boost::filesystem::path sounds() const;
+			boost::filesystem::path gtheme() const;
 
 		private:
 			boost::program_options::variables_map m_vm;
