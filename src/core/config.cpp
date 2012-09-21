@@ -181,12 +181,19 @@ namespace core
 		return rect;
 	}
 			
-	boost::filesystem::path Config::getPath(boost::filesystem::path end) const
+	path_t Config::getPath(path_t end) const
 	{
 		if( !m_home.empty()
 				&& boost::filesystem::exists(m_home) 
 				&& boost::filesystem::is_directory(m_home) )
-			return m_home / end;
+		{
+			path_t path = m_home / end;
+			if( boost::filesystem::exists(path)
+					&& !boost::filesystem::is_directory(path) )
+				return path;
+			else
+				return rc_dir / end;
+		}
 		else
 			return rc_dir / end;
 	}
