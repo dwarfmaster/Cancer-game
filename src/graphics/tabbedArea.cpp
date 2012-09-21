@@ -48,15 +48,6 @@ namespace graphics
 		return list;
 	}
 	
-	std::vector<gcn::Tab*> TabbedArea::getTabs()
-	{
-		std::vector<gcn::Tab*> list;
-		for(size_t i = 0; i < mTabs.size(); ++i)
-			list.push_back( mTabs[i].first );
-
-		return list;
-	}
-
 	bool TabbedArea::select(const std::string& name)
 	{
 		size_t idx = exists(name);

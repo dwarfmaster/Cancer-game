@@ -136,9 +136,11 @@ namespace graphics
 	{
 		apply(w, TAB);
 
-		std::vector<gcn::Tab*> tabs = w->getTabs();
-		for(size_t i = 0; i < tabs.size(); ++i)
-			apply(tabs[i], TAB);
+		for(size_t i = 0; i < w->mTabs.size(); ++i)
+			apply(w->mTabs[i].first, TAB);
+
+		apply(w->mTabContainer, TAB);
+		apply(w->mWidgetContainer, TAB);
 	}
 
 	void Theme::apply(gcn::Widget* w, const Types& type)

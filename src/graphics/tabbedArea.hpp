@@ -10,6 +10,8 @@
 
 namespace graphics
 {
+	class Theme;
+
 	class TabbedArea : public gcn::TabbedArea
 	{
 		public:
@@ -22,7 +24,6 @@ namespace graphics
 			size_t exists(const std::string& name) const; // Renvoie nbTabs() si n'existe pas, sinon renvoie l'index
 			size_t nbTabs() const;
 			std::vector<std::string> listOfTabs() const;
-			std::vector<gcn::Tab*> getTabs();
 
 			bool select(const std::string& name);
 			bool add(const std::string& name, Widget* widget);
@@ -37,6 +38,7 @@ namespace graphics
 			virtual void mousePressed(gcn::MouseEvent& ev);
 
 		private:
+			friend Theme;
 			cb_t m_callback;
 			size_t m_last;
 
