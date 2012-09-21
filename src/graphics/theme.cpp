@@ -4,6 +4,7 @@
 #include "../core/exception.hpp"
 #include "../i18n.hpp"
 #include "tabbedArea.hpp"
+#include "textBox.hpp"
 #include <sstream>
 #include <tinyxml.h>
 
@@ -141,6 +142,12 @@ namespace graphics
 
 		apply(w->mTabContainer, TAB);
 		apply(w->mWidgetContainer, TAB);
+	}
+
+	void Theme::apply(graphics::TextBox* w)
+	{
+		apply(w, TEXT);
+		apply(w->m_text, TEXT);
 	}
 
 	void Theme::apply(gcn::Widget* w, const Types& type)

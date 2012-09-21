@@ -17,6 +17,7 @@ namespace graphics
 	class DeleterContainer;
 	class Gui;
 	class TabbedArea;
+	class TextBox;
 
 	class Theme
 	{
@@ -60,6 +61,7 @@ namespace graphics
 			void apply(gcn::TabbedArea* w) // Déconseillé : utiliser graphics::TabbedArea
 			{ apply(w, TAB); } 
 			void apply(graphics::TabbedArea* w);
+			void apply(graphics::TextBox* w);
 
 			void apply(gcn::Widget* w, const Types& type);
 

@@ -9,6 +9,7 @@
 namespace graphics
 {
 	class TextBox;
+	class Theme;
 
 	namespace internal
 	{
@@ -29,6 +30,7 @@ namespace graphics
 	class TextBox : public gcn::ScrollArea
 	{
 		friend internal::Box;
+		friend Theme;
 
 		public:
 			TextBox();
