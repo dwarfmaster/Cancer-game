@@ -42,13 +42,12 @@ namespace core
 		opt::notify(m_vm);
 
 		// Lecture du fichier de conf
-		path_t confPath;
 		if( m_vm.count("config") )
-			confPath = m_vm["config"].as<path_t>();
+			m_config = m_vm["config"].as<path_t>();
 		else
-			confPath = getPath(default_path_config);
+			m_config = getPath(default_path_config);
 
-		boost::filesystem::ifstream file(confPath);
+		boost::filesystem::ifstream file(m_config);
 		if(file)
 		{
 			opt::store( opt::parse_config_file(file, m_opts), m_vm );

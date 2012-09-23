@@ -30,6 +30,7 @@ namespace core
 			boost::program_options::options_description m_desc;
 
 			boost::filesystem::path m_home;
+			boost::filesystem::path m_config; // Chemin vers le fichier de conf
 
 			unsigned char m_music, m_sounds;
 
