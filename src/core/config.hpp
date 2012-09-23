@@ -22,6 +22,7 @@ namespace core
 			boost::filesystem::path sounds() const;
 			boost::filesystem::path gtheme() const;
 
+			boost::filesystem::path getPath(boost::filesystem::path end) const;
 		private:
 			boost::program_options::variables_map m_vm;
 			boost::program_options::options_description m_opts;
@@ -31,8 +32,6 @@ namespace core
 			void setOpts();
 			sdl::AABB maxSize() const;
 			sdl::AABB parseSize(const std::string& size) const;
-
-			boost::filesystem::path getPath(boost::filesystem::path end) const;
 
 			Config(const Config& cp);
 			Config& operator=(const Config& cp);
