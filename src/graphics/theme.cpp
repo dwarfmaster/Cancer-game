@@ -24,10 +24,11 @@ namespace graphics
 	{
 		load(path);
 	}
-			
+
 	Theme::~Theme()
 	{
-		delete m_font;
+		for(size_t i = 0; i < ALL_FONTS; ++i)
+			delete m_fonts[i];
 	}
 
 	bool Theme::load(const boost::filesystem::path& path)
@@ -45,25 +46,18 @@ namespace graphics
 		if( themes.begin() == themes.end() )
 			return false;
 
-		// On fait les liens
-		TiXmlElement* elem = file.FirstChildElement("gtheme");
+		// TODO font
+		// On charge les polices
+		TiXmlElement* elem = file.FirstChildElement("fonts");
 		if( elem == NULL )
 			return false;
-
-		if( elem->Attribute("font") == NULL )
+		if( !parseFonts(elem) )
 			return false;
-		boost::filesystem::path pfont = elem->Attribute("font");
-		pfont = path.branch_path() / pfont;
 
-		std::string letters;
-		if( elem->Attribute("letters") == NULL )
-			letters = " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+/():;%&`'*#=[]\"";
-		else
-			letters = elem->Attribute("letters");
-		m_font = new gcn::ImageFont( pfont.string(), letters );
-		// DEBUG
-		if( m_font == NULL )
-			std::cout << "Breuj" << std::endl;
+		// On fait les liens
+		elem = file.FirstChildElement("gtheme");
+		if( elem == NULL )
+			return false;
 
 		boost::array<bool, LAST> inits;
 		for(size_t i = 0; i < inits.size(); ++i)
@@ -162,7 +156,7 @@ namespace graphics
 		apply(w, TEXT);
 		apply(w->m_text, TEXT);
 	}
-		
+
 	void Theme::apply(graphics::FileExplorer* w)
 	{
 		apply(w, CONTAINER);
@@ -170,7 +164,7 @@ namespace graphics
 		apply(w->m_dirs);
 		if( !w->m_dir )
 			apply(w->m_files);
-			
+
 		apply(w->m_valid);
 		apply(w->m_enter);
 		apply(w->m_up);
@@ -323,6 +317,56 @@ namespace graphics
 
 		return themes;
 	}
-	
+
+	bool Theme::parseFonts(TiXmlElement* elem)
+	{
+		boost::array<bool, ALL_FONTS> inits;
+		for(size_t i = 0; i < ALL_FONTS; ++i)
+			inits[i] = false;
+
+		elem = elem->FirstChildElement("font");
+		while( elem != NULL )
+		{
+			if( elem->Attribute("part") != NULL )
+			{
+				std::string part = elem->Attribute("part");
+				FontType idx;
+
+				if(part == "menu")
+					idx = menu;
+				else if(part == "normal")
+					idx = normal;
+				else
+					idx = ALL_FONTS;
+
+				if( idx != ALL_FONTS )
+				{
+					std::string letters;
+					if( elem->Attribute("letters") == NULL )
+						letters = " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+/():;%&`'*#=[]\"";
+					else
+						letters = elem->Attribute("letters");
+
+					if( elem->GetText() != NULL )
+					{
+						boost::filesystem::path path = elem->GetText();
+
+						if( inits[idx] )
+							delete m_fonts[idx];
+						m_fonts[idx] = new gcn::ImageFont( path.string(), letters );
+						inits[idx] = true;
+					}
+				}
+			}
+		}
+
+		for(size_t i = 0; i < ALL_FONTS; ++i)
+		{
+			if( !inits[i] )
+				return false;
+		}
+		return true;
+	}
+
 };//namespace graphics
 

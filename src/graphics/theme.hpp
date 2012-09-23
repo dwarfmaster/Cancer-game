@@ -24,6 +24,7 @@ namespace graphics
 	{
 		public:
 			enum Types{DEFAULT, GUICONT, BUTTON, CHECKBOX, RADIO, CONTAINER, LIST, TEXT, LABEL, TAB, SCROLL, SLIDER, LAST}; // LAST est réservé à un usage interne
+			enum FontType{normal, menu, ALL_FONTS};
 
 			Theme();
 			Theme(const boost::filesystem::path& path);
@@ -79,13 +80,15 @@ namespace graphics
 			boost::array<ctheme, LAST> m_links;
 			bool m_load;
 
+			// Pour l'usage interne de Gui
 			friend Gui;
-			gcn::ImageFont* m_font; // Gui peut y accéder directement
 			inline void applyInter(DeleterContainer* w)
 			{ apply(w, GUICONT); }
+			boost::array<gcn::ImageFont*, ALL_FONTS> m_fonts;
 
 			std::map<std::string, gcn::Color> parseColors(TiXmlDocument* file);
 			gcn::Color parseColor(TiXmlElement* elem);
+			bool parseFonts(TiXmlElement* elem);
 			std::map<std::string, ctheme> parseThemes(TiXmlDocument* file, const std::map<std::string,gcn::Color>& colors);
 
 	};//class Theme

@@ -27,7 +27,7 @@
 <!-- Si l'un d'entre eux est oublié ou invalide, il sera noir. -->
 <!-- On peut définir les composantes rgb de l'image directement ici ou utiliser une couleur pré utilsée -->
 
-<gtheme font="/path/to/font.png" letters=' abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'>
+<gtheme>
 	<!-- On définit la police à utiliser ci-dessus ainsi que les lettres (facultatif). /!\ : Ne permet pas de définir les caractèes " ou '. -->
 
 	<link part="default" ctheme="Global" />
@@ -49,4 +49,10 @@
 
 	<link part="guicont" ctheme="black" />
 </gtheme>
+
+<fonts>
+	<font part='menu' letters=''>/path/to/font.png</font>
+	<font part='normal' letters='' />/path/to/other/font.png</font>
+</fonts>
+<!-- On définit ici les polices à utiliser. Dans part, on indique 'menu' (le menu principal) ou 'normal' (police utilisée le reste du temps). letters contient les lettres dans l'ordre. -->
 

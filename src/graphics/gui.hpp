@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <SDLP_position.hpp>
+#include "theme.hpp"
 
 struct SDL_Surface;
 struct TTF_Font;
@@ -30,7 +31,6 @@ namespace boost
 namespace graphics
 {
 	class DeleterContainer;
-	class Theme;
 
 	class Gui
 	{
@@ -61,6 +61,8 @@ namespace graphics
 			Gui& processEvent(const SDL_Event& ev);
 			Gui& update();
 			bool hasFocus(const sdl::Pointsi& posm) const;
+
+			void setDefaultFont(const Theme::FontType& type);
 
 		private:
 			std::map<std::string, DeleterContainer*> m_contains;

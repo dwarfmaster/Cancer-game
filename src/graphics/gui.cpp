@@ -8,7 +8,6 @@
 #include "../core/exception.hpp"
 #include <sstream>
 #include "deleterContainer.hpp"
-#include "theme.hpp"
 
 namespace graphics
 {
@@ -42,7 +41,7 @@ namespace graphics
 			throw core::Exception( oss.str() );
 		}
 
-		m_font = m_theme->m_font;
+		m_font = m_theme->m_fonts[Theme::normal];
 		gcn::Widget::setGlobalFont(m_font);
 
 		m_gui = new gcn::Gui;
@@ -225,6 +224,12 @@ namespace graphics
 				return true;
 		}
 		return false;
+	}
+
+	void Gui::setDefaultFont(const Theme::FontType& type)
+	{
+		m_font = m_theme->m_fonts[type];
+		gcn::Widget::setGlobalFont(m_font);
 	}
 			
 };//namespace graphics
