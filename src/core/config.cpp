@@ -93,13 +93,33 @@ namespace core
 		configDesc += getPath(default_path_config).string();
 		configDesc += _i(").");
 
-		m_opts.add_options()
+		opt::options_description general;
+		general.add_options()
+			("config,c", opt::value<path_t>(), configDesc.c_str() )
+			("help,h", _i("Display an help message."))
+			;
+
+		opt::options_description sound;
+		sound.add_options()
+			("sounds,S", opt::value<path_t>(), _i("Set the path to the a sounds theme (a directory)."))
+			("volume,v", opt::value<unsigned char>(), _i("Set the volume of the application."))
+			;
+
+		opt::options_description graphics;
+		graphics.add_options()
 			("size,s", opt::value<std::string>()->composing(), _i("Set the size of the window, like '800x600'."))
 			("fullscreen,f", _i("Launch the program in fullscreen mode."))
-			("sounds,S", opt::value<path_t>(), _i("Set the path to the a sounds theme (a directory)."))
-			("config,c", opt::value<path_t>(), configDesc.c_str() )
 			("gtheme,g", opt::value<path_t>(), _i("Set the path to the graphics theme."))
 			;
+
+		opt::options_description hidden;
+		hidden.add_options()
+			("audio.music", opt::value<unsigned char>()->default_value(127))
+			("audio.sounds", opt::value<unsigned char>()->default_value(127))
+			;
+
+		m_desc.add(general).add(sound).add(graphics);
+		m_opts.add(general).add(sound).add(graphics).add(hidden);
 
 		const char* home = std::getenv("HOME");
 		if( home != NULL )
@@ -199,6 +219,28 @@ namespace core
 		}
 		else
 			return rc_dir / end;
+	}
+			
+	void Config::processOpts()
+	{
+		if( m_vm.count("help") )
+			std::cout << m_desc << std::endl;
+
+		if( m_vm.count("volume") )
+			m_sounds = m_music = m_vm["volume"].as<unsigned char>();
+		else
+		{
+			m_sounds = m_vm["audio.sounds"].as<unsigned char>();
+			m_music = m_vm["audio.music"].as<unsigned char>();
+		}
+	}
+	
+	unsigned char Config::volume(bool sounds) const
+	{
+		if( sounds )
+			return m_sounds;
+		else
+			return m_music;
 	}
 
 };//namespace core
