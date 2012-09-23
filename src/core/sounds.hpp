@@ -39,6 +39,8 @@ namespace core
 			void playMusic(const Music& mus);
 			void playSound(const Sound& sound);
 			void setVolume(unsigned char nvol); // 255 = max et 0 = mute : La fonction convertit toute seule vers les valeurs de SDL_Mixer
+			void setMusicVolume(unsigned char nvol);
+			void setSoundsVolume(unsigned char nvol);
 
 			void pause();
 			void unpause();
@@ -50,7 +52,8 @@ namespace core
 
 			bool isPaused() const;
 			bool isMute() const;
-			unsigned char volume() const;
+			unsigned char volumeMusic() const;
+			unsigned char volumeSounds() const;
 
 		private:
 			struct SSound
@@ -63,7 +66,8 @@ namespace core
 
 			bool m_paused;
 			bool m_mute;
-			unsigned char m_volume;
+			unsigned char m_volumeMusic;
+			unsigned char m_volumeSounds;
 			size_t m_nchannels;
 
 			void load(const boost::filesystem::path& sounds);

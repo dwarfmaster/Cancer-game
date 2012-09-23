@@ -18,7 +18,7 @@ namespace core
 	Sounds* sounds;
 
 	Sounds::Sounds(const fs::path& sounds)
-		: m_paused(true), m_mute(false), m_volume(255/2)
+		: m_paused(true), m_mute(false), m_volumeMusic(255/2), m_volumeSounds(255/2)
 	{
 		if( Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) < 0 )
 		{
@@ -76,13 +76,37 @@ namespace core
 
 	void Sounds::setVolume(unsigned char nvol)
 	{
-		m_volume = nvol;
+		m_volumeMusic = nvol;
+		m_volumeSounds = nvol;
 
 		if( !m_mute )
 		{
-			int vol = mixVol(m_volume);
+			int vol = mixVol(m_volumeMusic);
 			Mix_VolumeMusic(vol);
 
+			for(size_t i = 0; i < m_nchannels; ++i)
+				Mix_Volume(i, vol);
+		}
+	}
+			
+	void Sounds::setMusicVolume(unsigned char nvol)
+	{
+		m_volumeMusic = nvol;
+
+		if( !m_mute )
+		{
+			int vol = mixVol(m_volumeMusic);
+			Mix_VolumeMusic(vol);
+		}
+	}
+
+	void Sounds::setSoundsVolume(unsigned char nvol)
+	{
+		m_volumeSounds = nvol;
+
+		if( !m_mute )
+		{
+			int vol = mixVol(m_volumeSounds);
 			for(size_t i = 0; i < m_nchannels; ++i)
 				Mix_Volume(i, vol);
 		}
@@ -99,8 +123,10 @@ namespace core
 
 	void Sounds::unmute()
 	{
-		int vol = mixVol(m_volume);
+		int vol = mixVol(m_volumeMusic);
 		Mix_VolumeMusic(vol);
+
+		vol = mixVol(m_volumeSounds);
 		for(size_t i = 0; i < m_nchannels; ++i)
 			Mix_Volume(i, vol);
 
@@ -125,9 +151,14 @@ namespace core
 		return m_mute;
 	}
 
-	unsigned char Sounds::volume() const
+	unsigned char Sounds::volumeMusic() const
 	{
-		return m_volume;
+		return m_volumeMusic;
+	}
+			
+	unsigned char Sounds::volumeSounds() const
+	{
+		return m_volumeSounds;
 	}
 
 	struct tmpSound // Structure utilisée uniquement par la fonction ci-dessous
