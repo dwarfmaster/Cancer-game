@@ -5,12 +5,14 @@
 #include <SDL/SDL.h>
 
 #include "core/config.hpp"
+#include "core/sounds.hpp"
 #include "graphics/gui.hpp"
 
 int main(int argc, char *argv[])
 {
 	int retCode = 0;
 	core::cfg = NULL;
+	core::sounds = NULL;
 	graphics::gui = NULL;
 
 	try{
@@ -36,6 +38,9 @@ int main(int argc, char *argv[])
 
 		// On charge la gui
 		graphics::gui = new graphics::Gui(core::cfg->size(), core::cfg->gtheme());
+
+		// On charge le moteur sonore
+		core::sounds = new core::Sounds(core::cfg->sounds());
 
 		// TODO
 	}
@@ -64,6 +69,8 @@ int main(int argc, char *argv[])
 
 	if( core::cfg != NULL )
 		delete core::cfg;
+	if( core::sounds != NULL )
+		delete core::sounds;
 	if( graphics::gui != NULL )
 		delete graphics::gui;
 

@@ -15,6 +15,8 @@ namespace fs = boost::filesystem;
 
 namespace core
 {
+	Sounds* sounds;
+
 	Sounds::Sounds(const fs::path& sounds)
 		: m_paused(true), m_mute(false), m_volume(255/2)
 	{

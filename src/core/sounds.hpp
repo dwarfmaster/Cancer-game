@@ -74,6 +74,8 @@ namespace core
 			Sounds(const Sounds&);
 			Sounds& operator=(const Sounds&);
 	};//class Sounds
+
+	extern Sounds* sounds;
 };//namespace core
 
 #endif//DEF_CORE_SOUNDS
