@@ -27,6 +27,7 @@ namespace graphics
 
 			Theme();
 			Theme(const boost::filesystem::path& path);
+			~Theme();
 
 			bool load(const boost::filesystem::path& path);
 

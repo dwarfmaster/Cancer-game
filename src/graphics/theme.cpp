@@ -24,6 +24,11 @@ namespace graphics
 	{
 		load(path);
 	}
+			
+	Theme::~Theme()
+	{
+		delete m_font;
+	}
 
 	bool Theme::load(const boost::filesystem::path& path)
 	{
@@ -56,6 +61,9 @@ namespace graphics
 		else
 			letters = elem->Attribute("letters");
 		m_font = new gcn::ImageFont( pfont.string(), letters );
+		// DEBUG
+		if( m_font == NULL )
+			std::cout << "Breuj" << std::endl;
 
 		boost::array<bool, LAST> inits;
 		for(size_t i = 0; i < inits.size(); ++i)

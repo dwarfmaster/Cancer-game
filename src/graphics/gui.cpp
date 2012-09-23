@@ -34,7 +34,7 @@ namespace graphics
 		m_input = new gcn::SDLInput;
 
 		m_theme = new Theme(patht);
-		if( !m_theme )
+		if( !m_theme->isLoaded() )
 		{
 			std::ostringstream oss;
 			// Est suivit d'un chemin
@@ -57,7 +57,6 @@ namespace graphics
 	
 	Gui::~Gui()
 	{
-		delete m_font;
 		delete m_top;
 		delete m_gui;
 
