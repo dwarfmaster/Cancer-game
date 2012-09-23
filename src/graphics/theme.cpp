@@ -51,7 +51,7 @@ namespace graphics
 		TiXmlElement* elem = file.FirstChildElement("fonts");
 		if( elem == NULL )
 			return false;
-		if( !parseFonts(elem) )
+		if( !parseFonts(elem, path.branch_path()) )
 			return false;
 
 		// On fait les liens
@@ -318,7 +318,7 @@ namespace graphics
 		return themes;
 	}
 
-	bool Theme::parseFonts(TiXmlElement* elem)
+	bool Theme::parseFonts(TiXmlElement* elem, const boost::filesystem::path& base)
 	{
 		boost::array<bool, ALL_FONTS> inits;
 		for(size_t i = 0; i < ALL_FONTS; ++i)
@@ -349,7 +349,7 @@ namespace graphics
 
 					if( elem->GetText() != NULL )
 					{
-						boost::filesystem::path path = elem->GetText();
+						boost::filesystem::path path = base / elem->GetText();
 
 						if( inits[idx] )
 							delete m_fonts[idx];
@@ -358,6 +358,8 @@ namespace graphics
 					}
 				}
 			}
+
+			elem = elem->NextSiblingElement("font");
 		}
 
 		for(size_t i = 0; i < ALL_FONTS; ++i)

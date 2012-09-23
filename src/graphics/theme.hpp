@@ -88,7 +88,7 @@ namespace graphics
 
 			std::map<std::string, gcn::Color> parseColors(TiXmlDocument* file);
 			gcn::Color parseColor(TiXmlElement* elem);
-			bool parseFonts(TiXmlElement* elem);
+			bool parseFonts(TiXmlElement* elem, const boost::filesystem::path& base);
 			std::map<std::string, ctheme> parseThemes(TiXmlDocument* file, const std::map<std::string,gcn::Color>& colors);
 
 	};//class Theme
