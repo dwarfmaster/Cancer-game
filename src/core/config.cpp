@@ -60,8 +60,10 @@ namespace core
 	{
 		if( m_vm.count("size") )
 			return parseSize( m_vm["size"].as<std::string>() );
-		else
+		else if( fullscreen() )
 			return maxSize();
+		else
+			return sdl::makeRect(0, 0, 800, 600);
 	}
 
 	bool Config::fullscreen() const
