@@ -85,6 +85,8 @@ namespace graphics
 			Gui(const Gui&); // On interdit l'usage
 			Gui& operator=(const Gui&);
 	};//class Gui
+
+	extern Gui* gui;
 };//namespace graphics
 
 #endif//DEF_GRAPHICS_GUI

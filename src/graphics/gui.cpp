@@ -12,6 +12,8 @@
 
 namespace graphics
 {
+	Gui* gui;
+
 	Gui::Gui(const sdl::AABB& size, const boost::filesystem::path& patht)
 		: m_rect(size), ecran(NULL),
 		m_input(NULL), m_graphs(NULL), m_loader(NULL),

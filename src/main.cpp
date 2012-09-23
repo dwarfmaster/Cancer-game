@@ -1,42 +1,74 @@
 #include "core/exception.hpp"
-#include "core/config.hpp"
 #include "i18n.hpp"
 #include <guichan.hpp>
 #include <exception>
+#include <SDL/SDL.h>
+
+#include "core/config.hpp"
+#include "graphics/gui.hpp"
 
 int main(int argc, char *argv[])
 {
+	int retCode = 0;
+	core::cfg = NULL;
+	graphics::gui = NULL;
+
 	try{
 		// On charge la configuration
 		core::cfg = new core::Config(argc, argv);
 
-		// TODO
+		// On charge la SDL
+		if( SDL_Init(SDL_INIT_VIDEO) < 0 )
+		{
+			throw core::Exception( _i("Can't load SDL library.") );
+		}
 
-		delete core::cfg;
+		// On ouvre la fenêtre
+		sdl::AABB size = core::cfg->size();
+		Uint32 flags = SDL_DOUBLEBUF | SDL_HWSURFACE;
+		if( core::cfg->fullscreen() )
+			flags |= SDL_FULLSCREEN;
+
+		if( SDL_SetVideoMode(size->w, size->h, 24, flags) == NULL )
+		{
+			throw core::Exception( _i("Can't load the window.") );
+		}
+
+		// On charge la gui
+		graphics::gui = new graphics::Gui(core::cfg->size(), core::cfg->gtheme());
+
+		// TODO
 	}
 	catch(const core::Exception& e)
 	{
 		std::cerr << _i("A game error appened : ") << e.what() << std::endl;
-		return 1;
+		retCode =  1;
 	}
 	catch(const gcn::Exception& e)
 	{
 		std::cerr << _i("A guichan error appened : \"") << e.getMessage() 
 			// Est suivit d'un nom de fonction
 			<< _i("\" in ") << e.getFunction() << std::endl;
-		return 1;
+		retCode =  1;
 	}
 	catch(const std::exception& e)
 	{
 		std::cerr << _i("An internal error appened : ") << e.what() << std::endl;
-		return 1;
+		retCode =  1;
 	}
 	catch(...)
 	{
 		std::cerr << _i("An unknown error appened.") << std::endl;
-		return 1;
+		retCode =  1;
 	}
 
-	return 0;
+	if( core::cfg != NULL )
+		delete core::cfg;
+	if( graphics::gui != NULL )
+		delete graphics::gui;
+
+	SDL_Quit();
+
+	return retCode;
 }
 
