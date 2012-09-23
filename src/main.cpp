@@ -54,9 +54,7 @@ int main(int argc, char *argv[])
 	}
 	catch(const gcn::Exception& e)
 	{
-		std::cerr << _i("A guichan error appened : \"") << e.getMessage() 
-			// Est suivit d'un nom de fonction
-			<< _i("\" in ") << e.getFunction() << std::endl;
+		std::cerr << _i("A guichan error appened : \"") << e.getMessage() << _i("\"") << std::endl;
 		retCode =  1;
 	}
 	catch(const std::exception& e)
