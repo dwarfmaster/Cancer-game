@@ -69,10 +69,12 @@ void Menu::setGui()
 		m_gui.deleteContainer(conts[i]);
 
 	// On définit la nouvelle gui.
+	m_gui.setDefaultFont( graphics::Theme::menu );
+
 	sdl::AABB size = core::cfg->size();
 	m_gui.addContainer("menu");
 	m_gui.setCurrent("menu");
-	m_gui->setDimension( gcn::Rectangle(size->w / 2 - 100, size->h / 2 - 150, 200, 300) );
+	m_gui->setDimension( gcn::Rectangle(size->w / 2 - 200, size->h / 2 - 150, 400, 300) );
 
 	graphics::Button* load = new graphics::Button( _i("Load game") );
 	load->adjustSize();
