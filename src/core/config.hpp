@@ -37,6 +37,8 @@ namespace core
 			Config(const Config& cp);
 			Config& operator=(const Config& cp);
 	};//class Config
+
+	extern Config* cfg;
 };//namespace core
 
 #endif//DEF_CORE_CONFIG

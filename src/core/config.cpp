@@ -12,6 +12,8 @@ typedef boost::filesystem::path path_t;
 
 namespace core
 {
+	Config* cfg;
+
 	const char* default_path_sounds = "default.muscancer";
 	const char* default_path_config = "conf";
 	const char* default_path_gtheme = "default.gtheme";
