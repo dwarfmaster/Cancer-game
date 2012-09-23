@@ -27,6 +27,7 @@ class Menu
 		// Les callbacks
 		void loadGame();
 		void newGame();
+		void editOpts();
 };//class Menu
 
 #endif//DEF_MENU

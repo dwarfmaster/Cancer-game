@@ -78,17 +78,24 @@ void Menu::setGui()
 
 	graphics::Button* load = new graphics::Button( _i("Load game") );
 	load->adjustSize();
-	load->setPosition(m_gui->getWidth() / 2 - load->getWidth() / 2, m_gui->getHeight() / 2 - load->getHeight() - 40);
+	load->setPosition(m_gui->getWidth() / 2 - load->getWidth() / 2, m_gui->getHeight() / 2 - load->getHeight() - 60);
 	load->set( boost::bind(&Menu::loadGame, this) );
 	m_theme.apply(load);
 	m_gui->add(load);
 
 	graphics::Button* ngame = new graphics::Button( _i("New game") );
 	ngame->adjustSize();
-	ngame->setPosition(m_gui->getWidth() / 2 - ngame->getWidth() / 2, m_gui->getHeight() / 2 + 40);
+	ngame->setPosition(m_gui->getWidth() / 2 - ngame->getWidth() / 2, m_gui->getHeight() / 2 - ngame->getHeight() / 2);
 	ngame->set( boost::bind(&Menu::newGame, this) );
 	m_theme.apply(ngame);
 	m_gui->add(ngame);
+
+	graphics::Button* opts = new graphics::Button( _i("Options") );
+	opts->adjustSize();
+	opts->setPosition(m_gui->getWidth() / 2 - opts->getWidth() / 2, m_gui->getHeight() / 2 + 80);
+	opts->set( boost::bind(&Menu::newGame, this) );
+	m_theme.apply(opts);
+	m_gui->add(opts);
 }
 
 void Menu::loadGame()
@@ -105,6 +112,13 @@ void Menu::newGame()
 	// TODO
 }
 		
+void Menu::editOpts()
+{
+	core::sounds->playSound(core::Sounds::ok);
+	std::cout << "Edit opts !!" << std::endl; // DEBUG
+	// TODO
+}
+
 void Menu::loadBG()
 {
 	fs::path bgPath = core::cfg->getPath( menu_bg_path );
@@ -131,5 +145,4 @@ void Menu::loadBG()
 	else
 		SDL_FreeSurface(tmp);
 }
-
 
