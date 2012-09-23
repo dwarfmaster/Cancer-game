@@ -14,7 +14,7 @@ namespace core
 {
 	Config* cfg;
 
-	const char* default_path_sounds = "default.muscancer";
+	const char* default_path_sounds = "audio.d";
 	const char* default_path_config = "conf";
 	const char* default_path_gtheme = "default.gtheme";
 	const char* rc_dir = RCDIR;
