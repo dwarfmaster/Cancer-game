@@ -8,6 +8,8 @@
 #include "core/sounds.hpp"
 #include "graphics/gui.hpp"
 
+#include "menu.hpp"
+
 int main(int argc, char *argv[])
 {
 	int retCode = 0;
@@ -42,7 +44,8 @@ int main(int argc, char *argv[])
 		// On charge le moteur sonore
 		core::sounds = new core::Sounds(core::cfg->sounds());
 
-		// TODO
+		Menu menu;
+		menu.run();
 	}
 	catch(const core::Exception& e)
 	{
