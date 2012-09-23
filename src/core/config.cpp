@@ -190,8 +190,7 @@ namespace core
 				&& boost::filesystem::is_directory(m_home) )
 		{
 			path_t path = m_home / end;
-			if( boost::filesystem::exists(path)
-					&& !boost::filesystem::is_directory(path) )
+			if( boost::filesystem::exists(path) )
 				return path;
 			else
 				return rc_dir / end;
