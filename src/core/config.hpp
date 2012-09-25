@@ -21,7 +21,7 @@ namespace core
 			bool fullscreen() const;
 			boost::filesystem::path sounds() const;
 			boost::filesystem::path gtheme() const;
-			unsigned char volume(bool sounds = false) const;
+			unsigned short int volume(bool sounds = false) const;
 
 			boost::filesystem::path getPath(boost::filesystem::path end) const;
 		private:
@@ -32,7 +32,7 @@ namespace core
 			boost::filesystem::path m_home;
 			boost::filesystem::path m_config; // Chemin vers le fichier de conf
 
-			unsigned char m_music, m_sounds;
+			unsigned short int m_music, m_sounds;
 
 			void setOpts();
 			void processOpts();

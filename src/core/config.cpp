@@ -21,12 +21,13 @@ namespace core
 	const char* final_name = FNAME;
 
 	Config::Config()
-		: m_opts(_i("Allowed options"))
+		: m_desc(_i("Allowed options"))
 	{
 		setOpts();
 	}
 
 	Config::Config(int argc, char *argv[])
+		: m_desc(_i("Allowed options"))
 	{
 		setOpts();
 		load(argc, argv);
@@ -53,6 +54,8 @@ namespace core
 			opt::store( opt::parse_config_file(file, m_opts), m_vm );
 			opt::notify(m_vm);
 		}
+
+		processOpts();
 	}
 
 	sdl::AABB Config::size() const
@@ -77,7 +80,7 @@ namespace core
 		else
 			return getPath(default_path_sounds);
 	}
-			
+
 	path_t Config::gtheme() const
 	{
 		if( m_vm.count("gtheme") )
@@ -92,19 +95,22 @@ namespace core
 		configDesc += getPath(default_path_config).string();
 		configDesc += _i(").");
 
-		opt::options_description general;
+		// Options
+		opt::options_description general( _i("General") );
 		general.add_options()
 			("config,c", opt::value<path_t>(), configDesc.c_str() )
 			("help,h", _i("Display an help message."))
 			;
 
-		opt::options_description sound;
+		// Options
+		opt::options_description sound( _i("Audio") );
 		sound.add_options()
 			("sounds,S", opt::value<path_t>(), _i("Set the path to the a sounds theme (a directory)."))
-			("volume,v", opt::value<unsigned char>(), _i("Set the volume of the application."))
+			("volume,v", opt::value<unsigned short int>(), _i("Set the volume of the application."))
 			;
 
-		opt::options_description graphics;
+		// Options
+		opt::options_description graphics( _i("Graphics") );
 		graphics.add_options()
 			("size,s", opt::value<std::string>()->composing(), _i("Set the size of the window, like '800x600'."))
 			("fullscreen,f", _i("Launch the program in fullscreen mode."))
@@ -113,8 +119,8 @@ namespace core
 
 		opt::options_description hidden;
 		hidden.add_options()
-			("audio.music", opt::value<unsigned char>()->default_value(127))
-			("audio.sounds", opt::value<unsigned char>()->default_value(127))
+			("audio.music", opt::value<unsigned short int>())
+			("audio.sounds", opt::value<unsigned short int>())
 			;
 
 		m_desc.add(general).add(sound).add(graphics);
@@ -203,7 +209,7 @@ namespace core
 
 		return rect;
 	}
-			
+
 	path_t Config::getPath(path_t end) const
 	{
 		if( !m_home.empty()
@@ -219,22 +225,33 @@ namespace core
 		else
 			return rc_dir / end;
 	}
-			
+
 	void Config::processOpts()
 	{
 		if( m_vm.count("help") )
 			std::cout << m_desc << std::endl;
 
 		if( m_vm.count("volume") )
-			m_sounds = m_music = m_vm["volume"].as<unsigned char>();
+			m_sounds = m_music = m_vm["volume"].as<unsigned short int>();
 		else
 		{
-			m_sounds = m_vm["audio.sounds"].as<unsigned char>();
-			m_music = m_vm["audio.music"].as<unsigned char>();
+			if( m_vm.count("audio.sounds") )
+				m_sounds = m_vm["audio.sounds"].as<unsigned short int>();
+			else
+				m_sounds = 127;
+			if( m_sounds >= 255 )
+				m_sounds = 255;
+
+			if( m_vm.count("audio.music") )
+				m_music = m_vm["audio.music"].as<unsigned short int>();
+			else
+				m_music = 127;
+			if( m_music >= 255 )
+				m_music = 255;
 		}
 	}
-	
-	unsigned char Config::volume(bool sounds) const
+
+	unsigned short int Config::volume(bool sounds) const
 	{
 		if( sounds )
 			return m_sounds;
