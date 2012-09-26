@@ -3,6 +3,7 @@
 
 #include "core/config.hpp"
 #include "core/sounds.hpp"
+#include "core/event.hpp"
 #include "core/exception.hpp"
 #include "i18n.hpp"
 
@@ -15,13 +16,14 @@
 #include <SDL/SDL_image.h>
 #include <SDL/SDL_rotozoom.h>
 #include <SDLP_position.hpp>
-#include <SDLP_event.hpp>
 
 #include <boost/filesystem/path.hpp>
 #include <boost/bind.hpp>
 #include <sstream>
 #include <vector>
 #include <string>
+
+#include "configEditor.hpp"
 
 namespace fs = boost::filesystem;
 
@@ -40,11 +42,9 @@ void Menu::run()
 {
 	setGui();
 
-	sdl::Event ev;
-	ev.addQuitKey(SDLK_ESCAPE);
-	ev.setOnCaptedEventCallback( boost::bind(&graphics::Gui::processEvent, &m_gui, _1) );
-
+	sdl::Event& ev = *core::ev;
 	core::sounds->playMusic(core::Sounds::menu);
+
 	while( !ev.quit() )
 	{
 		ev.update();
@@ -93,7 +93,7 @@ void Menu::setGui()
 	graphics::Button* opts = new graphics::Button( _i("Options") );
 	opts->adjustSize();
 	opts->setPosition(m_gui->getWidth() / 2 - opts->getWidth() / 2, m_gui->getHeight() / 2 + 80);
-	opts->set( boost::bind(&Menu::newGame, this) );
+	opts->set( boost::bind(&Menu::editOpts, this) );
 	m_theme.apply(opts);
 	m_gui->add(opts);
 }
@@ -116,6 +116,16 @@ void Menu::editOpts()
 {
 	core::sounds->playSound(core::Sounds::ok);
 	std::cout << "Edit opts !!" << std::endl; // DEBUG
+
+	/*
+	ConfigEditor* editor = new ConfigEditor(m_bg);
+	editor->run();
+	delete editor;
+	//*/
+	ConfigEditor editor(m_bg);
+	editor.run();
+
+	setGui();
 	// TODO
 }
 

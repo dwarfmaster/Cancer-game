@@ -2,10 +2,12 @@
 #include "i18n.hpp"
 #include <guichan.hpp>
 #include <exception>
+#include <boost/bind.hpp>
 #include <SDL/SDL.h>
 
 #include "core/config.hpp"
 #include "core/sounds.hpp"
+#include "core/event.hpp"
 #include "graphics/gui.hpp"
 
 #include "menu.hpp"
@@ -15,6 +17,7 @@ int main(int argc, char *argv[])
 	int retCode = 0;
 	core::cfg = NULL;
 	core::sounds = NULL;
+	core::ev = NULL;
 	graphics::gui = NULL;
 
 	try{
@@ -43,6 +46,13 @@ int main(int argc, char *argv[])
 
 		// On charge le moteur sonore
 		core::sounds = new core::Sounds(core::cfg->sounds());
+		core::sounds->setMusicVolume( core::cfg->volume() );
+		core::sounds->setSoundsVolume( core::cfg->volume(true) );
+
+		// On charge le moteur d'évènements
+		core::ev = new sdl::Event;
+		core::ev->addQuitKey(SDLK_ESCAPE);
+		core::ev->setOnCaptedEventCallback( boost::bind(&graphics::Gui::processEvent, graphics::gui, _1) );
 
 		Menu menu;
 		menu.run();
@@ -72,6 +82,8 @@ int main(int argc, char *argv[])
 		delete core::cfg;
 	if( core::sounds != NULL )
 		delete core::sounds;
+	if( core::ev != NULL )
+		delete core::ev;
 	if( graphics::gui != NULL )
 		delete graphics::gui;
 
