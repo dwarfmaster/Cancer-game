@@ -68,7 +68,6 @@ namespace graphics
 			bool hasFocus(const sdl::Pointsi& posm) const;
 
 			void setDefaultFont(const Theme::FontType& type);
-			void clearEvents();
 
 		private:
 			std::map<std::string, DeleterContainer*> m_contains;

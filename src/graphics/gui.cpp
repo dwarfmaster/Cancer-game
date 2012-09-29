@@ -224,13 +224,5 @@ namespace graphics
 		gcn::Widget::setGlobalFont(m_font);
 	}
 
-	void Gui::clearEvents()
-	{
-		while( !m_input->isKeyQueueEmpty() )
-			m_input->dequeueKeyInput();
-		while( !m_input->isMouseQueueEmpty() )
-			m_input->dequeueMouseInput();
-	}
-			
 };//namespace graphics
 
