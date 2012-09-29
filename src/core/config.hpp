@@ -7,13 +7,18 @@
 #include <boost/program_options.hpp>
 #include <cstdlib>
 
+class configEditor;
+
 namespace core
 {
 	class Config
 	{
+		friend configEditor;
+
 		public:
 			Config();
 			Config(int argc, char *argv[]);
+			~Config();
 
 			void load(int argc, char *argv[]);
 
@@ -25,7 +30,6 @@ namespace core
 
 			boost::filesystem::path getPath(boost::filesystem::path end) const;
 		private:
-			boost::program_options::variables_map m_vm;
 			boost::program_options::options_description m_opts;
 			boost::program_options::options_description m_desc;
 
@@ -34,8 +38,14 @@ namespace core
 
 			unsigned short int m_music, m_sounds;
 
+			boost::filesystem::path m_dsounds;
+			boost::filesystem::path m_gtheme;
+
+			sdl::AABB m_size;
+			bool m_fullscreen;
+
 			void setOpts();
-			void processOpts();
+			void processOpts(const boost::program_options::variables_map& vm);
 			sdl::AABB maxSize() const;
 			sdl::AABB parseSize(const std::string& size) const;
 

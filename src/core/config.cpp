@@ -33,60 +33,54 @@ namespace core
 		load(argc, argv);
 	}
 
+	Config::~Config()
+	{}
+
 	void Config::load(int argc, char *argv[])
 	{
+		boost::program_options::variables_map vm;
+
 		// Lecture de la ligne de commande
 		opt::parsed_options parsed = opt::command_line_parser(argc, argv)
 			.options(m_opts)
 			.run();
-		opt::store(parsed, m_vm);
-		opt::notify(m_vm);
+		opt::store(parsed, vm);
+		opt::notify(vm);
 
 		// Lecture du fichier de conf
-		if( m_vm.count("config") )
-			m_config = m_vm["config"].as<path_t>();
+		if( vm.count("config") )
+			m_config = vm["config"].as<path_t>();
 		else
 			m_config = getPath(default_path_config);
 
 		boost::filesystem::ifstream file(m_config);
 		if(file)
 		{
-			opt::store( opt::parse_config_file(file, m_opts), m_vm );
-			opt::notify(m_vm);
+			opt::store( opt::parse_config_file(file, m_opts), vm );
+			opt::notify(vm);
 		}
 
-		processOpts();
+		processOpts(vm);
 	}
 
 	sdl::AABB Config::size() const
 	{
-		if( m_vm.count("size") )
-			return parseSize( m_vm["size"].as<std::string>() );
-		else if( fullscreen() )
-			return maxSize();
-		else
-			return sdl::makeRect(0, 0, 800, 600);
+		return m_size;
 	}
 
 	bool Config::fullscreen() const
 	{
-		return m_vm.count("fullscreen");
+		return m_fullscreen;
 	}
 
 	path_t Config::sounds() const
 	{
-		if( m_vm.count("sounds") )
-			return m_vm["sounds"].as<path_t>();
-		else
-			return getPath(default_path_sounds);
+		return m_dsounds;
 	}
 
 	path_t Config::gtheme() const
 	{
-		if( m_vm.count("gtheme") )
-			return m_vm["gtheme"].as<path_t>();
-		else
-			return getPath(default_path_gtheme);
+		return m_gtheme;
 	}
 
 	void Config::setOpts()
@@ -226,29 +220,49 @@ namespace core
 			return rc_dir / end;
 	}
 
-	void Config::processOpts()
+	void Config::processOpts(const boost::program_options::variables_map& vm)
 	{
-		if( m_vm.count("help") )
+		if( vm.count("help") )
 			std::cout << m_desc << std::endl;
 
-		if( m_vm.count("volume") )
-			m_sounds = m_music = m_vm["volume"].as<unsigned short int>();
+		if( vm.count("volume") )
+			m_sounds = m_music = vm["volume"].as<unsigned short int>();
 		else
 		{
-			if( m_vm.count("audio.sounds") )
-				m_sounds = m_vm["audio.sounds"].as<unsigned short int>();
+			if( vm.count("audio.sounds") )
+				m_sounds = vm["audio.sounds"].as<unsigned short int>();
 			else
 				m_sounds = 127;
 			if( m_sounds >= 255 )
 				m_sounds = 255;
 
-			if( m_vm.count("audio.music") )
-				m_music = m_vm["audio.music"].as<unsigned short int>();
+			if( vm.count("audio.music") )
+				m_music = vm["audio.music"].as<unsigned short int>();
 			else
 				m_music = 127;
 			if( m_music >= 255 )
 				m_music = 255;
 		}
+
+		if( vm.count("fullscreen") )
+			m_fullscreen = true;
+
+		if( vm.count("size") )
+			m_size = parseSize( vm["size"].as<std::string>() );
+		else if( fullscreen() )
+			m_size = maxSize();
+		else
+			m_size = sdl::makeRect(0, 0, 800, 600);
+
+		if( vm.count("sounds") )
+			m_dsounds = vm["sounds"].as<path_t>();
+		else
+			m_dsounds =  getPath(default_path_sounds);
+
+		if( vm.count("gtheme") )
+			m_gtheme = vm["gtheme"].as<path_t>();
+		else
+			m_gtheme =  getPath(default_path_gtheme);
 	}
 
 	unsigned short int Config::volume(bool sounds) const
