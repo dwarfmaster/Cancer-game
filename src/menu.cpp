@@ -35,6 +35,7 @@ Menu::Menu()
 	if( ecran == NULL )
 		throw core::Exception( _i("Can't get the video surface") );
 
+	initGui();
 	loadBG();
 }
 
@@ -48,85 +49,66 @@ void Menu::run()
 	while( !ev.quit() )
 	{
 		ev.update();
+		m_gui.update();
 
 		SDL_FillRect(ecran, NULL, SDL_MapRGB(ecran->format, 0, 0, 0));
 		SDL_BlitSurface(m_bg, NULL, ecran, NULL);
-		m_gui.update();
+		m_gui.draw();
 		SDL_Flip(ecran);
 	}
 }
 
 Menu::~Menu()
 {
+	delete load;
+	delete ngame;
+	delete opts;
+
 	SDL_FreeSurface(m_bg);
 }
 
-void Menu::setGui()
+void Menu::initGui()
 {
-	// On vide la gui
-	std::vector<std::string> conts = m_gui.listContainers();
-	for(size_t i = 0; i < conts.size(); ++i)
-		m_gui.deleteContainer(conts[i]);
-
-	// On définit la nouvelle gui.
-	m_gui.setDefaultFont( graphics::Theme::menu );
-
-	sdl::AABB size = core::cfg->size();
-	m_gui.addContainer("menu");
-	m_gui.setCurrent("menu");
-	m_gui->setDimension( gcn::Rectangle(size->w / 2 - 200, size->h / 2 - 150, 400, 300) );
-
-	graphics::Button* load = new graphics::Button( _i("Load game") );
-	load->adjustSize();
-	load->setPosition(m_gui->getWidth() / 2 - load->getWidth() / 2, m_gui->getHeight() / 2 - load->getHeight() - 60);
+	// On place les éléments.
+	load = new graphics::Button( _i("Load game") );
 	load->set( boost::bind(&Menu::loadGame, this) );
 	m_theme.apply(load);
-	m_gui->add(load);
 
-	graphics::Button* ngame = new graphics::Button( _i("New game") );
-	ngame->adjustSize();
-	ngame->setPosition(m_gui->getWidth() / 2 - ngame->getWidth() / 2, m_gui->getHeight() / 2 - ngame->getHeight() / 2);
+	ngame = new graphics::Button( _i("New game") );
 	ngame->set( boost::bind(&Menu::newGame, this) );
 	m_theme.apply(ngame);
-	m_gui->add(ngame);
 
-	graphics::Button* opts = new graphics::Button( _i("Options") );
-	opts->adjustSize();
-	opts->setPosition(m_gui->getWidth() / 2 - opts->getWidth() / 2, m_gui->getHeight() / 2 + 80);
+	opts = new graphics::Button( _i("Options") );
 	opts->set( boost::bind(&Menu::editOpts, this) );
 	m_theme.apply(opts);
-	m_gui->add(opts);
 }
 
 void Menu::loadGame()
 {
 	core::sounds->playSound(core::Sounds::ok);
 	std::cout << "Load game !!" << std::endl; // DEBUG
+	m_gui->clear();
 	// TODO
+	setGui();
 }
 
 void Menu::newGame()
 {
 	core::sounds->playSound(core::Sounds::ok);
 	std::cout << "New game !!" << std::endl; // DEBUG
+	m_gui->clear();
 	// TODO
+	setGui();
 }
 		
 void Menu::editOpts()
 {
 	core::sounds->playSound(core::Sounds::ok);
-	std::cout << "Edit opts !!" << std::endl; // DEBUG
 
-	/*
-	ConfigEditor* editor = new ConfigEditor(m_bg);
-	editor->run();
-	delete editor;
-	//*/
+	m_gui->clear();
 	ConfigEditor editor(m_bg);
 	editor.run();
-
 	setGui();
-	// TODO
 }
 
 void Menu::loadBG()
@@ -155,4 +137,33 @@ void Menu::loadBG()
 	else
 		SDL_FreeSurface(tmp);
 }
+
+void Menu::setGui()
+{
+	// On vide la gui
+	std::vector<std::string> conts = m_gui.listContainers();
+	for(size_t i = 0; i < conts.size(); ++i)
+		m_gui.deleteContainer(conts[i]);
+
+	// On rédéfinit la gui
+	m_gui.setDefaultFont( graphics::Theme::menu );
+
+	sdl::AABB size = core::cfg->size();
+	m_gui.addContainer("menu");
+	m_gui.setCurrent("menu");
+	m_gui->setDimension( gcn::Rectangle(size->w / 2 - 200, size->h / 2 - 150, 400, 300) );
+
+	load->adjustSize();
+	load->setPosition(m_gui->getWidth() / 2 - load->getWidth() / 2, m_gui->getHeight() / 2 - load->getHeight() - 60);
+	ngame->adjustSize();
+	ngame->setPosition(m_gui->getWidth() / 2 - ngame->getWidth() / 2, m_gui->getHeight() / 2 - ngame->getHeight() / 2);
+	opts->adjustSize();
+	opts->setPosition(m_gui->getWidth() / 2 - opts->getWidth() / 2, m_gui->getHeight() / 2 + 80);
+
+	m_gui->add(load);
+	m_gui->add(ngame);
+	m_gui->add(opts);
+}
+
+
 

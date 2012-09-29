@@ -7,6 +7,7 @@ namespace graphics
 {
 	class Gui;
 	class Theme;
+	class Button;
 };
 
 class Menu
@@ -23,6 +24,9 @@ class Menu
 		SDL_Surface* m_bg; // Background img
 		void loadBG();
 		SDL_Surface* ecran;
+
+		void initGui();
+		graphics::Button *load, *ngame, *opts;
 
 		// Les callbacks
 		void loadGame();
