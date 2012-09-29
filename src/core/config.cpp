@@ -15,7 +15,7 @@ namespace core
 	Config* cfg;
 
 	const char* default_path_sounds = "audio.d";
-	const char* default_path_config = "conf";
+	const char* default_path_config = "conf.cfg";
 	const char* default_path_gtheme = "default.gtheme";
 	const char* rc_dir = RCDIR;
 	const char* final_name = FNAME;
@@ -246,6 +246,8 @@ namespace core
 
 		if( vm.count("fullscreen") )
 			m_fullscreen = true;
+		else
+			m_fullscreen = false;
 
 		if( vm.count("size") )
 			m_size = parseSize( vm["size"].as<std::string>() );

@@ -7,13 +7,13 @@
 #include <boost/program_options.hpp>
 #include <cstdlib>
 
-class configEditor;
+class ConfigEditor;
 
 namespace core
 {
 	class Config
 	{
-		friend configEditor;
+		friend ConfigEditor;
 
 		public:
 			Config();
