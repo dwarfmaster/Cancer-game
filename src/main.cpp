@@ -29,6 +29,7 @@ int main(int argc, char *argv[])
 		{
 			throw core::Exception( _i("Can't load SDL library.") );
 		}
+		SDL_EnableUNICODE(SDL_ENABLE);
 
 		// On ouvre la fenêtre
 		sdl::AABB size = core::cfg->size();
