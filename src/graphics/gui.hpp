@@ -59,7 +59,12 @@ namespace graphics
 			const gcn::Container* get(const std::string& name) const;
 
 			Gui& processEvent(const SDL_Event& ev);
-			Gui& update();
+			inline Gui& update()
+			{ m_gui->logic();
+			  return *this; }
+			inline Gui& draw()
+			{ m_gui->draw();
+			  return *this; }
 			bool hasFocus(const sdl::Pointsi& posm) const;
 
 			void setDefaultFont(const Theme::FontType& type);

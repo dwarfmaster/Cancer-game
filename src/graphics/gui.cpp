@@ -205,14 +205,6 @@ namespace graphics
 		return *this;
 	}
 
-	Gui& Gui::update()
-	{
-		m_gui->logic();
-		m_gui->draw();
-
-		return *this;
-	}
-
 	bool Gui::hasFocus(const sdl::Pointsi& posm) const
 	{
 		for(ccont_iterator it = m_contains.begin(); it != m_contains.end(); ++it)
