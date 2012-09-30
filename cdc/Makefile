@@ -24,7 +24,13 @@ clean :
 	@touch $(NAME).$(DEST)
 	@rm -v `ls --ignore='*.tex' --ignore=Makefile`
 
+delete :
+	@touch $(NAME).$(DEST)
+	@rm -v $(NAME).$(DEST)
+
 rec : clean all
 
-.PHONY:all dvi ps pdf view clean all
+re : delete all
+
+.PHONY:all dvi ps pdf view clean all delete re
 

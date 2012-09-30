@@ -33,8 +33,35 @@ C'est dans cette section que le gameplay sera décrit en détail.
 \subsection{Le corp}\label{corp}
 Le corp est décomposé en différents \hyperref[organe]{organes}. Au début, le jeu se déroule dans un seul \hyperref[organe]{organe}. Une foix que vous en avez pris le contrôle, vous avez accès aux \hyperref[organe]{organes} reliés à celui que vous contrôlez par des veines ou des artères. Et ainsi de suite : pour accéder à un \hyperref[organe]{organe}, vous devez contrôler un autre \hyperref[organe]{organe} relié par un vaisseau sanguin et envoyer des agents mutagènes par ce vaisseau sanguin. Envoyer un agent mutagène n'est pas gage de réussite : plus le vaisseau sanguin est long, plus ils ont de chance de se faire arrêter par les anticorps. De plus, certains \hyperref[organe]{organes} sont mieux défendus que d'autres. Enfin, le sens du vaisseau sanguin est important : il doit aller de votre \hyperref[organe]{organe} à celui que vous ciblez pour être empruntable. Le contrôle de tous les \hyperref[organe]{organes} signifie la fin du jeu.
 
+\subsubsection{Liste d'\hyperref[organe]{organes}}
+Les \hyperref[organe]{organes} utilisés seront :
+\begin{itemize}
+	\item Cerveau (\emph{brain})
+	\item Cœur (\emph{heart})
+	\item Poumons (\emph{lung})
+	\item Foie (\emph{liver})
+	\item Rein (\emph{kidney})
+	\item Système Digestif (\emph{digestive})
+\end{itemize}
+
+\subsubsection{Graphiques}
+Le corp est un schéma dans lequel apparaissent les organes et les liens les unissants (les veines et artères).
+
+\subsubsection{Sélection}
+Un organe sélectionné est entouré de couleur. Les colision se font au pixel près en se basant sur le masque alpha des images.
+
+\subsubsection{Chargement}
+Le corp est une image du nom \emph{corpse.png}. Chaque organe est constitué de trois images : une quand il est contrôlé, une quand il est contaminé et une quand il est sain. Chaque image doit faire la même taille que celle du corp, mais son fond doit être transparent. Les nom des images doivent être \emph{organe/état.png}, avec état qui peut valoir \emph{control}, \emph{sick} et \emph{healthy}. Il y a donc un dossier par organe.
+Par exemple, pour le \emph{cerveau}, on aura :
+\begin{verbatim}
+brain/control.png
+brain/sick.png
+brain/healthy.png
+\end{verbatim}
+Tout ceci est placé dans un dossier (\emph{organes/} par défaut).
+
 \subsection{Un organe}\label{organe}
-Chaque organe est composé de \hyperref[cellule]{cellules}. Au départ, vous n'en possédez qu'une seule. Vous devez faire muter les autres \hyperref[cellule]{cellules}. Vous faire muter une \hyperref[cellule]{cellule}, vous devez prendre contact avec elle. Vous avez plusieurs possibilitées. D'abord, si vous êtes en contact avec elle, vous pouvez tenter le \hyperref[dialogue]{dialogue}, la \hyperref[force]{force} ou encore \hyperref[intimi]{l'intimidation}. Le principe consiste à chaque foix à faire avaler des agents mutagènes à la \hyperref[cellule]{cellule}. Ensuite, si vous êtes reliés à elle par un vaisseau sanguin qui va de vous vers elle, vous pouver tenter l'envoie de médiateur et d'agent mutagènes. Les médiateurs envoyésvont se fixer sur une \hyperref[cellule]{cellule} au hasard qui touche le vaisseau sanguin. Une foix qu'il a rejoint la \hyperref[cellule]{cellule}, vous pouvez ou tenter le \hyperref[dialogue]{dialogue} ou \hyperref[intimi]{l'intimidation}. Une foix la \hyperref[cellule]{cellule} convaincue, le médiateur va capter les agents mutagènes passant par le vaisseau sanguin jusqu'à mutation de la \hyperref[cellule]{cellule}.
+Chaque organe est composé de \hyperref[cellule]{cellules}. Au départ, vous n'en possédez qu'une seule. Vous devez faire muter les autres \hyperref[cellule]{cellules}. Vous faire muter une \hyperref[cellule]{cellule}, vous devez prendre contact avec elle. Vous avez plusieurs possibilitées. D'abord, si vous êtes en contact avec elle, vous pouvez tenter le \hyperref[dialogue]{dialogue}, la \hyperref[force]{force} ou encore \hyperref[intimi]{l'intimidation}. Le principe consiste à chaque foix à faire avaler des agents mutagènes à la \hyperref[cellule]{cellule}. Ensuite, si vous êtes reliés à elle par un vaisseau sanguin qui va de vous vers elle, vous pouver tenter l'envoie de médiateur et d'agent mutagènes. Les médiateurs envoyés vont se fixer sur une \hyperref[cellule]{cellule} au hasard qui touche le vaisseau sanguin. Une foix qu'il a rejoint la \hyperref[cellule]{cellule}, vous pouvez ou tenter le \hyperref[dialogue]{dialogue} ou \hyperref[intimi]{l'intimidation}. Une foix la \hyperref[cellule]{cellule} convaincue, le médiateur va capter les agents mutagènes passant par le vaisseau sanguin jusqu'à mutation de la \hyperref[cellule]{cellule}.
 
 Pour chaque organe, vous possédez un capital en nutriments et en oxygène. Vous en gagnez en le captant aux \hyperref[cellule]{cellules} voisines et aux vaisseaux sanguins. Ce capital sert à nourrir vos \hyperref[cellule]{cellules}, à créer des agents mutagènes et à envoyer des médiateurs. Pour prendre le contrôle d'un organe, il faut contrôle plus de 90\% des \hyperref[cellule]{cellules}.
 
