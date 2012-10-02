@@ -15,4 +15,5 @@ rec :
 cdc :
 	cd $(CDCDIR) && make view > /dev/null 2>&1 &
 
+.PHONY:all clean rec cdc
 
