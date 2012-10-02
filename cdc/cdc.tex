@@ -51,6 +51,7 @@ Le corp est un schéma dans lequel apparaissent les organes et les liens les uni
 Un organe sélectionné est entouré de couleur. Les colision se font au pixel près en se basant sur le masque alpha des images.
 
 \subsubsection{Chargement}
+\paragraph{Les organes}
 Le corp est une image du nom \emph{corpse.png}. Chaque organe est constitué de trois images : une quand il est contrôlé, une quand il est contaminé et une quand il est sain. Chaque image doit faire la même taille que celle du corp, mais son fond doit être transparent. Les nom des images doivent être \emph{organe/état.png}, avec état qui peut valoir \emph{control}, \emph{sick} et \emph{healthy}. Il y a donc un dossier par organe.
 Par exemple, pour le \emph{cerveau}, on aura :
 \begin{verbatim}
@@ -59,6 +60,14 @@ brain/sick.png
 brain/healthy.png
 \end{verbatim}
 Tout ceci est placé dans un dossier (\emph{organs/} par défaut).
+\paragraph{Les vaisseaux sanguins}
+Chaque vaisseau sanguin est constitué d'un fichier de type \emph{cfg}. Ce fichier doit porter l'extension \textbf{vessel} et être situé dans le dossier \emph{organs/vessels}. Il doit indiquer le chemin vers l'image à utiliser (image de même taille que le corp, avec fond transparent), l'organe d'origine du vaisseau ainsi que l'organe de destination et enfin la longueur du vaisseau en centimètres. Par exemple, un fichier pourrait être :
+\begin{verbatim}
+picture=path/to/picture.png
+origin=brain
+destination=heart
+length=50
+\end{verbatim}
 
 \subsection{Un organe}\label{organe}
 Chaque organe est composé de \hyperref[cellule]{cellules}. Au départ, vous n'en possédez qu'une seule. Vous devez faire muter les autres \hyperref[cellule]{cellules}. Vous faire muter une \hyperref[cellule]{cellule}, vous devez prendre contact avec elle. Vous avez plusieurs possibilitées. D'abord, si vous êtes en contact avec elle, vous pouvez tenter le \hyperref[dialogue]{dialogue}, la \hyperref[force]{force} ou encore \hyperref[intimi]{l'intimidation}. Le principe consiste à chaque foix à faire avaler des agents mutagènes à la \hyperref[cellule]{cellule}. Ensuite, si vous êtes reliés à elle par un vaisseau sanguin qui va de vous vers elle, vous pouver tenter l'envoie de médiateur et d'agent mutagènes. Les médiateurs envoyés vont se fixer sur une \hyperref[cellule]{cellule} au hasard qui touche le vaisseau sanguin. Une foix qu'il a rejoint la \hyperref[cellule]{cellule}, vous pouvez ou tenter le \hyperref[dialogue]{dialogue} ou \hyperref[intimi]{l'intimidation}. Une foix la \hyperref[cellule]{cellule} convaincue, le médiateur va capter les agents mutagènes passant par le vaisseau sanguin jusqu'à mutation de la \hyperref[cellule]{cellule}.
