@@ -26,6 +26,7 @@ namespace core
 			bool fullscreen() const;
 			boost::filesystem::path sounds() const;
 			boost::filesystem::path gtheme() const;
+			boost::filesystem::path organs() const;
 			unsigned short int volume(bool sounds = false) const;
 
 			boost::filesystem::path getPath(boost::filesystem::path end) const;
@@ -40,6 +41,7 @@ namespace core
 
 			boost::filesystem::path m_dsounds;
 			boost::filesystem::path m_gtheme;
+			boost::filesystem::path m_organs;
 
 			sdl::AABB m_size;
 			bool m_fullscreen;

@@ -17,6 +17,7 @@ namespace core
 	const char* default_path_sounds = "audio.d";
 	const char* default_path_config = "conf.cfg";
 	const char* default_path_gtheme = "default.gtheme";
+	const char* default_path_organs = "organs";
 	const char* rc_dir = RCDIR;
 	const char* final_name = FNAME;
 
@@ -97,6 +98,12 @@ namespace core
 			;
 
 		// Options
+		opt::options_description game( _i("Game") );
+		game.add_options()
+			("organs,G", opt::value<path_t>(), _i("Set the path to the organs directory."))
+			;
+
+		// Options
 		opt::options_description sound( _i("Audio") );
 		sound.add_options()
 			("sounds,S", opt::value<path_t>(), _i("Set the path to the a sounds theme (a directory)."))
@@ -117,8 +124,8 @@ namespace core
 			("audio.sounds", opt::value<unsigned short int>())
 			;
 
-		m_desc.add(general).add(sound).add(graphics);
-		m_opts.add(general).add(sound).add(graphics).add(hidden);
+		m_desc.add(general).add(sound).add(graphics).add(game);
+		m_opts.add(general).add(sound).add(graphics).add(game).add(hidden);
 
 		const char* home = std::getenv("HOME");
 		if( home != NULL )
@@ -127,6 +134,11 @@ namespace core
 			add += final_name;
 			m_home = path_t(home) / add;
 		}
+	}
+			
+	path_t Config::organs() const
+	{
+		return m_organs;
 	}
 
 	sdl::AABB Config::maxSize() const
@@ -264,7 +276,12 @@ namespace core
 		if( vm.count("gtheme") )
 			m_gtheme = vm["gtheme"].as<path_t>();
 		else
-			m_gtheme =  getPath(default_path_gtheme);
+			m_gtheme = getPath(default_path_gtheme);
+
+		if( vm.count("organs") )
+			m_organs = vm["organs"].as<path_t>();
+		else
+			m_organs = getPath(default_path_organs);
 	}
 
 	unsigned short int Config::volume(bool sounds) const
