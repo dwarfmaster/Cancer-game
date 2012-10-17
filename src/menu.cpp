@@ -1,5 +1,6 @@
 
 #include "menu.hpp"
+#include "body.hpp"
 
 #include "core/config.hpp"
 #include "core/sounds.hpp"
@@ -97,7 +98,12 @@ void Menu::newGame()
 	core::sounds->playSound(core::Sounds::ok);
 	std::cout << "New game !!" << std::endl; // DEBUG
 	m_gui->clear();
-	// TODO
+
+	// DEBUG TODO
+	Body* b = new Body;
+	b->run();
+	delete b;
+
 	setGui();
 }
 		
