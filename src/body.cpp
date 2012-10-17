@@ -43,6 +43,13 @@ namespace fs = boost::filesystem;
 		throw core::Exception( oss.str() );
 	}
 
+	for(size_t i = 0; i < m_orgs.size(); ++i)
+	{
+		m_orgs[i].healthy = NULL;
+		m_orgs[i].sick = NULL;
+		m_orgs[i].control = NULL;
+	}
+
 	load();
 }
 
