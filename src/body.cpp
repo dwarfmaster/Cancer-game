@@ -8,19 +8,33 @@
 
 #include "i18n.hpp"
 #include "core/exception.hpp"
+#include "core/sounds.hpp"
+#include "core/config.hpp"
+
 #include <sstream>
 #include <map>
+#include <iostream> // TODO supprimer
 
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/convenience.hpp>
 #include <boost/regex.hpp>
+#include <boost/bind.hpp>
+
+#include "graphics/theme.hpp"
+#include "graphics/gui.hpp"
+#include "graphics/deleterContainer.hpp"
+#include "graphics/button.hpp"
 
 namespace fs = boost::filesystem;
 
 	Body::Body()
-: m_selected(ALLORGS), m_corpse(NULL), ecran(SDL_GetVideoSurface())
+: m_selected(ALLORGS), m_veselected(NULL), m_corpse(NULL), 
+	m_top(NULL),
+	m_gvessels(NULL), m_gvessrc(NULL), m_gvessrct(NULL), m_gvesdest(NULL), m_gvesdestt(NULL), m_gvesthrow(NULL),
+	m_gorgans(NULL), m_gorgtitle(NULL), m_gorgname(NULL), m_gorgst(NULL), m_gorgstate(NULL), m_gorgenter(NULL),
+	ecran(SDL_GetVideoSurface())
 {
 	if( ecran == NULL )
 	{
@@ -52,6 +66,13 @@ Body::~Body()
 
 	if( m_corpse != NULL )
 		SDL_FreeSurface(m_corpse);
+
+	if( m_top != NULL )
+		delete m_top;
+	if( m_gvessels != NULL )
+		delete m_gvessels;
+	if( m_gorgans != NULL )
+		delete m_gorgans;
 }
 
 void Body::run()
@@ -272,6 +293,53 @@ Body::Vessel Body::loadVessel(const fs::path& path, double fact)
 
 void Body::load()
 {
+	// On charge l'image du corp
+	fs::path rcdir = core::cfg->organs();
+
+	fs::path cpath = rcdir / "corpse.png";
+	m_corpse = IMG_Load( cpath.string().c_str() );
+	if( m_corpse == NULL )
+	{
+		std::ostringstream oss;
+		oss << _i("Error while loading the picture \"") << cpath.string() << _i("\" : \"") << SDL_GetError() << _i("\"");
+		throw core::Exception( oss.str() );
+	}
+
+	double f1 = (double)ecran->w / (double)m_corpse->w;
+	double f2 = (double)ecran->h / (double)m_corpse->h;
+	double fact = (f1 > f2) ? f1 : f2;
+
+	SDL_Surface* zoom = zoomSurface(m_corpse, fact, fact, SMOOTHING_ON);
+	if( zoom == NULL )
+	{
+		std::ostringstream oss;
+		oss << _i("Error while resizing the picture ") << cpath.string();
+		throw core::Exception( oss.str() );
+	}
+	SDL_FreeSurface(m_corpse);
+
+	m_corpse = SDL_DisplayFormatAlpha(zoom);
+	if( m_corpse == NULL )
+	{
+		std::ostringstream oss;
+		oss << _i("Error while adapting the picture ") << cpath.string() << _i(": \"") << SDL_GetError() << _i("\"");
+		throw core::Exception( oss.str() );
+	}
+	SDL_FreeSurface(zoom);
+
+	// On charge les organes
+	for(size_t i = 0; i < ALLORGS; ++i)
+	{
+		fs::path orgpath = rcdir / organToStr( static_cast<Organs>(i) );
+		loadOrgan(orgpath, fact);
+	}
+	
+	// On charge les vaisseaux sanguins
+	loadVessels(rcdir / "vessels", fact);
+	
+	// On charge la GUI
+	initGui();
+	setGui();
 }
 
 void Body::clic(const sdl::Pointsi& pos)
@@ -282,14 +350,141 @@ void Body::draw()
 {
 }
 
+void Body::selectOrgan(const Organs& org)
+{
+}
+
+void Body::selectVessel(Vessel* s)
+{
+}
+
 void Body::setGui()
 {
+	graphics::Gui& gui = *graphics::gui;
+
+	// On vide la précédente gui
+	std::vector<std::string> conts = gui.listContainers();
+	for(size_t i = 0; i < conts.size(); ++i)
+		gui.deleteContainer(conts[i]);
+
+	// On crée la nouvelle gui
+	size_t width, height;
+	width = ecran->w / 5;
+	height = ecran->h - 20;
+
+	gui.setDefaultFont( graphics::Theme::normal );
+	gui.addContainer("body");
+	gui.setCurrent("body");
+	gui->setDimension( gcn::Rectangle(ecran->w - width - 10, 10, width, height) );
+
+	m_top->setDimension( gcn::Rectangle(0, 0, width, height) );
+	gui->add(m_top);
+
+	// On place la gui pour organe
+	size_t y = 10;
+	m_gorgans->setDimension( gcn::Rectangle(0, 0, width, height) );
+
+	m_gorgtitle->adjustSize();
+	m_gorgtitle->setPosition(5, y);
+	y += m_gorgtitle->getHeight();
+	m_gorgname->adjustSize();
+	m_gorgname->setPosition(20, y);
+	y += m_gorgname->getHeight();
+
+	y += 10;
+	m_gorgst->adjustSize();
+	m_gorgst->setPosition(5, y);
+	y += m_gorgst->getHeight();
+	m_gorgstate->adjustSize();
+	m_gorgstate->setPosition(20, y);
+
+	m_gorgenter->adjustSize();
+	y = m_top->getHeight() - m_gorgenter->getHeight(); y -= 5;
+	m_gorgenter->setPosition( m_top->getWidth() - m_gorgenter->getWidth() - 5, y );
+
+	// On place la gui pour les vaisseaux sanguins
+	y = 10;
+	m_gvessels->setDimension( gcn::Rectangle(0, 0, width, height) );
+
+	m_gvessrct->adjustSize();
+	m_gvessrct->setPosition(5, y);
+	y += m_gvessrct->getHeight();
+	m_gvessrc->adjustSize();
+	m_gvessrc->setPosition(20, y);
+	y += m_gvessrc->getHeight();
+
+	y += 10;
+	m_gvesdestt->adjustSize();
+	m_gvesdestt->setPosition(5, y);
+	y += m_gvesdestt->getHeight();
+	m_gvesdest->adjustSize();
+	m_gvesdest->setPosition(20, y);
+
+	m_gvesthrow->adjustSize();
+	y = m_top->getHeight() - m_gvesthrow->getHeight(); y -= 5;
+	m_gvesthrow->setPosition( m_top->getWidth() - m_gvesthrow->getWidth() - 5, y );
+
+	// On choisit ce qu'on affiche
+	m_top->clear();
+	if( m_selected != ALLORGS )
+		m_top->add(m_gorgans);
+	else if( m_veselected != NULL )
+		m_top->add(m_gvessels);
+}
+
+void Body::initGui()
+{
+	graphics::Theme& theme = *graphics::gui->getTheme();
+
+	m_top = new gcn::Container;
+	theme.apply(m_top);
+
+	// Création de la gui d'un organe
+	m_gorgans = new graphics::DeleterContainer;
+	m_gorgtitle = new graphics::Label( _i("Organ :") );
+	m_gorgname = new graphics::Label;
+	m_gorgst = new graphics::Label( _i("State :") );
+	m_gorgstate = new graphics::Label;
+	m_gorgenter = new graphics::Button( _i("Enter"), boost::bind(&Body::enter, this));
+
+	m_gorgans->add(m_gorgtitle);
+	m_gorgans->add(m_gorgname);
+	m_gorgans->add(m_gorgst);
+	m_gorgans->add(m_gorgstate);
+	m_gorgans->add(m_gorgenter);
+
+	theme.apply(m_gorgans);
+	theme.apply(m_gorgtitle);
+	theme.apply(m_gorgname);
+	theme.apply(m_gorgst);
+	theme.apply(m_gorgstate);
+	theme.apply(m_gorgenter);
+
+	// Création de la gui d'un vaisseau
+	m_gvessels = new graphics::DeleterContainer;
+	m_gvessrct = new graphics::Label( _i("Origin :") );
+	m_gvessrc = new graphics::Label;
+	m_gvesdestt = new graphics::Label( _i("Destination :") );
+	m_gvesdest = new graphics::Label;
+	m_gvesthrow = new graphics::Button( _i("Throw"), boost::bind(&Body::vesthrow, this));
+
+	m_gvessels->add(m_gvessrct);
+	m_gvessels->add(m_gvessrc);
+	m_gvessels->add(m_gvesdestt);
+	m_gvessels->add(m_gvesdest);
+	m_gvessels->add(m_gvesthrow);
+
+	theme.apply(m_gvessrct);
+	theme.apply(m_gvessrc);
+	theme.apply(m_gvesdestt);
+	theme.apply(m_gvesdest);
+	theme.apply(m_gvesthrow);
 }
 
 Body::Organs Body::strToOrgan(const std::string& s)
 {
 	Organs ret;
-	
+
 	if( s == "brain" )
 		ret = brain;
 	else if( s == "heart" )
@@ -307,4 +502,42 @@ Body::Organs Body::strToOrgan(const std::string& s)
 
 	return ret;
 }
+
+std::string Body::organToStr(const Organs& org)
+{
+	switch(org)
+	{
+		case brain:
+			return "brain";
+		case heart:
+			return "heart";
+		case lung:
+			return "lung";
+		case liver:
+			return "liver";
+		case kidney:
+			return "kidney";
+		case digestive:
+			return "digestive";
+		case ALLORGS:
+			return "alls";
+		default:
+			return "error";
+	}
+}
+
+void Body::enter()
+{
+	core::sounds->playSound( core::Sounds::ok );
+	// TODO
+	std::cout << "Enter !!" << std::endl;
+}
+
+void Body::vesthrow()
+{
+	core::sounds->playSound( core::Sounds::ok );
+	// TODO
+	std::cout << "Vesthrow called !!" << std::endl;
+}
+
 
