@@ -79,7 +79,7 @@ void Menu::initGui()
 	ngame->set( boost::bind(&Menu::newGame, this) );
 	m_theme.apply(ngame);
 
-	opts = new graphics::Button( _i("Options") );
+	opts = new graphics::Button( _i("Settings") );
 	opts->set( boost::bind(&Menu::editOpts, this) );
 	m_theme.apply(opts);
 }
