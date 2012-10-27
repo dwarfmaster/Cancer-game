@@ -10,6 +10,7 @@
 #include "core/exception.hpp"
 #include "core/sounds.hpp"
 #include "core/config.hpp"
+#include "core/event.hpp"
 
 #include <sstream>
 #include <map>
@@ -29,8 +30,8 @@
 
 namespace fs = boost::filesystem;
 
-	Body::Body()
-: m_selected(ALLORGS), m_veselected(NULL), m_corpse(NULL), 
+	Body::Body(SDL_Surface* bg)
+: m_selected(ALLORGS), m_veselected(NULL), m_corpse(NULL), m_bg(bg),
 	m_top(NULL),
 	m_gvessels(NULL), m_gvessrc(NULL), m_gvessrct(NULL), m_gvesdest(NULL), m_gvesdestt(NULL), m_gvesthrow(NULL),
 	m_gorgans(NULL), m_gorgtitle(NULL), m_gorgname(NULL), m_gorgst(NULL), m_gorgstate(NULL), m_gorgenter(NULL),
@@ -84,6 +85,22 @@ Body::~Body()
 
 void Body::run()
 {
+	// TODO
+	// tmp
+	
+	sdl::Event& event = *core::ev;
+	event.setOnPressedButtonCallback( boost::bind(&Body::clic, this, _2) );
+
+	while( !event.quit() )
+	{
+		event.update();
+		graphics::gui->update();
+
+		draw();
+		SDL_Delay(1000/30);
+	}
+
+	event.clearOnPressedButtonCallback();
 }
 
 SDL_Surface* Body::loadPicture(const boost::filesystem::path& path, double fact)
@@ -157,6 +174,9 @@ Body::Organ Body::loadOrgan(const fs::path& dir, double fact)
 		throw e;
 	}
 
+	// TODO : à retravailler
+	org.state = Organ::SICK;
+
 	return org;
 }
 
@@ -168,7 +188,7 @@ void Body::loadVessels(const fs::path& dir, double fact)
 		if( fs::exists(*fit)
 				&& !fs::is_directory(*fit)
 				&& fs::extension(*fit) == ".vessel" )
-			loadVessel(*fit, fact);
+			m_vessels.push_back(loadVessel(*fit, fact));
 	}
 }
 
@@ -212,7 +232,8 @@ Body::Vessel Body::loadVessel(const fs::path& path, double fact)
 		if( line.find_first_not_of(' ') != line.npos )
 		{
 			// On vérifie la validité de la ligne
-			boost::regex reg("[[:word:]]*([[:blank:]]*|)=([[:blank:]]|)*[[:word:]]*([[:space:]]*|)");
+			boost::regex reg("[[:word:]]*([[:blank:]]*|)=([[:blank:]]*|)([[:word:]]|\\\\|\\.|/)*([[:space:]]*|)");
+
 			if( regex_match(line, reg) )
 			{
 				// Position '='
@@ -248,8 +269,8 @@ Body::Vessel Body::loadVessel(const fs::path& path, double fact)
 	}
 	else
 	{
-		fs::path path = map["picture"];
-		vessel.picture = loadPicture(path.string(), fact);
+		fs::path pictPath = path.branch_path() / map["picture"];
+		vessel.picture = loadPicture(pictPath.string(), fact);
 	}
 
 	if( map.find("origin") == map.end() )
@@ -296,6 +317,8 @@ Body::Vessel Body::loadVessel(const fs::path& path, double fact)
 		vessel.size = sdl::atoi( map["length"] );
 
 	file.close();
+
+	return vessel;
 }
 
 void Body::load()
@@ -314,7 +337,7 @@ void Body::load()
 
 	double f1 = (double)ecran->w / (double)m_corpse->w;
 	double f2 = (double)ecran->h / (double)m_corpse->h;
-	double fact = (f1 > f2) ? f1 : f2;
+	double fact = (f1 > f2) ? f2 : f1;
 
 	SDL_Surface* zoom = zoomSurface(m_corpse, fact, fact, SMOOTHING_ON);
 	if( zoom == NULL )
@@ -334,16 +357,21 @@ void Body::load()
 	}
 	SDL_FreeSurface(zoom);
 
+	// On définit sa position
+	size_t tmpwidth = 4 * ecran->w / 5;
+	m_ori.x = m_corpse->w / 2 - tmpwidth / 2;
+	m_ori.y = m_corpse->h / 2 - ecran->h / 2;
+
 	// On charge les organes
 	for(size_t i = 0; i < ALLORGS; ++i)
 	{
 		fs::path orgpath = rcdir / organToStr( static_cast<Organs>(i) );
-		loadOrgan(orgpath, fact);
+		m_orgs[i] = loadOrgan(orgpath, fact);
 	}
-	
+
 	// On charge les vaisseaux sanguins
 	loadVessels(rcdir / "vessels", fact);
-	
+
 	// On charge la GUI
 	initGui();
 	setGui();
@@ -351,18 +379,98 @@ void Body::load()
 
 void Body::clic(const sdl::Pointsi& pos)
 {
+	// TODO
+	
+	for(size_t i = 0; i < m_orgs.size(); ++i)
+	{
+		Uint8 alpha;
+		std::cout << "Mouse pos (" << pos.x << ";" << pos.y << ") and img pos (" << pos.x - m_ori.x << ";" << pos.y - m_ori.y << ")." << std::endl;
+		if( (alpha = getAlphaValue(m_orgs[i].healthy, pos.x - m_ori.x, pos.y - m_ori.y)) >= 150 )
+		{
+			selectOrgan( static_cast<Organs>(i) );
+			core::sounds->playSound( core::Sounds::ok );
+			// DEBUG
+			std::cout << "Clic on organ " << organToStr(static_cast<Organs>(i)) << std::endl;
+			return;
+		}
+		std::cout << "Alpha for " << organToStr(static_cast<Organs>(i)) << " : " << int(alpha) << std::endl;
+	}
+
+	for(size_t i = 0; i < m_vessels.size(); ++i)
+	{
+		if( getAlphaValue(m_vessels[i].picture, pos.x - m_ori.x, pos.y - m_ori.y) >= 150 )
+		{
+			selectVessel( &m_vessels[i] );
+			core::sounds->playSound( core::Sounds::ok );
+			// DEBUG
+			std::cout << "Clic on vessel " << i << std::endl;
+			return;
+		}
+	}
+
+	core::sounds->playSound( core::Sounds::cancel );
 }
 
 void Body::draw()
 {
+	SDL_FillRect(ecran, NULL, SDL_MapRGB(ecran->format, 0, 0, 0));
+	SDL_BlitSurface(m_bg, NULL, ecran, NULL);
+
+	SDL_BlitSurface(m_corpse, NULL, ecran, m_ori);
+
+	for(size_t i = 0; i < m_orgs.size(); ++i)
+	{
+		SDL_Surface* toblit;
+		switch( m_orgs[i].state )
+		{
+			case Organ::SICK:
+				toblit = m_orgs[i].sick;
+				break;
+			case Organ::HEATHLY:
+				toblit = m_orgs[i].healthy;
+				break;
+			case Organ::CONTROL:
+				toblit = m_orgs[i].control;
+				break;
+			default:
+				toblit = m_orgs[i].healthy;
+				break;
+		}
+
+		SDL_BlitSurface(toblit, NULL, ecran, m_ori);
+	}
+
+	for(size_t i = 0; i < m_vessels.size(); ++i)
+		SDL_BlitSurface(m_vessels[i].picture, NULL, ecran, m_ori);
+
+	graphics::gui->draw();
+	SDL_Flip(ecran);
 }
 
 void Body::selectOrgan(const Organs& org)
 {
+	m_veselected = NULL;
+	m_selected = org;
+
+	setGui();
+	if( m_orgs[org].state == Organ::SICK
+			|| m_orgs[org].state == Organ::CONTROL )
+		m_gorgenter->setVisible(true);
+	else
+		m_gorgenter->setVisible(false);
 }
 
 void Body::selectVessel(Vessel* s)
 {
+	m_selected = ALLORGS;
+	m_veselected = s;
+
+	setGui();
+	const Organ& src = m_orgs[s->src];
+	if( src.state == Organ::CONTROL )
+		m_gvesthrow->setVisible(true);
+	else
+		m_gvesthrow->setVisible(false);
 }
 
 void Body::setGui()
@@ -545,6 +653,51 @@ void Body::vesthrow()
 	core::sounds->playSound( core::Sounds::ok );
 	// TODO
 	std::cout << "Vesthrow called !!" << std::endl;
+}
+
+Uint8 Body::getAlphaValue(SDL_Surface* surf, int x, int y)
+{
+	if( x < 0
+			|| x >= surf->w
+			|| y < 0
+			|| y >= surf->h )
+	{
+		std::cout << "Out !" << std::endl;
+		return 0;
+	}
+
+	int bpp = surf->format->BytesPerPixel;
+	Uint8 *p = (Uint8 *)surf->pixels + y * surf->pitch + x * bpp;
+	Uint32 c;
+
+	switch(bpp)
+	{
+		case 1:
+			c = *p;
+			break;
+
+		case 2:
+			c = *(Uint16 *)p;
+			break;
+
+		case 3:
+			if(SDL_BYTEORDER == SDL_BIG_ENDIAN)
+				c = p[0] << 16 | p[1] << 8 | p[2];
+			else
+				c = p[0] | p[1] << 8 | p[2] << 16;
+			break;
+
+		case 4:
+			c = *(Uint32 *)p;
+			break;
+
+		default:
+			return 0;       /* shouldn't happen, but avoids warnings */
+	}
+
+	Uint8 r, g, b, a;
+	SDL_GetRGBA(c, surf->format, &r, &g, &b, &a);
+	return a;
 }
 
 

@@ -26,7 +26,7 @@ namespace graphics
 class Body
 {
 	public:
-		Body();
+		Body(SDL_Surface* bg);
 		~Body();
 
 		void run();
@@ -66,6 +66,7 @@ class Body
 
 		// Corp
 		SDL_Surface* m_corpse;
+		SDL_Surface* m_bg;
 		sdl::Pointui m_ori; // Position où blitter le corp
 		void load(); // Charge toutes les images, ainsi que les sauvegardes et la GUI, lance une exception en cas d'erreur
 
@@ -93,6 +94,7 @@ class Body
 		void vesthrow(); // On envoie des agents mutagènes à travers un vaisseau sanguin
 		void draw();
 		void setGui();
+		Uint8 getAlphaValue(SDL_Surface* surf, int x, int y);
 
 		SDL_Surface* ecran;
 };//class Body
