@@ -100,7 +100,7 @@ void Menu::newGame()
 	m_gui->clear();
 
 	// DEBUG TODO
-	Body* b = new Body;
+	Body* b = new Body(m_bg);
 	b->run();
 	delete b;
 
