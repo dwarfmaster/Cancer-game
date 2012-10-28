@@ -11,9 +11,9 @@ Définit la structure qui gère les vaisseaux sanguins:
 		-> Faire une classe qui représente toutes les cases de chaque vaisseau sanguin.
 
 Coder le moteur de tilemapping hexagonal:
-	-> Réfléchir à l'interface:
-		-> Permettre l'accès aux cellules et vaisseaux sanguins.
-		-> Permettre leur modification.
+	-> Réfléchir à l'interface: DONE
+		-> Permettre l'accès aux cellules et vaisseaux sanguins. DONE
+		-> Permettre leur modification. DONE
 	-> Définir un format de fichier.
 	-> Implémenter le chargement.
 	-> Implémenter la sauvegarde.
