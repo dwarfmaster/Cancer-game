@@ -1,14 +1,14 @@
+Définir la structure globale d'une tile:
+	-> Doit contenir la sauvegarde vers std::string, le chargement depuis std::string et une fonction retournant l'image à afficher.
+
 Définir la structure qui gère les cellules:
 	-> Réfléchir à l'interface.
-	-> Permettre la sauvegarde vers une std::string.
-	-> Permettre le chargement depuis une std::string.
+	-> Hérite de la structure globale de tile.
 
 Définit la structure qui gère les vaisseaux sanguins:
 	-> Réfléchir à l'interface :
-		-> Faire une structure pour chaque case.
+		-> Faire une structure pour chaque case -> hérite de la structure globale de tile.
 		-> Faire une classe qui représente toutes les cases de chaque vaisseau sanguin.
-	-> Permettre la sauvegarde vers une std::string.
-	-> Permettre le chargement depuis une std::string.
 
 Coder le moteur de tilemapping hexagonal:
 	-> Réfléchir à l'interface:
@@ -19,5 +19,5 @@ Coder le moteur de tilemapping hexagonal:
 	-> Implémenter la sauvegarde.
 	-> Implémenter le dessin des tiles.
 	-> Implémenter le scroll.
-	-> Implémenter le test de colision.
+	-> Implémenter le test de collision.
 
