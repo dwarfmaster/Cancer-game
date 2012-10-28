@@ -4,9 +4,18 @@
 #include <SDL/SDL.h>
 #include "tile.hpp"
 
+#include <tinyxml.h>
+
 #include <boost/filesystem/path.hpp>
+#include <boost/filesystem/fstream.hpp>
 #include <cmath>
 #define PI 3.14159265
+
+#include "../core/exception.hpp"
+#include <sstream>
+#include "../i18n.hpp"
+
+namespace fs = boost::filesystem;
 
 namespace graphics
 {
@@ -15,7 +24,7 @@ namespace graphics
 	{
 	}
 
-	HexaMap::HexaMap(const boost::filesystem::path& src, unsigned int tileSize)
+	HexaMap::HexaMap(const fs::path& src, unsigned int tileSize)
 		: m_size(0,0), m_ori(0,0), m_tileSize(tileSize), m_s(m_tileSize / std::cos(30.0*PI/180.0) / 2)
 	{
 		load(src);
@@ -26,15 +35,41 @@ namespace graphics
 		clear();
 	}
 
-	void HexaMap::load(const boost::filesystem::path& src)
+	void HexaMap::load(const fs::path& src)
 	{
 		clear();
 		// TODO
 	}
 
-	void HexaMap::save(const boost::filesystem::path& dest) const
+	void HexaMap::save(const fs::path& dest) const
 	{
-		// TODO
+		fs::ofstream ofs(dest);
+		if( !ofs )
+		{
+			std::ostringstream oss;
+			oss << _i("Error while opening the file : \"") << dest.string() << _i("\"");
+			throw core::Exception( oss.str() );
+		}
+
+		ofs << "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" << std::endl;
+		ofs << "<map size=\"" << m_size.x << "\">" << std::endl;
+
+		for(size_t i = 0; i < m_size.x; ++i)
+		{
+			ofs << "\t<row>" << std::endl;
+			for(size_t j = 0; j < m_size.y; ++j)
+			{
+				ofs << "<cell type=\"";
+				if( m_map[i][j] == NULL )
+					ofs << "nil\" />";
+				else
+					ofs << "content\">" << m_map[i][j]->save() << "</cell>";
+				ofs << std::endl;
+			}
+			ofs << "\t</row>" << std::endl;
+		}
+
+		ofs << "</map>" << std::endl;
 	}
 
 	void HexaMap::clear()
