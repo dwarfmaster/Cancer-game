@@ -35,10 +35,60 @@ namespace graphics
 		clear();
 	}
 
-	void HexaMap::load(const fs::path& src)
+	void HexaMap::load(const boost::filesystem::path& src, const load_tile_f& loader)
 	{
 		clear();
-		// TODO
+
+		// On vérifie le loader
+		if( loader.empty() )
+			throw core::Exception( _i("There is no loader set for the tilemap") );
+
+		// On ouvre le document
+		TiXmlDocument file(src.string());
+		if( !file.LoadFile() )
+		{
+			std::ostringstream oss;
+			oss << _i("Error while opening the file \"") << src.string() << _i("\" : \"") << file.ErrorDesc() << _i("\"");
+			throw core::Exception( oss.str() );
+		}
+
+		// On récupère le noeud map
+		TiXmlElement *elem = file->FirstChildElement("map");
+		if( elem == NULL )
+		{
+			std::ostringstream oss;
+			oss << _i("The file \"") << src.string() << _i("\" has no map node");
+			throw core::Exception( oss.str() );
+		}
+
+		// On récupère la taille
+		if( elem->Attribute("size") == NULL )
+		{
+			std::ostringstream oss;
+			oss << _i("The file \"") << src.string() << _i("\" has an invalid map node : no size attribute");
+			throw core::Exception( oss.str() );
+		}
+		size_t size = sdl::atoi( elem->Attribute("size") );
+
+		// On récupère les colonnes
+		std::vector<row_t> rows;
+		elem = elem->FirstChildElement("row");
+		while( elem != NULL )
+		{
+			rows.push_back( parseRow(elem, loader, size) );
+			elem = elem->NextSiblingElement("row");
+		}
+
+		// On le stocke dans la classe
+		m_size.x = size;
+		m_size.y = rows.size();
+		m_map.resize( boost::extents[m_size.x][m_size.y] );
+
+		for(size_t i = 0; i < m_size.x; ++i)
+		{
+			for(size_t j = 0; j < m_size.y; ++j)
+				m_map[i][j] = rows[j][i];
+		}
 	}
 
 	void HexaMap::save(const fs::path& dest) const
@@ -156,5 +206,37 @@ namespace graphics
 	{
 		return get(m_pictSize);
 	}
+
+	row_t HexaMap::parseRow(const TiXmlElement* row, const load_tile_f& loader, size_t size)
+	{
+		row_t row;
+		TiXmlElement* elem = rom->FirstChildElement("cell");
+		while( elem != NULL )
+		{
+			if( elem->Attribute("type") == NULL )
+				throw std::string("Invalid cell."); // Le texte ne va pas être affiché.
+
+			std::string type = elem->Attribute("type");
+			if( type == "nil" )
+				row.push_back(NULL);
+			else if( elem->getText() != NULL )
+			{
+				Tile* loaded = loader( elem->getText() );
+				if( loaded == NULL )
+					throw std::string("Invalid content of cell."); // Le texte ne va pas être affiché.
+				row.push_back(loaded);
+			}
+			else
+				throw std::string("Invalid cell."); // Le texte ne va pas être affiché.
+
+			elem = elem->NextSiblingElement("cell");
+		}
+
+		if( row.size() != size )
+			throw std::string("Invalid size."); // Le texte ne va pas être affiché.
+
+		return row;
+	}
+
 };//namespace graphics
 

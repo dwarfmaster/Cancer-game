@@ -15,7 +15,7 @@ Coder le moteur de tilemapping hexagonal:
 		-> Permettre l'accès aux cellules et vaisseaux sanguins. DONE
 		-> Permettre leur modification. DONE
 	-> Définir un format de fichier. DONE
-	-> Implémenter le chargement.
+	-> Implémenter le chargement. DONE
 	-> Implémenter la sauvegarde. DONE
 	-> Implémenter le dessin des tiles.
 	-> Implémenter le scroll.

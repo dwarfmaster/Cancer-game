@@ -6,6 +6,7 @@
 #include <vector>
 #include <boost/multi_array.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/function.hpp>
 
 namespace boost
 {
@@ -23,11 +24,13 @@ namespace graphics
 	class HexaMap
 	{
 		public:
+			typedef boost::function<Tile* (const std::string&)> load_tile_f;
+
 			HexaMap(unsigned int tileSize);
 			HexaMap(const boost::filesystem::path& src, unsigned int tileSize);
 			~HexaMap();
 
-			void load(const boost::filesystem::path& src); // Lance une exception en cas d'erreur
+			void load(const boost::filesystem::path& src, const load_tile_f& loader); // Lance une exception en cas d'erreur, loader est utilisé pour créer les tiles
 			void save(const boost::filesystem::path& dest) const; // Idem
 			void clear();
 			// Se bloque sur les bords
@@ -57,6 +60,9 @@ namespace graphics
 
 			const unsigned int m_tileSize;
 			const unsigned int m_s; // Constante utilisée pour les calculs
+
+			typedef std::vector<Tile*> row_t;
+			row_t parseRow(const TiXmlElement* row);
 
 			HexaMap();
 	};//class HexaMap
