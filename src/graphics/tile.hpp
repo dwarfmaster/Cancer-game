@@ -14,6 +14,8 @@ namespace graphics
 			virtual SDL_Surface* getImg() const =0;
 			virtual std::string save() const =0;
 
+			virtual ~Tile();
+
 	};//class Tile
 };//namespace graphics
 
