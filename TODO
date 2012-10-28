@@ -19,5 +19,5 @@ Coder le moteur de tilemapping hexagonal:
 	-> Implémenter la sauvegarde.
 	-> Implémenter le dessin des tiles.
 	-> Implémenter le scroll.
-	-> Implémenter le test de collision.
+	-> Implémenter le test de collision. DONE
 
