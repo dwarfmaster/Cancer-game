@@ -1,5 +1,5 @@
-Définir la structure globale d'une tile:
-	-> Doit contenir la sauvegarde vers std::string, le chargement depuis std::string et une fonction retournant l'image à afficher.
+Définir la structure globale d'une tile: DONE
+	-> Doit contenir la sauvegarde vers std::string, le chargement depuis std::string et une fonction retournant l'image à afficher. DONE
 
 Définir la structure qui gère les cellules:
 	-> Réfléchir à l'interface.
