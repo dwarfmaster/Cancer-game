@@ -16,6 +16,7 @@ namespace boost
 	};
 };
 struct SDL_Surface;
+class TiXmlElement;
 
 namespace graphics
 {
@@ -27,7 +28,7 @@ namespace graphics
 			typedef boost::function<Tile* (const std::string&)> load_tile_f;
 
 			HexaMap(unsigned int tileSize);
-			HexaMap(const boost::filesystem::path& src, unsigned int tileSize);
+			HexaMap(const boost::filesystem::path& src, const load_tile_f& loader, unsigned int tileSize);
 			~HexaMap();
 
 			void load(const boost::filesystem::path& src, const load_tile_f& loader); // Lance une exception en cas d'erreur, loader est utilisé pour créer les tiles
@@ -47,6 +48,8 @@ namespace graphics
 			SDL_Surface* get() const; // Utilise la taille enregistrée
 			operator SDL_Surface*() const;
 
+			sdl::AABB totalSize() const;
+
 		private:
 			typedef boost::multi_array<Tile*,2> array_t;
 			typedef boost::multi_array_types::index_range vue_t;
@@ -62,7 +65,7 @@ namespace graphics
 			const unsigned int m_s; // Constante utilisée pour les calculs
 
 			typedef std::vector<Tile*> row_t;
-			row_t parseRow(const TiXmlElement* row);
+			row_t parseRow(const TiXmlElement* row, const load_tile_f& loader, size_t size);
 
 			HexaMap();
 	};//class HexaMap

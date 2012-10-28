@@ -2,6 +2,7 @@
 #include "hexamap.hpp"
 
 #include <SDL/SDL.h>
+#include <SDLP_tools.hpp>
 #include "tile.hpp"
 
 #include <tinyxml.h>
@@ -24,10 +25,10 @@ namespace graphics
 	{
 	}
 
-	HexaMap::HexaMap(const fs::path& src, unsigned int tileSize)
+	HexaMap::HexaMap(const fs::path& src, const load_tile_f& loader, unsigned int tileSize)
 		: m_size(0,0), m_ori(0,0), m_tileSize(tileSize), m_s(m_tileSize / std::cos(30.0*PI/180.0) / 2)
 	{
-		load(src);
+		load(src, loader);
 	}
 
 	HexaMap::~HexaMap()
@@ -53,7 +54,7 @@ namespace graphics
 		}
 
 		// On récupère le noeud map
-		TiXmlElement *elem = file->FirstChildElement("map");
+		TiXmlElement *elem = file.FirstChildElement("map");
 		if( elem == NULL )
 		{
 			std::ostringstream oss;
@@ -140,7 +141,13 @@ namespace graphics
 
 	void HexaMap::scroll(const sdl::Vector2f& dec)
 	{
-		// TODO
+		sdl::Pointsi ori = m_ori;
+		ori += dec;
+
+		m_ori.x = ori.x < 0 ? 0 : ori.x;
+		m_ori.y = ori.y < 0 ? 0 : ori.y;
+
+		// TODO test dépacement hauteur et largeur
 	}
 
 	Tile* HexaMap::getTileAt(unsigned int x, unsigned int y)
@@ -207,10 +214,10 @@ namespace graphics
 		return get(m_pictSize);
 	}
 
-	row_t HexaMap::parseRow(const TiXmlElement* row, const load_tile_f& loader, size_t size)
+	HexaMap::row_t HexaMap::parseRow(const TiXmlElement* row, const load_tile_f& loader, size_t size)
 	{
-		row_t row;
-		TiXmlElement* elem = rom->FirstChildElement("cell");
+		row_t rowlist;
+		const TiXmlElement* elem = row->FirstChildElement("cell");
 		while( elem != NULL )
 		{
 			if( elem->Attribute("type") == NULL )
@@ -218,13 +225,13 @@ namespace graphics
 
 			std::string type = elem->Attribute("type");
 			if( type == "nil" )
-				row.push_back(NULL);
-			else if( elem->getText() != NULL )
+				rowlist.push_back(NULL);
+			else if( elem->GetText() != NULL )
 			{
-				Tile* loaded = loader( elem->getText() );
+				Tile* loaded = loader( elem->GetText() );
 				if( loaded == NULL )
 					throw std::string("Invalid content of cell."); // Le texte ne va pas être affiché.
-				row.push_back(loaded);
+				rowlist.push_back(loaded);
 			}
 			else
 				throw std::string("Invalid cell."); // Le texte ne va pas être affiché.
@@ -232,10 +239,19 @@ namespace graphics
 			elem = elem->NextSiblingElement("cell");
 		}
 
-		if( row.size() != size )
+		if( rowlist.size() != size )
 			throw std::string("Invalid size."); // Le texte ne va pas être affiché.
 
-		return row;
+		return rowlist;
+	}
+			
+	sdl::AABB HexaMap::totalSize() const
+	{
+		size_t w = (m_size.x - 1) * m_s * 1.5;
+		w += m_tileSize;
+		size_t h = m_size.y * m_tileSize + m_tileSize / 2;
+
+		return sdl::makeRect(0, 0, w, h);
 	}
 
 };//namespace graphics
