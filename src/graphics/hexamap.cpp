@@ -218,6 +218,106 @@ namespace graphics
 			return getTileAt( (unsigned int)x, (unsigned int)y );
 	}
 
+	HexaMap::near_t HexaMap::getAroundTiles(const Tile* tile)
+	{
+		near_t ret;
+		boost::optional<sdl::Pointui> tmp = getTilePos(tile);
+
+		if( tmp == boost::none )
+		{
+			for(size_t i = 0; i < ret.size(); ++i)
+				ret[i] = NULL;
+			return ret;
+		}
+
+		sdl::Pointui pos = *tmp;
+		sdl::Pointui other;
+
+		// Bottom
+		other.x = pos.x;
+		other.y = pos.y + 1;
+		ret[bottom] = getTileAt(other.x, other.y);
+
+		// Top
+		other.x = pos.x;
+		other.y = pos.y - 1;
+		ret[top] = getTileAt(other.x, other.y);
+
+		// Top Left
+		unsigned int col = pos.x % 2;
+		unsigned int col1 = (pos.x + 1) % 2;
+		other.x = pos.x - 1;
+		other.y = pos.y - col1;
+		ret[top_left] = getTileAt(other.x, other.y);
+
+		// Bottom Left
+		other.x = pos.x - 1;
+		other.y = pos.y + col;
+		ret[bottom_left] = getTileAt(other.x, other.y);
+
+		// Top Right
+		other.x = pos.x + 1;
+		other.y = pos.y - col1;
+		ret[top_right] = getTileAt(other.x, other.y);
+
+		// Bottom Right
+		other.x = pos.x + 1;
+		other.y = pos.y + col;
+		ret[bottom_right] = getTileAt(other.x, other.y);
+
+		return ret;
+	}
+
+	HexaMap::const_near_t HexaMap::getAroundTiles(const Tile* tile) const
+	{
+		const_near_t ret;
+		boost::optional<sdl::Pointui> tmp = getTilePos(tile);
+
+		if( tmp == boost::none )
+		{
+			for(size_t i = 0; i < ret.size(); ++i)
+				ret[i] = NULL;
+			return ret;
+		}
+
+		sdl::Pointui pos = *tmp;
+		sdl::Pointui other;
+
+		// Bottom
+		other.x = pos.x;
+		other.y = pos.y + 1;
+		ret[bottom] = getTileAt(other.x, other.y);
+
+		// Top
+		other.x = pos.x;
+		other.y = pos.y - 1;
+		ret[top] = getTileAt(other.x, other.y);
+
+		// Top Left
+		unsigned int col = pos.x % 2;
+		unsigned int col1 = (pos.x + 1) % 2;
+		other.x = pos.x - 1;
+		other.y = pos.y - col1;
+		ret[top_left] = getTileAt(other.x, other.y);
+
+		// Bottom Left
+		other.x = pos.x - 1;
+		other.y = pos.y + col;
+		ret[bottom_left] = getTileAt(other.x, other.y);
+
+		// Top Right
+		other.x = pos.x + 1;
+		other.y = pos.y - col1;
+		ret[top_right] = getTileAt(other.x, other.y);
+
+		// Bottom Right
+		other.x = pos.x + 1;
+		other.y = pos.y + col;
+		ret[bottom_right] = getTileAt(other.x, other.y);
+
+		return ret;
+	}
+
 	SDL_Surface* HexaMap::get(const sdl::AABB& size) const
 	{
 		// On récupère l'écran

@@ -8,6 +8,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/function.hpp>
 #include <boost/optional.hpp>
+#include <boost/array.hpp>
 
 namespace boost
 {
@@ -27,6 +28,9 @@ namespace graphics
 	{
 		public:
 			typedef boost::function<Tile* (const std::string&)> load_tile_f;
+			enum Around{top, bottom, top_left, top_right, bottom_left, bottom_right};
+			typedef boost::array<Tile*, 6> near_t;
+			typedef boost::array<const Tile*, 6> const_near_t;
 
 			HexaMap(unsigned int height);
 			HexaMap(const boost::filesystem::path& src, const load_tile_f& loader, unsigned int height);
@@ -44,6 +48,8 @@ namespace graphics
 			const Tile* getTileAt(unsigned int x, unsigned int y) const;
 			Tile* getTileAtPos(const sdl::Pointui& pos); // En pixels, tient compte du scroll
 			const Tile* getTileAtPos(const sdl::Pointui& pos) const;
+			near_t getAroundTiles(const Tile* tile);
+			const_near_t getAroundTiles(const Tile* tile) const;
 
 			SDL_Surface* get(const sdl::AABB& size) const;
 			void setSize(const sdl::AABB& size);
