@@ -20,13 +20,13 @@ namespace fs = boost::filesystem;
 
 namespace graphics
 {
-	HexaMap::HexaMap(unsigned int tileSize)
-		: m_size(0,0), m_ori(0,0), m_tileSize(tileSize), m_s(m_tileSize / std::cos(30.0*PI/180.0) / 2)
+	HexaMap::HexaMap(unsigned int height)
+		: m_size(0,0), m_ori(0,0), m_height(height), m_width(m_height / std::cos(30.0*PI/180.0)), m_s(m_width / 2)
 	{
 	}
 
-	HexaMap::HexaMap(const fs::path& src, const load_tile_f& loader, unsigned int tileSize)
-		: m_size(0,0), m_ori(0,0), m_tileSize(tileSize), m_s(m_tileSize / std::cos(30.0*PI/180.0) / 2)
+	HexaMap::HexaMap(const fs::path& src, const load_tile_f& loader, unsigned int height)
+		: m_size(0,0), m_ori(0,0), m_height(height), m_width(m_height / std::cos(30.0*PI/180.0)), m_s(m_width / 2)
 	{
 		load(src, loader);
 	}
@@ -182,7 +182,7 @@ namespace graphics
 	{
 		sdl::Pointui rpos = pos + sdl::Vector2f(m_ori);
 		long int x = rpos.x / m_s / 1.5;
-		long int y = (rpos.y - (x%2) * m_tileSize / 2) / m_tileSize;
+		long int y = (rpos.y - (x%2) * m_height / 2) / m_height;
 
 		if( y < 0
 				|| x < 0 )
@@ -195,7 +195,7 @@ namespace graphics
 	{
 		sdl::Pointui rpos = pos + sdl::Vector2f(m_ori);
 		long int x = rpos.x / m_s / 1.5;
-		long int y = (rpos.y - (x%2) * m_tileSize / 2) / m_tileSize;
+		long int y = (rpos.y - (x%2) * m_height / 2) / m_height;
 
 		if( y < 0
 				|| x < 0 )
@@ -206,7 +206,58 @@ namespace graphics
 
 	SDL_Surface* HexaMap::get(const sdl::AABB& size) const
 	{
-		// TODO
+		// On récupère l'écran
+		SDL_Surface* ecran = SDL_GetVideoSurface();
+		if( ecran == NULL )
+		{
+			std::ostringstream oss;
+			oss << _i("Error while getting the rendering surface : \"") << SDL_GetError() << _i("\"");
+			throw core::Exception( oss.str() );
+		}
+
+		// On crée la surface
+		SDL_Surface* ret = SDL_CreateRGBSurface(SDL_HWSURFACE, size->w, size->h, ecran->format->BitsPerPixel, 0, 0, 0, 0);
+		if( ret == NULL )
+		{
+			std::ostringstream oss;
+			oss << _i("Error while create a surface : \"") << SDL_GetError() << _i("\"");
+			throw core::Exception( oss.str() );
+		}
+
+		SDL_FillRect(ret, NULL, SDL_MapRGBA(ret->format, 0, 0, 0, 0)); // Transparent
+
+		// On affiche
+		signed int lastx = 0;
+		for(size_t x = 0; x < m_size.x; ++x)
+		{
+			SDL_Rect pos;
+			if( x == 0 )
+				pos.x = 0;
+			else
+				pos.x = lastx + m_s * 1.5;
+
+			if( pos.x + m_width > m_ori.x
+					&& (unsigned int)pos.x < m_ori.x + size->w )
+			{
+				for(size_t y = 0; y < m_size.y; ++y)
+				{
+					pos.y = y * m_height + (x%2) * m_height / 2;
+
+					Tile* toblit = m_map[x][y];
+					if( toblit != NULL 
+							&& pos.y + m_height > m_ori.y
+							&& (unsigned int)pos.y < m_ori.y + size->h )
+					{
+						pos.x -= m_ori.x;
+						pos.y -= m_ori.y;
+						SDL_BlitSurface(toblit->getImg(), NULL, ret, &pos);
+					}
+				}
+			}
+			lastx = pos.x;
+		}
+
+		return ret;
 	}
 
 	void HexaMap::setSize(const sdl::AABB& size)
@@ -254,12 +305,12 @@ namespace graphics
 
 		return rowlist;
 	}
-			
+
 	sdl::AABB HexaMap::totalSize() const
 	{
 		size_t w = (m_size.x - 1) * m_s * 1.5;
-		w += m_tileSize;
-		size_t h = m_size.y * m_tileSize + m_tileSize / 2;
+		w += m_height;
+		size_t h = m_size.y * m_height + m_height / 2;
 
 		return sdl::makeRect(0, 0, w, h);
 	}

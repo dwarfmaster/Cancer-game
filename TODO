@@ -17,7 +17,7 @@ Coder le moteur de tilemapping hexagonal:
 	-> Définir un format de fichier. DONE
 	-> Implémenter le chargement. DONE
 	-> Implémenter la sauvegarde. DONE
-	-> Implémenter le dessin des tiles.
+	-> Implémenter le dessin des tiles. DONE
 	-> Implémenter le scroll. DONE
 	-> Implémenter le test de collision. DONE
 

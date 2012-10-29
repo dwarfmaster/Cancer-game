@@ -27,8 +27,8 @@ namespace graphics
 		public:
 			typedef boost::function<Tile* (const std::string&)> load_tile_f;
 
-			HexaMap(unsigned int tileSize);
-			HexaMap(const boost::filesystem::path& src, const load_tile_f& loader, unsigned int tileSize);
+			HexaMap(unsigned int height);
+			HexaMap(const boost::filesystem::path& src, const load_tile_f& loader, unsigned int height);
 			~HexaMap();
 
 			void load(const boost::filesystem::path& src, const load_tile_f& loader); // Lance une exception en cas d'erreur, loader est utilisé pour créer les tiles
@@ -61,7 +61,8 @@ namespace graphics
 			sdl::Pointui m_ori; // Origine du scroll
 			sdl::AABB m_pictSize;
 
-			const unsigned int m_tileSize;
+			const unsigned int m_height;
+			const unsigned int m_width;
 			const unsigned int m_s; // Constante utilisée pour les calculs
 
 			typedef std::vector<Tile*> row_t;
