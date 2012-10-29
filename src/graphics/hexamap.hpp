@@ -51,6 +51,9 @@ namespace graphics
 			near_t getAroundTiles(const Tile* tile);
 			const_near_t getAroundTiles(const Tile* tile) const;
 
+			void select(const Tile* t);
+			void unselect();
+
 			SDL_Surface* get(const sdl::AABB& size) const;
 			void setSize(const sdl::AABB& size);
 			SDL_Surface* get() const; // Utilise la taille enregistrée
@@ -73,8 +76,13 @@ namespace graphics
 			const unsigned int m_width;
 			const unsigned int m_s; // Constante utilisée pour les calculs
 
+			boost::optional<sdl::Pointui> m_selected; // boost::none = pas de sélection
+
 			typedef std::vector<Tile*> row_t;
 			row_t parseRow(const TiXmlElement* row, const load_tile_f& loader, size_t size);
+
+			SDL_Surface* m_hexa;
+			void createHexa();
 
 			HexaMap();
 	};//class HexaMap

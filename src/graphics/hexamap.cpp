@@ -2,6 +2,7 @@
 #include "hexamap.hpp"
 
 #include <SDL/SDL.h>
+#include <SDL/SDL_gfxPrimitives.h>
 #include <SDLP_tools.hpp>
 #include "tile.hpp"
 
@@ -21,19 +22,24 @@ namespace fs = boost::filesystem;
 namespace graphics
 {
 	HexaMap::HexaMap(unsigned int height)
-		: m_size(0,0), m_ori(0,0), m_height(height), m_width(m_height / std::cos(30.0*PI/180.0)), m_s(m_width / 2)
+		: m_size(0,0), m_ori(0,0), m_height(height), m_width(m_height / std::cos(30.0*PI/180.0)), m_s(m_width / 2), m_selected( sdl::Pointui(0,0) ), m_hexa(NULL)
 	{
+		createHexa();
 	}
 
 	HexaMap::HexaMap(const fs::path& src, const load_tile_f& loader, unsigned int height)
-		: m_size(0,0), m_ori(0,0), m_height(height), m_width(m_height / std::cos(30.0*PI/180.0)), m_s(m_width / 2)
+		: m_size(0,0), m_ori(0,0), m_height(height), m_width(m_height / std::cos(30.0*PI/180.0)), m_s(m_width / 2), m_selected( sdl::Pointui(0,0) ), m_hexa(NULL)
 	{
 		load(src, loader);
+		createHexa();
 	}
 
 	HexaMap::~HexaMap()
 	{
 		clear();
+		
+		if( m_hexa != NULL )
+			SDL_FreeSurface(m_hexa);
 	}
 
 	void HexaMap::load(const boost::filesystem::path& src, const load_tile_f& loader)
@@ -341,6 +347,7 @@ namespace graphics
 		SDL_FillRect(ret, NULL, SDL_MapRGBA(ret->format, 0, 0, 0, 0)); // Transparent
 
 		// On affiche
+		SDL_Rect selectPos;
 		signed int lastx = 0;
 		for(size_t x = 0; x < m_size.x; ++x)
 		{
@@ -364,14 +371,22 @@ namespace graphics
 							&& pos.y + m_height > m_ori.y
 							&& (unsigned int)pos.y < m_ori.y + size->h )
 					{
-						signed int tmpx = pos.x;
 						pos.y -= m_ori.y;
+						SDL_Rect save = pos;
+
 						SDL_BlitSurface(toblit->getImg(), NULL, ret, &pos);
-						pos.x = tmpx;
+						if( m_selected != boost::none
+								&& m_selected->x == x
+								&& m_selected->y == y )
+							selectPos = save;
+
+						pos = save;
 					}
 				}
 			}
 		}
+		if( m_selected != boost::none )
+			SDL_BlitSurface(m_hexa, NULL, ret, &selectPos);
 
 		return ret;
 	}
@@ -429,6 +444,82 @@ namespace graphics
 		size_t h = m_size.y * m_height + m_height / 2;
 
 		return sdl::makeRect(0, 0, w, h);
+	}
+			
+	void HexaMap::select(const Tile* t)
+	{
+		m_selected = getTilePos(t);
+	}
+			
+	void HexaMap::unselect()
+	{
+		m_selected = boost::none;
+	}
+			
+	void HexaMap::createHexa()
+	{
+		SDL_Surface* tmp = SDL_CreateRGBSurface(SDL_HWSURFACE, m_width, m_height, 24, 0, 0, 0, 0);
+		if( tmp == NULL )
+		{
+			std::ostringstream oss;
+			oss << _i("Error while creating a surface : \"") << SDL_GetError() << _i("\"");
+			throw core::Exception( oss.str() );
+		}
+
+		m_hexa = SDL_DisplayFormatAlpha(tmp);
+		if( m_hexa == NULL )
+		{
+			std::ostringstream oss;
+			oss << _i("Error while converting a surface : \"") << SDL_GetError() << _i("\"");
+			throw core::Exception( oss.str() );
+		}
+		SDL_FillRect(m_hexa, NULL, SDL_MapRGBA(m_hexa->format, 0, 0, 0, 0));
+
+		const Uint8 width = 3;
+
+		SDL_Color c;
+		c.r = 255;
+		c.b = 255;
+		c.g = 0;
+
+		sdl::Pointui p1;
+		sdl::Pointui p2;
+
+		p1.x = m_width / 4;
+		p1.y = 0;
+		p2.x = 0;
+		p2.y = m_height / 2;
+		thickLineRGBA(m_hexa, p1.x, p1.y, p2.x, p2.y, width, c.r, c.g, c.b, 255);
+
+		p1.x = m_width / 4;
+		p1.y = 0;
+		p2.x = m_width * 3 / 4;
+		p2.y = 0;
+		thickLineRGBA(m_hexa, p1.x, p1.y, p2.x, p2.y, width, c.r, c.g, c.b, 255);
+
+		p1.x = m_width * 3 / 4;
+		p1.y = 0;
+		p2.x = m_width - 1;
+		p2.y = m_height / 2;
+		thickLineRGBA(m_hexa, p1.x, p1.y, p2.x, p2.y, width, c.r, c.g, c.b, 255);
+
+		p1.x = m_width / 4;
+		p1.y = m_height - 1;
+		p2.x = 0;
+		p2.y = m_height / 2;
+		thickLineRGBA(m_hexa, p1.x, p1.y, p2.x, p2.y, width, c.r, c.g, c.b, 255);
+
+		p1.x = m_width / 4;
+		p1.y = m_height - 1;
+		p2.x = m_width * 3 / 4;
+		p2.y = m_height - 1;
+		thickLineRGBA(m_hexa, p1.x, p1.y, p2.x, p2.y, width, c.r, c.g, c.b, 255);
+
+		p1.x = m_width * 3 / 4;
+		p1.y = m_height - 1;
+		p2.x = m_width - 1;
+		p2.y = m_height / 2;
+		thickLineRGBA(m_hexa, p1.x, p1.y, p2.x, p2.y, width, c.r, c.g, c.b, 255);
 	}
 
 };//namespace graphics
