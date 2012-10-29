@@ -182,7 +182,7 @@ namespace graphics
 	{
 		sdl::Pointui rpos = pos + sdl::Vector2f(m_ori);
 		long int x = rpos.x / m_s / 1.5;
-		long int y = (rpos.y - (x%2) * m_height / 2) / m_height;
+		long int y = (rpos.y - (rpos.x%2) * m_height / 2) / m_height;
 
 		if( y < 0
 				|| x < 0 )
