@@ -7,6 +7,7 @@
 #include <boost/multi_array.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/function.hpp>
+#include <boost/optional.hpp>
 
 namespace boost
 {
@@ -39,6 +40,7 @@ namespace graphics
 
 			// Retournent NULL si la case pointée est vide.
 			Tile* getTileAt(unsigned int x, unsigned int y); // En nombre de tiles
+			boost::optional<sdl::Pointui> getTilePos(const Tile* tile) const; // Retourne boost::none si rien n'a été trouvé
 			const Tile* getTileAt(unsigned int x, unsigned int y) const;
 			Tile* getTileAtPos(const sdl::Pointui& pos); // En pixels, tient compte du scroll
 			const Tile* getTileAtPos(const sdl::Pointui& pos) const;

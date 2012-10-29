@@ -161,6 +161,19 @@ namespace graphics
 			m_ori.y = ori.y;
 	}
 
+	boost::optional<sdl::Pointui> HexaMap::getTilePos(const Tile* tile) const
+	{
+		for(size_t x = 0; x < m_size.x; ++x)
+		{
+			for(size_t y = 0; y < m_size.y; ++y)
+			{
+				if( tile == m_map[x][y] )
+					return sdl::Pointui(x,y);
+			}
+		}
+		return boost::none;
+	}
+
 	Tile* HexaMap::getTileAt(unsigned int x, unsigned int y)
 	{
 		if( x < m_size.x
