@@ -4,6 +4,7 @@
 
 #include <SDLP_position.hpp>
 #include <vector>
+#include <list>
 #include <boost/multi_array.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/function.hpp>
@@ -54,6 +55,10 @@ namespace graphics
 			void select(const Tile* t);
 			void unselect();
 
+			void setHighlight(const std::list<Tile*>& hl);
+			void addHighlight(const Tile* t);
+			void clearHighlight();
+
 			SDL_Surface* get(const sdl::AABB& size) const;
 			void setSize(const sdl::AABB& size);
 			SDL_Surface* get() const; // Utilise la taille enregistrée
@@ -77,12 +82,14 @@ namespace graphics
 			const unsigned int m_s; // Constante utilisée pour les calculs
 
 			boost::optional<sdl::Pointui> m_selected; // boost::none = pas de sélection
+			std::list<sdl::Pointui> m_highlight; // ceux à surligner
 
 			typedef std::vector<Tile*> row_t;
 			row_t parseRow(const TiXmlElement* row, const load_tile_f& loader, size_t size);
 
 			SDL_Surface* m_hexa;
-			void createHexa();
+			SDL_Surface* m_high;
+			SDL_Surface* createHexa(SDL_Color c);
 
 			HexaMap();
 	};//class HexaMap

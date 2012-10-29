@@ -22,5 +22,5 @@ Coder le moteur de tilemapping hexagonal:
 	-> Implémenter le test de collision. DONE
 	-> Obtention des tiles concurrents d'un tile. DONE
 	-> Sélection graphique d'un tile. DONE
-	-> Surlignage graphiqe d'un tile.
+	-> Surlignage graphique d'un tile. DONE
 
