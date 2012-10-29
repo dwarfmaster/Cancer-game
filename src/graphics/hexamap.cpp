@@ -110,7 +110,7 @@ namespace graphics
 			ofs << "\t<row>" << std::endl;
 			for(size_t j = 0; j < m_size.y; ++j)
 			{
-				ofs << "<cell type=\"";
+				ofs << "\t\t<cell type=\"";
 				if( m_map[i][j] == NULL )
 					ofs << "nil\" />";
 				else
