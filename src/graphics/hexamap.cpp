@@ -105,16 +105,16 @@ namespace graphics
 		ofs << "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" << std::endl;
 		ofs << "<map size=\"" << m_size.x << "\">" << std::endl;
 
-		for(size_t i = 0; i < m_size.x; ++i)
+		for(size_t y = 0; y < m_size.y; ++y)
 		{
 			ofs << "\t<row>" << std::endl;
-			for(size_t j = 0; j < m_size.y; ++j)
+			for(size_t x = 0; x < m_size.x; ++x)
 			{
 				ofs << "\t\t<cell type=\"";
-				if( m_map[i][j] == NULL )
+				if( m_map[x][y] == NULL )
 					ofs << "nil\" />";
 				else
-					ofs << "content\">" << m_map[i][j]->save() << "</cell>";
+					ofs << "content\">" << m_map[x][y]->save() << "</cell>";
 				ofs << std::endl;
 			}
 			ofs << "\t</row>" << std::endl;
