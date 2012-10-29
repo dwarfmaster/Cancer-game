@@ -20,4 +20,7 @@ Coder le moteur de tilemapping hexagonal:
 	-> Implémenter le dessin des tiles. DONE
 	-> Implémenter le scroll. DONE
 	-> Implémenter le test de collision. DONE
+	-> Obtention des tiles concurrents d'un tile.
+	-> Sélection graphique d'un tile.
+	-> Surlignage graphiqe d'un tile.
 
