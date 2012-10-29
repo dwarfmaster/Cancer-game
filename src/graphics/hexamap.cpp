@@ -369,7 +369,10 @@ namespace graphics
 
 		// On affiche
 		SDL_Rect selectPos;
+		selectPos.x = m_width * -1; // On s'assure que la sélection ne sera pas affichée si en dehors de l'écran
+		selectPos.y = m_height * -1;
 		std::list<SDL_Rect> hls; // highlights
+
 		signed int lastx = 0;
 		for(size_t x = 0; x < m_size.x; ++x)
 		{
