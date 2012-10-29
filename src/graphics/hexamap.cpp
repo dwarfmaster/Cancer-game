@@ -22,7 +22,7 @@ namespace fs = boost::filesystem;
 namespace graphics
 {
 	HexaMap::HexaMap(unsigned int height)
-		: m_size(0,0), m_ori(0,0), m_height(height), m_width(m_height / std::cos(30.0*PI/180.0)), m_s(m_width / 2), m_selected( sdl::Pointui(0,0) ), m_hexa(NULL)
+		: m_size(0,0), m_ori(0,0), m_height(height), m_width(m_height / std::cos(30.0*PI/180.0)), m_s(m_width / 2), m_selected(boost::none), m_hexa(NULL)
 	{
 		SDL_Color c;
 		c.r = 255;
@@ -37,7 +37,7 @@ namespace graphics
 	}
 
 	HexaMap::HexaMap(const fs::path& src, const load_tile_f& loader, unsigned int height)
-		: m_size(0,0), m_ori(0,0), m_height(height), m_width(m_height / std::cos(30.0*PI/180.0)), m_s(m_width / 2), m_selected( sdl::Pointui(0,0) ), m_hexa(NULL)
+		: m_size(0,0), m_ori(0,0), m_height(height), m_width(m_height / std::cos(30.0*PI/180.0)), m_s(m_width / 2), m_selected(boost::none), m_hexa(NULL)
 	{
 		load(src, loader);
 
