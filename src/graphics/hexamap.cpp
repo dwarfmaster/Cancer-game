@@ -141,13 +141,23 @@ namespace graphics
 
 	void HexaMap::scroll(const sdl::Vector2f& dec)
 	{
+		sdl::AABB totsize = totalSize();
 		sdl::Pointsi ori = m_ori;
 		ori += dec;
 
-		m_ori.x = ori.x < 0 ? 0 : ori.x;
-		m_ori.y = ori.y < 0 ? 0 : ori.y;
+		if( ori.x < 0 )
+			m_ori.x = 0;
+		else if( ori.x + m_pictSize->w > totsize->w )
+			m_ori.x = totsize->w - m_pictSize->w;
+		else
+			m_ori.x = ori.x;
 
-		// TODO test dépacement hauteur et largeur
+		if( ori.y < 0 )
+			m_ori.y = 0;
+		else if( ori.y + m_pictSize->h > totsize->h )
+			m_ori.y = totsize->h - m_pictSize->h;
+		else
+			m_ori.y = ori.y;
 	}
 
 	Tile* HexaMap::getTileAt(unsigned int x, unsigned int y)

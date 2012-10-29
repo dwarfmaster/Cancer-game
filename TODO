@@ -18,6 +18,6 @@ Coder le moteur de tilemapping hexagonal:
 	-> Implémenter le chargement. DONE
 	-> Implémenter la sauvegarde. DONE
 	-> Implémenter le dessin des tiles.
-	-> Implémenter le scroll. ADVANDCED
+	-> Implémenter le scroll. DONE
 	-> Implémenter le test de collision. DONE
 
