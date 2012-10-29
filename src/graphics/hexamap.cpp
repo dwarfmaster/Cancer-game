@@ -164,7 +164,7 @@ namespace graphics
 	Tile* HexaMap::getTileAt(unsigned int x, unsigned int y)
 	{
 		if( x < m_size.x
-				|| y < m_size.y )
+				&& y < m_size.y )
 			return m_map[x][y];
 		else
 			return NULL;
@@ -173,7 +173,7 @@ namespace graphics
 	const Tile* HexaMap::getTileAt(unsigned int x, unsigned int y) const
 	{
 		if( x < m_size.x
-				|| y < m_size.y )
+				&& y < m_size.y )
 			return m_map[x][y];
 		else
 			return NULL;
@@ -186,7 +186,7 @@ namespace graphics
 		long int y = (rpos.y - (rpos.x%2) * m_height / 2) / m_height;
 
 		if( y < 0
-				|| x < 0 )
+				|| x < 0 ) // La vérification de x et y trop grands se fait dans le getTileAt
 			return NULL;
 		else
 			return getTileAt( (unsigned int)x, (unsigned int)y );
@@ -199,7 +199,7 @@ namespace graphics
 		long int y = (rpos.y - (x%2) * m_height / 2) / m_height;
 
 		if( y < 0
-				|| x < 0 )
+				|| x < 0 ) // Idem
 			return NULL;
 		else
 			return getTileAt( (unsigned int)x, (unsigned int)y );
