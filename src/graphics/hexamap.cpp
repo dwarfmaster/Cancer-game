@@ -142,8 +142,9 @@ namespace graphics
 	void HexaMap::scroll(const sdl::Vector2f& dec)
 	{
 		sdl::AABB totsize = totalSize();
-		sdl::Pointsi ori = m_ori;
-		ori += dec;
+		SDL_Rect ori = m_ori;
+		ori.x += dec.x;
+		ori.y += dec.y;
 
 		if( ori.x < 0 )
 			m_ori.x = 0;
