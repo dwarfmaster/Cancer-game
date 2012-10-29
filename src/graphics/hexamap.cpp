@@ -236,10 +236,12 @@ namespace graphics
 				pos.x = 0;
 			else
 				pos.x = lastx + m_s * 1.5;
+			lastx = pos.x;
 
 			if( pos.x + m_width > m_ori.x
 					&& (unsigned int)pos.x < m_ori.x + size->w )
 			{
+				pos.x -= m_ori.x;
 				for(size_t y = 0; y < m_size.y; ++y)
 				{
 					pos.y = y * m_height + (x%2) * m_height / 2;
@@ -249,13 +251,13 @@ namespace graphics
 							&& pos.y + m_height > m_ori.y
 							&& (unsigned int)pos.y < m_ori.y + size->h )
 					{
-						pos.x -= m_ori.x;
+						signed int tmpx = pos.x;
 						pos.y -= m_ori.y;
 						SDL_BlitSurface(toblit->getImg(), NULL, ret, &pos);
+						pos.x = tmpx;
 					}
 				}
 			}
-			lastx = pos.x;
 		}
 
 		return ret;
