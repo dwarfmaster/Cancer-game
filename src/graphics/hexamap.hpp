@@ -62,7 +62,8 @@ namespace graphics
 			SDL_Surface* get(const sdl::AABB& size) const;
 			void setSize(const sdl::AABB& size);
 			SDL_Surface* get() const; // Utilise la taille enregistrée
-			operator SDL_Surface*() const;
+			operator SDL_Surface*() const; // Idem
+			void drawOn(SDL_Surface* ecran) const; // Dessine directement sur toute la surface passée en argument
 
 			sdl::AABB totalSize() const;
 
