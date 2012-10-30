@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<!-- Size représente la largeur du terrain. -->
-<map size="4">
+<!-- Size représente la hauteur d'un tile en pixel et length le nombre de tiles par ligne. -->
+<map length="4" size="50">
 	<!-- Chaque row contient une ligne du terrain. -->
 	<row>
 		<!-- Chaque cell représente une cellule. Il doit y en avoir autant que précisé dans size. Si type = "nil", alors la cellule est vide, sinon son contenu est chargé à partir du texte du milieu. -->

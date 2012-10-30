@@ -33,8 +33,8 @@ namespace graphics
 			typedef boost::array<Tile*, 6> near_t;
 			typedef boost::array<const Tile*, 6> const_near_t;
 
-			HexaMap(unsigned int height);
-			HexaMap(const boost::filesystem::path& src, const load_tile_f& loader, unsigned int height);
+			HexaMap();
+			HexaMap(const boost::filesystem::path& src, const load_tile_f& loader);
 			~HexaMap();
 
 			void load(const boost::filesystem::path& src, const load_tile_f& loader); // Lance une exception en cas d'erreur, loader est utilisé pour créer les tiles
@@ -78,9 +78,9 @@ namespace graphics
 			sdl::Pointui m_ori; // Origine du scroll
 			sdl::AABB m_pictSize;
 
-			const unsigned int m_height;
-			const unsigned int m_width;
-			const unsigned int m_s; // Constante utilisée pour les calculs
+			unsigned int m_height;
+			unsigned int m_width;
+			unsigned int m_s; // Constante utilisée pour les calculs
 
 			boost::optional<sdl::Pointui> m_selected; // boost::none = pas de sélection
 			std::list<sdl::Pointui> m_highlight; // ceux à surligner
@@ -91,8 +91,6 @@ namespace graphics
 			SDL_Surface* m_hexa;
 			SDL_Surface* m_high;
 			SDL_Surface* createHexa(SDL_Color c);
-
-			HexaMap();
 	};//class HexaMap
 };//namespace graphics
 

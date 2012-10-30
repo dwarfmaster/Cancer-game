@@ -21,46 +21,19 @@ namespace fs = boost::filesystem;
 
 namespace graphics
 {
-	HexaMap::HexaMap(unsigned int height)
-		: m_size(0,0), m_ori(0,0), m_height(height), m_width(m_height / std::cos(30.0*PI/180.0)), m_s(m_width / 2), m_selected(boost::none), m_hexa(NULL)
-	{
-		SDL_Color c;
-		c.r = 255;
-		c.g = 0;
-		c.b = 255;
-		m_hexa = createHexa(c);
+	HexaMap::HexaMap()
+		: m_size(0,0), m_ori(0,0), m_height(0), m_width(0), m_s(0), m_selected(boost::none), m_hexa(NULL), m_high(NULL)
+	{ }
 
-		c.r = 255;
-		c.g = 255;
-		c.b = 0;
-		m_high = createHexa(c);
-	}
-
-	HexaMap::HexaMap(const fs::path& src, const load_tile_f& loader, unsigned int height)
-		: m_size(0,0), m_ori(0,0), m_height(height), m_width(m_height / std::cos(30.0*PI/180.0)), m_s(m_width / 2), m_selected(boost::none), m_hexa(NULL)
+	HexaMap::HexaMap(const fs::path& src, const load_tile_f& loader)
+		: m_size(0,0), m_ori(0,0), m_height(0), m_width(0), m_s(0), m_selected(boost::none), m_hexa(NULL), m_high(NULL)
 	{
 		load(src, loader);
-
-		SDL_Color c;
-		c.r = 255;
-		c.g = 0;
-		c.b = 255;
-		m_hexa = createHexa(c);
-
-		c.r = 255;
-		c.g = 255;
-		c.b = 0;
-		m_high = createHexa(c);
 	}
 
 	HexaMap::~HexaMap()
 	{
 		clear();
-		
-		if( m_hexa != NULL )
-			SDL_FreeSurface(m_hexa);
-		if( m_high != NULL )
-			SDL_FreeSurface(m_high);
 	}
 
 	void HexaMap::load(const boost::filesystem::path& src, const load_tile_f& loader)
@@ -96,7 +69,25 @@ namespace graphics
 			oss << _i("The file \"") << src.string() << _i("\" has an invalid map node : no size attribute");
 			throw core::Exception( oss.str() );
 		}
-		size_t size = sdl::atoi( elem->Attribute("size") );
+		m_height = sdl::atoi( elem->Attribute("size") );
+		m_width = m_height / std::cos(30.0 * PI / 180.0);
+		m_s = m_width / 2;
+
+		// On crée les hexagones de sélection et surlignage
+		SDL_Color c;
+		c.r = 255; c.g = 0; c.b = 255;
+		m_hexa = createHexa(c);
+		c.r = 255; c.g = 255; c.b = 0;
+		m_high = createHexa(c);
+
+		// On récupère la longeur des lignes
+		if( elem->Attribute("length") == NULL )
+		{
+			std::ostringstream oss;
+			oss << _i("The file \"") << src.string() << _i("\" has an invalid map node : no length attribute");
+			throw core::Exception( oss.str() );
+		}
+		size_t size = sdl::atoi( elem->Attribute("length") );
 
 		// On récupère les colonnes
 		std::vector<row_t> rows;
@@ -130,7 +121,7 @@ namespace graphics
 		}
 
 		ofs << "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" << std::endl;
-		ofs << "<map size=\"" << m_size.x << "\">" << std::endl;
+		ofs << "<map length=\"" << m_size.x << "\" size=\"" << m_height << "\">" << std::endl;
 
 		for(size_t y = 0; y < m_size.y; ++y)
 		{
@@ -164,6 +155,15 @@ namespace graphics
 		m_map.resize( boost::extents[0][0] );
 		m_size.set(0,0);
 		m_ori.set(0,0);
+
+		m_width = 0;
+		m_height = 0;
+		m_s = 0;
+
+		if( m_hexa != NULL )
+			SDL_FreeSurface(m_hexa);
+		if( m_high != NULL )
+			SDL_FreeSurface(m_high);
 	}
 
 	void HexaMap::scroll(const sdl::Vector2f& dec)
@@ -374,7 +374,7 @@ namespace graphics
 		}
 		SDL_FreeSurface(tmp);
 
-		SDL_FillRect(ret, NULL, SDL_MapRGB(ret->format, 1, 2, 3)); // TODO : Transparent
+		SDL_FillRect(ret, NULL, SDL_MapRGB(ret->format, 1, 2, 3));
 		SDL_SetColorKey(ret, SDL_SRCCOLORKEY, SDL_MapRGB(ret->format, 1, 2, 3));
 
 		// On affiche
