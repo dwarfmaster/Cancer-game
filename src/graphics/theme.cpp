@@ -46,7 +46,6 @@ namespace graphics
 		if( themes.begin() == themes.end() )
 			return false;
 
-		// TODO font
 		// On charge les polices
 		TiXmlElement* elem = file.FirstChildElement("fonts");
 		if( elem == NULL )
