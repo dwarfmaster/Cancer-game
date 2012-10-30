@@ -1,6 +1,6 @@
 include ../compil.mk
 
-OBJS=button.o anim.o deleterContainer.o gui.o checkBox.o icon.o listModel.o selectListener.o list.o radioButton.o slider.o focusListener.o textField.o textBox.o fileexplorer.o dropDown.o tabbedArea.o theme.o
+OBJS=button.o anim.o deleterContainer.o gui.o checkBox.o icon.o listModel.o selectListener.o list.o radioButton.o slider.o focusListener.o textField.o textBox.o fileexplorer.o dropDown.o tabbedArea.o theme.o tile.o hexamap.o
 
 all : $(OBJS)
 

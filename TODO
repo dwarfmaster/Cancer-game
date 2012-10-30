@@ -1,4 +1,26 @@
-Réfléchir à l'implémentation du jeu.
-Config : chemin vers les images du corp.
-Faire le corp.
+Définir la structure globale d'une tile: DONE
+	-> Doit contenir la sauvegarde vers std::string, le chargement depuis std::string et une fonction retournant l'image à afficher. DONE
+
+Définir la structure qui gère les cellules:
+	-> Réfléchir à l'interface.
+	-> Hérite de la structure globale de tile.
+
+Définit la structure qui gère les vaisseaux sanguins:
+	-> Réfléchir à l'interface :
+		-> Faire une structure pour chaque case -> hérite de la structure globale de tile.
+		-> Faire une classe qui représente toutes les cases de chaque vaisseau sanguin.
+
+Coder le moteur de tilemapping hexagonal: DONE
+	-> Réfléchir à l'interface: DONE
+		-> Permettre l'accès aux cellules et vaisseaux sanguins. DONE
+		-> Permettre leur modification. DONE
+	-> Définir un format de fichier. DONE
+	-> Implémenter le chargement. DONE
+	-> Implémenter la sauvegarde. DONE
+	-> Implémenter le dessin des tiles. DONE
+	-> Implémenter le scroll. DONE
+	-> Implémenter le test de collision. DONE
+	-> Obtention des tiles concurrents d'un tile. DONE
+	-> Sélection graphique d'un tile. DONE
+	-> Surlignage graphique d'un tile. DONE
 
