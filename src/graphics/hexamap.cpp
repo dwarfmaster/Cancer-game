@@ -357,15 +357,25 @@ namespace graphics
 		}
 
 		// On crée la surface
-		SDL_Surface* ret = SDL_CreateRGBSurface(SDL_HWSURFACE, size->w, size->h, ecran->format->BitsPerPixel, 0, 0, 0, 0);
-		if( ret == NULL )
+		SDL_Surface* tmp = SDL_CreateRGBSurface(SDL_HWSURFACE, size->w, size->h, 24, 0, 0, 0, 0);
+		if( tmp == NULL )
 		{
 			std::ostringstream oss;
 			oss << _i("Error while create a surface : \"") << SDL_GetError() << _i("\"");
 			throw core::Exception( oss.str() );
 		}
 
-		SDL_FillRect(ret, NULL, SDL_MapRGBA(ret->format, 0, 0, 0, 0)); // Transparent
+		SDL_Surface* ret = SDL_DisplayFormat(tmp);
+		if( ret == NULL )
+		{
+			std::ostringstream oss;
+			oss << _i("Error while converting a surface : \"") << SDL_GetError() << _i("\"");
+			throw core::Exception( oss.str() );
+		}
+		SDL_FreeSurface(tmp);
+
+		SDL_FillRect(ret, NULL, SDL_MapRGB(ret->format, 1, 2, 3)); // TODO : Transparent
+		SDL_SetColorKey(ret, SDL_SRCCOLORKEY, SDL_MapRGB(ret->format, 1, 2, 3));
 
 		// On affiche
 		SDL_Rect selectPos;
@@ -499,7 +509,7 @@ namespace graphics
 			throw core::Exception( oss.str() );
 		}
 
-		SDL_Surface* pict = SDL_DisplayFormatAlpha(tmp);
+		SDL_Surface* pict = SDL_DisplayFormat(tmp);
 		if( pict == NULL )
 		{
 			std::ostringstream oss;
@@ -507,7 +517,9 @@ namespace graphics
 			throw core::Exception( oss.str() );
 		}
 		SDL_FreeSurface(tmp);
-		SDL_FillRect(pict, NULL, SDL_MapRGBA(pict->format, 0, 0, 0, 0));
+
+		SDL_FillRect(pict, NULL, SDL_MapRGB(pict->format, 125, 125, 125));
+		SDL_SetColorKey(pict, SDL_SRCCOLORKEY, SDL_MapRGB(pict->format, 125, 125, 125)); // La transparence
 
 		const Uint8 width = 3;
 
