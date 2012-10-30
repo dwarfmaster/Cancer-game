@@ -378,58 +378,7 @@ namespace graphics
 		SDL_SetColorKey(ret, SDL_SRCCOLORKEY, SDL_MapRGB(ret->format, 1, 2, 3));
 
 		// On affiche
-		SDL_Rect selectPos;
-		selectPos.x = m_width * -1; // On s'assure que la sélection ne sera pas affichée si en dehors de l'écran
-		selectPos.y = m_height * -1;
-		std::list<SDL_Rect> hls; // highlights
-
-		signed int lastx = 0;
-		for(size_t x = 0; x < m_size.x; ++x)
-		{
-			SDL_Rect pos;
-			if( x == 0 )
-				pos.x = 0;
-			else
-				pos.x = lastx + m_s * 1.5;
-			lastx = pos.x;
-
-			if( pos.x + m_width > m_ori.x
-					&& (unsigned int)pos.x < m_ori.x + size->w )
-			{
-				pos.x -= m_ori.x;
-				for(size_t y = 0; y < m_size.y; ++y)
-				{
-					pos.y = y * m_height + (x%2) * m_height / 2;
-
-					Tile* toblit = m_map[x][y];
-					if( toblit != NULL 
-							&& pos.y + m_height > m_ori.y
-							&& (unsigned int)pos.y < m_ori.y + size->h )
-					{
-						pos.y -= m_ori.y;
-						SDL_Rect save = pos;
-
-						SDL_BlitSurface(toblit->getImg(), NULL, ret, &pos);
-						if( m_selected != boost::none
-								&& m_selected->x == x
-								&& m_selected->y == y )
-							selectPos = save;
-						for(std::list<sdl::Pointui>::const_iterator it = m_highlight.begin(); it != m_highlight.end(); ++it)
-						{
-							if( it->x == x
-									&& it->y == y )
-								hls.push_back(save);
-						}
-
-						pos = save;
-					}
-				}
-			}
-		}
-		for(std::list<SDL_Rect>::iterator it = hls.begin(); it != hls.end(); ++it)
-			SDL_BlitSurface(m_high, NULL, ret, &(*it));
-		if( m_selected != boost::none )
-			SDL_BlitSurface(m_hexa, NULL, ret, &selectPos);
+		drawOn(ret);
 
 		return ret;
 	}
