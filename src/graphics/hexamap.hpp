@@ -1,6 +1,6 @@
 
-#ifndef DEF_HEXAMAP
-#define DEF_HEXAMAP
+#ifndef DEF_GRAPHICS_HEXAMAP
+#define DEF_GRAPHICS_HEXAMAP
 
 #include <SDLP_position.hpp>
 #include <vector>
@@ -94,5 +94,5 @@ namespace graphics
 	};//class HexaMap
 };//namespace graphics
 
-#endif//DEF_HEXAMAP
+#endif//DEF_GRAPHICS_HEXAMAP
 
