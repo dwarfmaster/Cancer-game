@@ -78,6 +78,14 @@ La tilemap remplit tout l'écran. Il y a un container dans un coin qui affiche l
 \subsubsection{Contrôle}
 On clique sur un cellule pour la sélectionner. Si on fait un clic droit sur une cellule non contaminée alors qu'une cellule contaminé est sélectionnée, on propose d'envoyer des unités d'attaque si les deux cellules sont adjacentes et on propose d'envoyer des médiateurs si les deux cellules ont un lien (contact ou vaisseau sanguin).
 
+\subsubsection{Stockage}
+Chaque case de l'hexamap est stockée sous la forme : \emph{type:autre} où type peut être :
+\begin{description}
+	\item[empty] Correspond à un case vide. \emph{autre} ne contiendra rien.
+	\item[vessel] Correspond à un vaisseau sanguin. Voir la description des vessels pour le contenu de \emph{autre}.
+	\item[cell] Correspond à une cellule. Voir la description des cellules pour le contenu de \emph{autre}
+\end{description}
+
 \subsection{Une cellule}\label{cellule}
 Les cellules sont les unités de bases du jeu. Les cellules mutées vous appartiennent et vous devez faire muter les autres. Chaque cellule mutée consomme régulièrement un peu de nutriments (20 nutriments par minute), mais peu aussi en faire gagner lorsqu'elle en prend aux veines ou aux cellules non mutées. Une cellule mutée complètement entourée par des cellules mutées et qui ne touche pas de vaisseau sanguin vera sa consommation en nutriments divisée par deux. Si vous n'avez pas assez de nutriments pour toutes vos cellules, vous devez en mettre certaines en hibernation : elles ne consommeront plus rien mais ne pourront plus rien faire. Pour les faire sortir d'hibernation, vous devrez consommer 20 oxygènes. Si toutes vos cellules sont en hibernation, vous avez perdu. Chaque action (créer,dialoguer...) de vos cellules consomme de l'oxygène.
 
@@ -116,6 +124,9 @@ Pour faire muter une cellule non mutée, vous devez lui faire accepter la mutati
 
 \subsubsection{Graphiques}
 Chaque cellule est un hexagone, de couleur différente en fonction de si elle est saine, mutée ou en hibernation. Les unités d'attaques sont de petits crabes. Elles ne sont pas forcément tous affichés (ça ne sert à rien d'en afficher vingt sur 10 pixels). Le médiateurs sont de petites boules tentaculaires. Comme pour les unités d'attaque, les médiateurs ne sont pas forcément tous affichés.
+
+\subsubsection{Stockage}
+Chaque cellule est stockée dans une chaine de caractères de la forme \emph{[muted|sane]:autre}. Le début indique si la cellule est mutée et le \emph{autre} en dépend. % TODO autre en fonction de l'état de la cellule.
 
 \subsection{Sons}
 Le jeu possède deux musiques : une pour le menu et une pour le jeu lui-même. Il possède aussi un certain nombre de sons que voici (avec leurs noms) :
