@@ -5,8 +5,7 @@
 #include <list>
 #include <SDL/SDL.h>
 #include "cell.hpp"
-
-class SaneCell; // TODO créer la sanecell
+#include "sanecell.hpp"
 
 class MutedCell;
 void update(MutedCell* cell);
@@ -44,11 +43,13 @@ class MutedCell : public Cell
 
 		static SDL_Surface* m_img;
 
+		// Le compteur
 		static size_t m_nb;
 		typedef std::list<MutedCell*> all_t;
 		typedef all_t::iterator all_it;
 		typedef all_t::const_iterator all_cit;
 		all_t m_all;
+		all_it m_selfPos;
 };//MutedCell
 
 #endif//DEF_MUTEDCELL
