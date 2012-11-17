@@ -4,11 +4,12 @@
 
 #include <list>
 #include "cell.hpp"
-#include "mutedcell.hpp"
 #include "attacker.hpp"
 
 struct SDL_Surface;
+class MutedCell;
 
+class SaneCell;
 void update(SaneCell* cell);
 
 class SaneCell : public Cell
