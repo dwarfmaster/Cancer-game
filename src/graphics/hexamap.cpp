@@ -295,6 +295,33 @@ namespace graphics
 		return ret;
 	}
 
+	bool HexaMap::set(unsigned int x, unsigned int y, Tile* nvalue)
+	{
+		if( x >= m_size.x
+				|| y >= m_size.y )
+			return false;
+
+		m_map[x][y] = nvalue;
+		return true;
+	}
+
+	bool HexaMap::set(const sdl::Pointui& pos, Tile* nvalue)
+	{
+		long int x = pos.x / m_s / 1.5;
+		long int y = (pos.y - (x % 2) * m_height / 2) / m_height;
+
+		if( y < 0
+				|| x < 0 ) // La vérification de x et y trop grands se fait dans le getTileAt
+			return false;
+		else
+			return set( (unsigned int)x, (unsigned int)y, nvalue );
+	}
+
+	bool HexaMap::setR(const sdl::Pointui& pos, Tile* nvalue)
+	{
+		return set(pos + sdl::Vector2f(m_ori), nvalue);
+	}
+
 	HexaMap::const_near_t HexaMap::getAroundTiles(const Tile* tile) const
 	{
 		const_near_t ret;

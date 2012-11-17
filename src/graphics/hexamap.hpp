@@ -52,6 +52,10 @@ namespace graphics
 			near_t getAroundTiles(const Tile* tile);
 			const_near_t getAroundTiles(const Tile* tile) const;
 
+			bool set(unsigned int x, unsigned int y, Tile* nvalue); // Change la valeur de la tile d'index (x;y) : /!\ Ne libère pas l'ancienne valeur.
+			bool set(const sdl::Pointui& pos, Tile* nvalue); // Change la valeur de la tile de position absolue pos.
+			bool setR(const sdl::Pointui& pos, Tile* nvalue); // Change la valeur de la tile de position relative à m_ori pos.
+
 			void select(const Tile* t);
 			void unselect();
 
