@@ -5,6 +5,7 @@
 #include <string>
 #include <boost/function.hpp>
 struct SDL_Surface;
+class HexaMap;
 
 namespace graphics
 {
@@ -16,6 +17,14 @@ namespace graphics
 
 			virtual ~Tile();
 
+			unsigned int getXidx() const;
+			unsigned int getYidx() const;
+
+		private:
+			friend HexaMap;
+
+			unsigned int m_Xidx;
+			unsigned int m_Yidx;
 	};//class Tile
 };//namespace graphics
 

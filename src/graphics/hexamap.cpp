@@ -106,7 +106,15 @@ namespace graphics
 		for(size_t i = 0; i < m_size.x; ++i)
 		{
 			for(size_t j = 0; j < m_size.y; ++j)
+			{
 				m_map[i][j] = rows[j][i];
+
+				if( m_map[i][j] != NULL )
+				{
+					m_map[i][j]->m_Xidx = i;
+					m_map[i][j]->m_Yidx = j;
+				}
+			}
 		}
 	}
 
@@ -302,6 +310,12 @@ namespace graphics
 			return false;
 
 		m_map[x][y] = nvalue;
+		if( m_map[x][y] != NULL )
+		{
+			m_map[x][y]->m_Xidx = x;
+			m_map[x][y]->m_Yidx = y;
+		}
+
 		return true;
 	}
 
@@ -409,11 +423,11 @@ namespace graphics
 
 		return ret;
 	}
-	
+
 	void HexaMap::drawOn(SDL_Surface* ecran) const
 	{
 		sdl::AABB size = sdl::makeRect(0, 0, ecran->w, ecran->h);
-		
+
 		// le dessin
 		SDL_Rect selectPos;
 		selectPos.x = m_width * -1; // On s'assure que la sélection ne sera pas affichée si en dehors de l'écran
@@ -523,17 +537,17 @@ namespace graphics
 
 		return sdl::makeRect(0, 0, w, h);
 	}
-			
+
 	void HexaMap::select(const Tile* t)
 	{
 		m_selected = getTilePos(t);
 	}
-			
+
 	void HexaMap::unselect()
 	{
 		m_selected = boost::none;
 	}
-			
+
 	SDL_Surface* HexaMap::createHexa(SDL_Color c)
 	{
 		SDL_Surface* tmp = SDL_CreateRGBSurface(SDL_HWSURFACE, m_width, m_height, 24, 0, 0, 0, 0);
@@ -599,7 +613,7 @@ namespace graphics
 
 		return pict;
 	}
-			
+
 	void HexaMap::setHighlight(const std::list<Tile*>& hl)
 	{
 		clearHighlight();
