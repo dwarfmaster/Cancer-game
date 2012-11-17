@@ -35,9 +35,21 @@ class MutedCell : public Cell
 		typedef listCell::iterator cells_it;
 		typedef listCell::const_iterator cells_cit;
 		listCell m_attackers; // Les attackers à créer
-		Uint32 m_timeSpend; // Temps passé depuis le début de la création
+		Uint32 m_atTimeSpend; // Temps passé depuis le début de la création
 
-		// TODO les médiateurs
+		// Les mediators
+		struct AMediator // Structure servant à stocker les mediator avant leur création
+		{
+			enum dest_t{CELL,VESSEL}; // Le type de la destination
+			dest_t dest;
+
+			graphics::Tile* tdest; // La destination, sera castée en fonction de son type
+		};
+		typedef std::list<AMediator> listMed;
+		typedef listMed::iterator meds_it;
+		typedef listMed::const_iterator meds_cit;
+		listMed m_mediators;
+		Uint32 m_medTimeSpend; // Temps passé depuis la création
 
 		void selfUpdate();
 
