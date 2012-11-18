@@ -16,5 +16,10 @@ namespace graphics
 	{
 		return m_Yidx;
 	}
+			
+	HexaMap* Tile::getHexaMap() const
+	{
+		return m_father;
+	}
 };
 

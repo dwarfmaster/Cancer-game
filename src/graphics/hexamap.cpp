@@ -113,6 +113,7 @@ namespace graphics
 				{
 					m_map[i][j]->m_Xidx = i;
 					m_map[i][j]->m_Yidx = j;
+					m_map[i][j]->m_father = this;
 				}
 			}
 		}
@@ -314,6 +315,7 @@ namespace graphics
 		{
 			m_map[x][y]->m_Xidx = x;
 			m_map[x][y]->m_Yidx = y;
+			m_map[x][y]->m_father = this;
 		}
 
 		return true;

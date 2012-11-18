@@ -19,12 +19,14 @@ namespace graphics
 
 			unsigned int getXidx() const;
 			unsigned int getYidx() const;
+			HexaMap* getHexaMap() const;
 
 		private:
 			friend HexaMap;
 
 			unsigned int m_Xidx;
 			unsigned int m_Yidx;
+			HexaMap* m_father;
 	};//class Tile
 };//namespace graphics
 
