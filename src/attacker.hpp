@@ -20,6 +20,9 @@ class Attacker
 		Attacker(SaneCell* dest);
 		~Attacker();
 
+		std::string save() const;
+		void load(const std::string& src);
+
 	private:
 		SaneCell* m_dest;
 		const size_t m_nbByImg = 5; // Le nombre d'attackers pour chaque image
