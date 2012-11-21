@@ -5,6 +5,7 @@
 #include <list>
 #include "cell.hpp"
 #include "attacker.hpp"
+#include "mediator.hpp"
 
 struct SDL_Surface;
 class MutedCell;
@@ -16,7 +17,7 @@ class SaneCell : public Cell
 {
 	friend void update(SaneCell* cell);
 	friend Attacker;
-	// friend mediator
+	friend Mediator;
 
 	public:
 		SaneCell();
