@@ -34,8 +34,10 @@ class SaneCell : public Cell
 		static MutedCell* toMuted(SaneCell* cell);
 
 	private:
-		size_t m_nbMed; // Ces deux sont mis à jour par les mediator et attacker
+		size_t m_nbMed; // Ces quatres sont mis à jour par les mediator et attacker
+		std::list<Mediator*> m_meds;
 		size_t m_nbAtt;
+		std::list<Attacker*> m_atts;
 
 		static SDL_Surface* m_img;
 
