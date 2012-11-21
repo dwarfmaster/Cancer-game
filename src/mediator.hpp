@@ -20,6 +20,10 @@ class Mediator
 		Mediator(SaneCell* dest);
 		~Mediator();
 
+		std::string save() const;
+		void load(const std::string& src);
+
+
 	private:
 		SaneCell* m_dest;
 
