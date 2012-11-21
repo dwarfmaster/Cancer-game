@@ -45,7 +45,7 @@ class SaneCell : public Cell
 		typedef std::list<SaneCell*> all_t;
 		typedef all_t::iterator all_it;
 		typedef all_t::const_iterator all_cit;
-		all_t m_all;
+		static all_t m_all;
 		all_it m_selfPos;
 };//class SaneCell
 
