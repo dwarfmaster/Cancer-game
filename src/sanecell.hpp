@@ -39,6 +39,9 @@ class SaneCell : public Cell
 		size_t m_nbAtt;
 		std::list<Attacker*> m_atts;
 
+		int m_def; // Défense restante
+		int m_conv; // Niveau de conviction
+
 		static SDL_Surface* m_img;
 
 		void selfUpdate();
