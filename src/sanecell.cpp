@@ -2,6 +2,7 @@
 #include "sanecell.hpp"
 
 #include <SDL.h>
+#include <sstream>
 
 size_t SaneCell::m_nb = 0;
 all_t SaneCell::m_all;
@@ -42,8 +43,19 @@ SDL_Surface* SaneCell::getImg() const
 
 std::string SaneCell::save() const
 {
-	// TODO
 	// Syntaxe sauvegarde : def;conv;nb_med(amed/anothermed);nb_att(aatt/anotheratt)
+	
+	std::ostringstream save;
+	save << m_def << ";" << m_conv << ";";
+	save << m_nbMed << "(";
+	for(std::list<Mediator*>::const_iterator it = m_meds.begin(); it != m_meds.end(); ++it)
+		save << it->save() << "/";
+	save << ");" << m_nbAtt << "(";
+	for(std::list<Attacker*>::const_iterator it = m_atts.begin(); it != m_atts.end(); ++it)
+		save << it->save() << "/";
+	save << ")";
+
+	return save.c_str();
 }
 
 size_t SaneCell::nbSane()
