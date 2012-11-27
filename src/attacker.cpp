@@ -73,7 +73,7 @@ void Attacker::selfUpdate()
 		}
 	}
 
-	// TODO libérer la mémoire
+	delete this;
 }
 
 
