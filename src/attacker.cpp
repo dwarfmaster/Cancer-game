@@ -51,7 +51,7 @@ void Attacker::load(const std::string& src)
 			|| !iss.eof() )
 	{
 		std::ostringstream oss;
-		oss << _i("Error in the time spent of an attacker : \"") << src << _i("\"");
+		oss << _i("Error while loading the time spent of an attacker : \"") << src << _i("\"");
 		throw core::Exception( oss.str() );
 	}
 }
