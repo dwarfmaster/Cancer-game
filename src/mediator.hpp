@@ -10,7 +10,6 @@ class SaneCell;
 struct SDL_Surface;
 
 class Mediator;
-void update(Mediator* med); // Met à jour tous les mediators
 
 class Mediator
 {
@@ -23,21 +22,15 @@ class Mediator
 		std::string save() const;
 		void load(const std::string& src);
 
+		void selfUpdate(); // Appelé par sanecell
 
 	private:
 		SaneCell* m_dest;
+		unsigned int m_timeSpent;
+		unsigned int m_lastTime;
 
-		void selfUpdate();
 		void blit();
 
-		typedef std::list<Mediator*> listMeds;
-		typedef std::map<SaneCell*, listMeds> mapBySaneCell;
-		typedef listMeds::iterator meds_it;
-		typedef listMeds::const_iterator meds_cit;
-		typedef mapBySaneCell::iterator all_it;
-		typedef mapBySaneCell::const_iterator all_cit;
-		
-		static mapBySaneCell m_all;
 		static size_t m_nb;
 		static SDL_Surface* m_img;
 
