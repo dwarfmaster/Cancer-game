@@ -4,11 +4,18 @@
 #include <sstream>
 #include <SDL/SDL.h>
 
+#include "sanecell.hpp"
+#include "i18n.hpp"
+#include "core/exception.hpp"
+
 size_t Mediator::m_nb = 0;
 SDL_Surface* Mediator::m_img = NULL;
 
+// La durée de survie : 2 minutes
+const Uint32 timeLive = 120000;
+
 Mediator::Mediator(SaneCell* dest)
-	: m_timeSpent(0);
+	: m_dest(dest), m_timeSpent(0)
 {
 	m_lastTime = SDL_GetTicks();
 
@@ -17,6 +24,9 @@ Mediator::Mediator(SaneCell* dest)
 		// TODO charger l'image
 	}
 	++m_nb;
+
+	++m_dest->m_nbMed;
+	m_dest->m_meds.push_back(this);
 }
 
 Mediator::~Mediator()
@@ -24,6 +34,16 @@ Mediator::~Mediator()
 	--m_nb;
 	if( m_nb == 0 )
 		SDL_FreeSurface(m_img);
+
+	for(std::list<Mediator*>::iterator it = m_dest->m_meds.begin(); it != m_dest->m_meds.end(); ++it)
+	{
+		if( *it == this )
+		{
+			m_dest->m_meds.erase(it);
+			break;
+		}
+	}
+	--m_dest->m_nbMed;
 }
 
 std::string Mediator::save() const
@@ -55,17 +75,8 @@ void Mediator::selfUpdate()
 	m_timeSpent += timeLapsed;
 	if( m_timeSpent >= timeLive )
 	{
-		for(std::list<Attacker*>::iterator it = m_dest->m_atts.begin(); it != m_dest->m_atts.end(); ++it)
-		{
-			if( *it == this )
-			{
-				m_dest->m_atts.erase(it);
-				break;
-			}
-		}
+		delete this;
 	}
-
-	delete this;
 }
 
 void Mediator::blit()
