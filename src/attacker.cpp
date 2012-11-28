@@ -15,8 +15,8 @@ const Uint32 timeLive = 45000;
 size_t Attacker::nb = 0;
 SDL_Surface* Attacker::m_img = NULL;
 
-Attacker::Attacker(SaneCell* dest)
-	: m_dest(dest), m_timeSpent(0)
+	Attacker::Attacker(SaneCell* dest)
+: m_dest(dest), m_timeSpent(0)
 {
 	m_lastTime = SDL_GetTicks();
 
@@ -25,6 +25,9 @@ Attacker::Attacker(SaneCell* dest)
 		// TODO charger l'image
 	}
 	++nb;
+
+	++m_dest->m_nbAtt;
+	m_dest->m_atts.push_back(this);
 }
 
 Attacker::~Attacker()
@@ -32,6 +35,16 @@ Attacker::~Attacker()
 	--nb;
 	if( nb == 0 )
 		SDL_FreeSurface(m_img);
+
+	for(std::list<Attacker*>::iterator it = m_dest->m_atts.begin(); it != m_dest->m_atts.end(); ++it)
+	{
+		if( *it == this )
+		{
+			m_dest->m_atts.erase(it);
+			break;
+		}
+	}
+	--m_dest->m_nbAtt;
 }
 
 std::string Attacker::save() const
@@ -63,17 +76,8 @@ void Attacker::selfUpdate()
 	m_timeSpent += timeLapsed;
 	if( m_timeSpent >= timeLive )
 	{
-		for(std::list<Attacker*>::iterator it = m_dest->m_atts.begin(); it != m_dest->m_atts.end(); ++it)
-		{
-			if( *it == this )
-			{
-				m_dest->m_atts.erase(it);
-				break;
-			}
-		}
+		delete this;
 	}
-
-	delete this;
 }
 
 
