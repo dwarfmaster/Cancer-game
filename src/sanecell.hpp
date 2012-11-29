@@ -35,9 +35,14 @@ class SaneCell : public Cell
 
 	private:
 		size_t m_nbMed; // Ces quatres sont mis à jour par les mediator et attacker
-		std::list<Mediator*> m_meds;
+		typedef std::list<Mediator*> listMed;
+		typedef listMed::iterator med_it;
+		listMed m_meds;
+
 		size_t m_nbAtt;
-		std::list<Attacker*> m_atts;
+		typedef std::list<Attacker*> listAtt;
+		typedef listAtt::iterator att_it;
+		listAtt m_atts;
 
 		int m_def; // Défense restante
 		int m_conv; // Niveau de conviction
