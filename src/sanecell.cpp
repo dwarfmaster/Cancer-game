@@ -8,8 +8,8 @@ size_t SaneCell::m_nb = 0;
 SaneCell::all_t SaneCell::m_all;
 SDL_Surface* SaneCell::m_img = NULL;
 
-SaneCell::SaneCell()
-	: m_def(100), m_conv(0)
+	SaneCell::SaneCell()
+: m_def(100), m_conv(0), m_lastTime(SDL_GetTicks())
 {
 	if( m_nb == 0 )
 	{
@@ -44,7 +44,7 @@ SDL_Surface* SaneCell::getImg() const
 std::string SaneCell::save() const
 {
 	// Syntaxe sauvegarde : def;conv;nb_med(amed/anothermed);nb_att(aatt/anotheratt)
-	
+
 	std::ostringstream save;
 	save << m_def << ";" << m_conv << ";";
 	save << m_nbMed << "(";
@@ -77,29 +77,37 @@ void SaneCell::selfUpdate()
 {
 	// Mise à jour des médiators et attackers
 	for(med_it it = m_meds.begin(); it != m_meds.end(); ++it)
-		it->selfUpdate();
+		(*it)->selfUpdate();
 	for(att_it it = m_atts.begin(); it != m_atts.end(); ++it)
-		it->selfUpdate();
+		(*it)->selfUpdate();
 
-	// TODO par seconde
-	// Les attackers
-	int vdefence = int(m_nbAtt / 2) * -1;
-	int vaccept = 0;
-	if(m_def > 50)
-		vaccept = ((m_def - 50) / 25) * -1;
-	else
-		vaccet = (50 - m_def) / 25;
+	// TODO améliorer la précision
+	Uint32 timeSpent = SDL_GetTicks() - m_lastTime;
+	while(timeSpent >= 1000)
+	{
+		// Les attackers
+		int vdefense = int(m_nbAtt / 2) * -1;
+		int vaccept = 0;
+		if(m_def > 50)
+			vaccept = ((m_def - 50) / 25) * -1;
+		else
+			vaccept = (50 - m_def) / 25;
 
-	// Les Mediator
-	vaccept = int(m_nbMed / 4) * int((100 - m_def) / 100);
-	vaccept = m_conv / 4;
-	if(vaccept < 0)
-		vaccept = 0;
+		// Les Mediator
+		vaccept = int(m_nbMed / 4) * int((100 - m_def) / 100);
+		vaccept = m_conv / 4;
+		if(vaccept < 0)
+			vaccept = 0;
 
-	m_def += vdefense;
-	m_conv += vaccept;
+		m_def += vdefense;
+		m_conv += vaccept;
 
-	// TODO conversion
+		// TODO conversion
+
+		timeSpent -= 1000;
+	}
+
+	m_lastTime = SDL_GetTicks();
 }
 
 void update(SaneCell* cell)

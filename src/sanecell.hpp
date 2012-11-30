@@ -50,6 +50,7 @@ class SaneCell : public Cell
 		static SDL_Surface* m_img;
 
 		void selfUpdate();
+		unsigned int m_lastTime;
 
 		// Le compteur
 		static size_t m_nb;
