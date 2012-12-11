@@ -15,6 +15,7 @@ namespace core
 	Config* cfg;
 
 	const char* default_path_sounds = "audio.d";
+	const char* default_path_game = "game";
 	const char* default_path_config = "conf.cfg";
 	const char* default_path_gtheme = "default.gtheme";
 	const char* rc_dir = RCDIR;
@@ -82,6 +83,11 @@ namespace core
 	{
 		return m_gtheme;
 	}
+			
+	path_t Config::gamedir() const
+	{
+		return m_gamedir;
+	}
 
 	void Config::setOpts()
 	{
@@ -111,14 +117,20 @@ namespace core
 			("gtheme,g", opt::value<path_t>(), _i("Set the path to the graphics theme."))
 			;
 
+		// Options
+		opt::options_description game( _i("Game") );
+		game.add_options()
+			("gamedir,G", opt::value<path_t>(), _i("Set the path to the directory containing game pictures."))
+			;
+
 		opt::options_description hidden;
 		hidden.add_options()
 			("audio.music", opt::value<unsigned short int>())
 			("audio.sounds", opt::value<unsigned short int>())
 			;
 
-		m_desc.add(general).add(sound).add(graphics);
-		m_opts.add(general).add(sound).add(graphics).add(hidden);
+		m_desc.add(general).add(sound).add(graphics).add(game);
+		m_opts.add(general).add(sound).add(graphics).add(game).add(hidden);
 
 		const char* home = std::getenv("HOME");
 		if( home != NULL )
@@ -265,6 +277,11 @@ namespace core
 			m_gtheme = vm["gtheme"].as<path_t>();
 		else
 			m_gtheme =  getPath(default_path_gtheme);
+
+		if( vm.count("gamedir") )
+			m_gamedir = vm["gamedir"].as<path_t>();
+		else
+			m_gamedir = getPath(default_path_game);
 	}
 
 	unsigned short int Config::volume(bool sounds) const
