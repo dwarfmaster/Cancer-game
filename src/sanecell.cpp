@@ -2,7 +2,12 @@
 #include "sanecell.hpp"
 
 #include <SDL.h>
+#include <SDL_image.h>
 #include <sstream>
+
+#include "core/config.hpp"
+#include "core/exception.hpp"
+#include "i18n.hpp"
 
 size_t SaneCell::m_nb = 0;
 SaneCell::all_t SaneCell::m_all;
@@ -13,7 +18,14 @@ SDL_Surface* SaneCell::m_img = NULL;
 {
 	if( m_nb == 0 )
 	{
-		// TODO : chargement de m_img
+		std::string path = (core::cfg->gamedir() / "sanecell.png").string();
+		m_img = IMG_Load( path.c_str() );
+		if( m_img == NULL )
+		{
+			std::ostringstream oss;
+			oss << _i("Error while loading the picture \"") << path << _i("\" : ") << SDL_GetError();
+			throw core::Exception( oss.str() );
+		}
 	}
 
 	++m_nb;
