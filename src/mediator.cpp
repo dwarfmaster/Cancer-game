@@ -3,10 +3,12 @@
 
 #include <sstream>
 #include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
 
 #include "sanecell.hpp"
 #include "i18n.hpp"
 #include "core/exception.hpp"
+#include "core/config.hpp"
 
 size_t Mediator::m_nb = 0;
 SDL_Surface* Mediator::m_img = NULL;
@@ -21,7 +23,14 @@ Mediator::Mediator(SaneCell* dest)
 
 	if( m_nb == 0 )
 	{
-		// TODO charger l'image
+		std::string path = (core::cfg->gamedir() / "mediator.png").string();
+		m_img = IMG_Load( path.c_str() );
+		if( m_img == NULL )
+		{
+			std::ostringstream oss;
+			oss << _i("Error while loading the picture \"") << path << _i("\" : ") << SDL_GetError();
+			throw core::Exception( oss.str() );
+		}
 	}
 	++m_nb;
 
