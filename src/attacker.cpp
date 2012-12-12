@@ -2,10 +2,12 @@
 #include "attacker.hpp"
 
 #include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
 #include <sstream>
 
 #include "i18n.hpp"
 #include "core/exception.hpp"
+#include "core/config.hpp"
 
 #include "sanecell.hpp"
 
@@ -22,7 +24,14 @@ SDL_Surface* Attacker::m_img = NULL;
 
 	if( nb == 0 )
 	{
-		// TODO charger l'image
+		std::string path = (core::cfg->gamedir() / "attacker.png").string();
+		m_img = IMG_Load( path.c_str() );
+		if( m_img == NULL )
+		{
+			std::ostringstream oss;
+			oss << _i("Error while loading the picture \"") << path << _i("\" : ") << SDL_GetError();
+			throw core::Exception( oss.str() );
+		}
 	}
 	++nb;
 
