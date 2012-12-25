@@ -56,7 +56,7 @@ SDL_Surface* SaneCell::getImg() const
 
 std::string SaneCell::save() const
 {
-	// Syntaxe sauvegarde : def;conv;nb_med(amed/anothermed);nb_att(aatt/anotheratt)
+	// Syntaxe sauvegarde : def;conv;amed/anothermed;aatt/anotheratt
 
 	std::ostringstream save;
 	save << m_def << ";" << m_conv << ";";
@@ -104,7 +104,7 @@ void loadComps(const std::string& src, NbDest& nb)
 SaneCell* SaneCell::load(const std::string& src)
 {
 	// TODO
-	// Syntaxe sauvegarde : def;conv;nb_med(amed/anothermed);nb_att(aatt/anotheratt)
+	// Syntaxe sauvegarde : def;conv;amed/anothermed;aatt/anotheratt
 	std::vector<std::string> parts = core::cutByChar(src, ';');
 	if( parts.size() != 4 )
 	{
