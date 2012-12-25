@@ -85,18 +85,23 @@ void loadPart(const std::string& src, T& dest, const std::string& caption)
 	}
 }
 
-	template<typename Dest, typename NbDest>
-void loadComps(const std::string& src, NbDest& nb)
+	template<typename Dest, typename List>
+void loadComps(const std::string& src, List& dest, SaneCell* tthis)
 {
-	size_t pos = src.find_first_of("(");
-	if( pos == std::string::npos )
+	std::vector<std::string> dests = core::cutByChar(src, '/');
+	if( dests.size() == 0 )
 	{
 		std::ostringstream oss;
-		oss << _i("Invalid syntax in a sanecell save : \"") << src << _i("\"");
+		oss << _i("Invalid save of a sanecell : \"") << src << _i("\"");
 		throw core::Exception( oss.str() );
 	}
 
-	if( ! ); // TODO continue
+	dest.clear();
+	for(size_t i = 0; i < dests.size(); ++i)
+	{
+		dest.push_back( new Dest(tthis) );
+		dest.back()->load( dests[i] );
+	}
 }
 
 SaneCell* SaneCell::load(const std::string& src)
@@ -111,9 +116,16 @@ SaneCell* SaneCell::load(const std::string& src)
 		throw core::Exception( oss.str() );
 	}
 
-	SaneCell* cell;
+	SaneCell* cell = new SaneCell;
 	loadPart(parts[0], cell->m_def, _i("defense"));
 	loadPart(parts[1], cell->m_conv, _i("level of conviction"));
+
+	loadComps<Mediator, std::list<Mediator*>>(parts[2], cell->m_meds, cell);
+	cell->m_nbMed = cell->m_meds.size();
+	loadComps<Attacker, std::list<Attacker*>>(parts[3], cell->m_atts, cell);
+	cell->m_nbAtt = cell->m_atts.size();
+
+	return cell;
 }
 
 MutedCell* SaneCell::toMuted(SaneCell* cell)
