@@ -60,13 +60,11 @@ std::string SaneCell::save() const
 
 	std::ostringstream save;
 	save << m_def << ";" << m_conv << ";";
-	save << m_nbMed << "(";
 	for(std::list<Mediator*>::const_iterator it = m_meds.begin(); it != m_meds.end(); ++it)
 		save << (*it)->save() << "/";
-	save << ");" << m_nbAtt << "(";
+	save << ";";
 	for(std::list<Attacker*>::const_iterator it = m_atts.begin(); it != m_atts.end(); ++it)
 		save << (*it)->save() << "/";
-	save << ")";
 
 	return save.str();
 }
