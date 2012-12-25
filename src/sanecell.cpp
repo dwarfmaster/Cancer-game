@@ -8,6 +8,7 @@
 #include "core/config.hpp"
 #include "core/exception.hpp"
 #include "i18n.hpp"
+#include "core/strtools.hpp"
 
 size_t SaneCell::m_nb = 0;
 SaneCell::all_t SaneCell::m_all;
@@ -75,9 +76,46 @@ size_t SaneCell::nbSane()
 	return m_nb;
 }
 
+	template<typename T>
+void loadPart(const std::string& src, T& dest, const std::string& caption)
+{
+	if( !core::fromString(src, dest) )
+	{
+		std::ostringstream oss;
+		oss << _i("Error while parsing ") << caption << _i(" of a sanecell save : \"") << src << _i("\"");
+		throw core::Exception( oss.str() );
+	}
+}
+
+	template<typename Dest, typename NbDest>
+void loadComps(const std::string& src, NbDest& nb)
+{
+	size_t pos = src.find_first_of("(");
+	if( pos == std::string::npos )
+	{
+		std::ostringstream oss;
+		oss << _i("Invalid syntax in a sanecell save : \"") << src << _i("\"");
+		throw core::Exception( oss.str() );
+	}
+
+	if( ! ); // TODO continue
+}
+
 SaneCell* SaneCell::load(const std::string& src)
 {
 	// TODO
+	// Syntaxe sauvegarde : def;conv;nb_med(amed/anothermed);nb_att(aatt/anotheratt)
+	std::vector<std::string> parts = core::cutByChar(src, ';');
+	if( parts.size() != 4 )
+	{
+		std::ostringstream oss;
+		oss << _i("Invalid number of parts in a sanecell save : \"") << src << _i("\"");
+		throw core::Exception( oss.str() );
+	}
+
+	SaneCell* cell;
+	loadPart(parts[0], cell->m_def, _i("defense"));
+	loadPart(parts[1], cell->m_conv, _i("level of conviction"));
 }
 
 MutedCell* SaneCell::toMuted(SaneCell* cell)
