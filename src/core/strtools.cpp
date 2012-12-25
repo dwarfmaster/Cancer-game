@@ -12,7 +12,10 @@ namespace core
 
 		std::string part;
 		while( std::getline(iss, part, del) )
-			parts.push_back(part);
+		{
+			if( !part.empty() )
+				parts.push_back(part);
+		}
 
 		return parts;
 	}
