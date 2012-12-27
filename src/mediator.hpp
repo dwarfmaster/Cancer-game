@@ -13,8 +13,6 @@ class Mediator;
 
 class Mediator
 {
-	friend void update(Mediator* med);
-
 	public:
 		Mediator(SaneCell* dest);
 		~Mediator();
@@ -28,8 +26,6 @@ class Mediator
 		SaneCell* m_dest;
 		unsigned int m_timeSpent;
 		unsigned int m_lastTime;
-
-		void blit();
 
 		static size_t m_nb;
 		static SDL_Surface* m_img;

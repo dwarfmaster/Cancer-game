@@ -88,9 +88,4 @@ void Mediator::selfUpdate()
 	}
 }
 
-void Mediator::blit()
-{
-	// TODO
-}
-
 
