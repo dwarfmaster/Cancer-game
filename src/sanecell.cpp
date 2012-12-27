@@ -99,15 +99,15 @@ void loadComps(const std::string& src, List& dest, SaneCell* tthis)
 	dest.clear();
 	for(size_t i = 0; i < dests.size(); ++i)
 	{
-		dest.push_back( new Dest(tthis) );
-		dest.back()->load( dests[i] );
+		Dest* nv = new Dest(tthis); // nv s'ajoute tout seul à dest
+		nv->load( dests[i] );
 	}
 }
 
 SaneCell* SaneCell::load(const std::string& src)
 {
-	// TODO
 	// Syntaxe sauvegarde : def;conv;amed/anothermed;aatt/anotheratt
+
 	std::vector<std::string> parts = core::cutByChar(src, ';');
 	if( parts.size() != 4 )
 	{
