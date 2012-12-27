@@ -1,5 +1,5 @@
 
-#include "cell.hpp"
+#include "sanecell.hpp"
 
 #include <sstream>
 #include "core/exception.hpp"
@@ -41,7 +41,7 @@ Cell* Cell::load(const std::string& src)
 	}
 	else if(type == "sane")
 	{
-		// TODO : return SaneCell::load(arg);
+		return SaneCell::load(arg);
 	}
 	else
 	{
