@@ -10,6 +10,8 @@
 #include "i18n.hpp"
 #include "core/strtools.hpp"
 
+#include "mutedcell.hpp"
+
 size_t SaneCell::m_nb = 0;
 SaneCell::all_t SaneCell::m_all;
 SDL_Surface* SaneCell::m_img = NULL;
@@ -161,7 +163,12 @@ void SaneCell::selfUpdate()
 		m_def += vdefense;
 		m_conv += vaccept;
 
-		// TODO conversion
+		if( m_def <= 0
+				|| m_conv >= 100 )
+		{
+			MutedCell::addMuted( toMuted(this) );
+			return;
+		}
 
 		timeSpent -= 1000;
 	}
