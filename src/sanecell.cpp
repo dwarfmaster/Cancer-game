@@ -141,7 +141,6 @@ void SaneCell::selfUpdate()
 	for(att_it it = m_atts.begin(); it != m_atts.end(); ++it)
 		(*it)->selfUpdate();
 
-	// TODO améliorer la précision
 	Uint32 timeSpent = SDL_GetTicks() - m_lastTime;
 	while(timeSpent >= 1000)
 	{
@@ -168,6 +167,7 @@ void SaneCell::selfUpdate()
 	}
 
 	m_lastTime = SDL_GetTicks();
+	m_lastTime -= timeSpent;
 }
 
 void update(SaneCell* cell)
