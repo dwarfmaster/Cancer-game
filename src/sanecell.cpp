@@ -179,7 +179,8 @@ void SaneCell::selfUpdate()
 
 void update(SaneCell* cell)
 {
-	// TODO
+	for(SaneCell::all_it it = cell->m_all.begin(); it != cell->m_all.end(); ++it)
+		(*it)->selfUpdate();
 }
 
 
