@@ -13,7 +13,7 @@ namespace opt = boost::program_options;
 typedef boost::filesystem::path path_t;
 
 // Validate functions for boost.program_options
-void validate(boost::any& v, const std::vector<std::string>& values, SDL_Rect* dest, int)
+void validate(boost::any& v, const std::vector<std::string>& values, SDL_Rect*, int)
 {
 	static boost::regex reg("(\\d+)[x*](\\d+)");
 
