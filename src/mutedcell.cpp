@@ -7,10 +7,15 @@ SDL_Surface* MutedCell::m_img = NULL;
 MutedCell::MutedCell()
 {
 	// TODO constructor
+	
+	m_selfPos = m_all.insert(m_all.begin(), this);
+	++m_nb;
 }
 
 MutedCell::~MutedCell()
 {
+	m_all.erase(m_selfPos);
+	--m_nb;
 	// TODO destructor
 }
 
@@ -26,7 +31,7 @@ std::string MutedCell::save() const
 
 size_t MutedCell::nbMuted()
 {
-	// TODO nombre de mutedcell
+	return m_nb;
 }
 
 MutedCell* MutedCell::load(const std::string& src)
