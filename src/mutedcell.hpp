@@ -27,8 +27,6 @@ class MutedCell : public Cell
 		size_t attackers() const; // Nombre d'attackers
 		void createAttacker(SaneCell* dest);
 
-		static void addMuted(MutedCell* nv);
-
 	private:
 		Uint32 m_lastTime;
 

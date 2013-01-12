@@ -72,11 +72,6 @@ void MutedCell::createAttacker(SaneCell* dest)
 	m_attackers.push_front(dest);
 }
 
-void MutedCell::addMuted(MutedCell* nv)
-{
-	// TODO ajouter un mutant
-}
-
 void MutedCell::selfUpdate()
 {
 	// TODO se mettre à jour
