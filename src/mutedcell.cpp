@@ -1,6 +1,13 @@
 
 #include "mutedcell.hpp"
 
+#include "core/config.hpp"
+#include "core/exception.hpp"
+#include "i18n.hpp"
+
+#include <sstream>
+#include <SDL/SDL_image.h>
+
 size_t MutedCell::m_nb = 0;
 SDL_Surface* MutedCell::m_img = NULL;
 
@@ -8,6 +15,18 @@ MutedCell::MutedCell()
 {
 	// TODO constructor
 	
+	if( m_nb == 0 )
+	{
+		std::string path = (core::cfg->gamedir() / "mutedcell.png").string();
+		m_img = IMG_Load( path.c_str() );
+		if( m_img == NULL )
+		{
+			std::ostringstream oss;
+			oss << _i("Error while loading the picture \"") << path << _i("\" : ") << SDL_GetError();
+			throw core::Exception( oss.str() );
+		}
+	}
+
 	m_selfPos = m_all.insert(m_all.begin(), this);
 	++m_nb;
 }
@@ -16,6 +35,10 @@ MutedCell::~MutedCell()
 {
 	m_all.erase(m_selfPos);
 	--m_nb;
+
+	if( m_nb == 0 )
+		SDL_FreeSurface(m_img);
+
 	// TODO destructor
 }
 
