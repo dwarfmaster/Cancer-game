@@ -16,7 +16,7 @@ MutedCell::~MutedCell()
 
 SDL_Surface* MutedCell::getImg() const
 {
-	// TODO retourner image
+	return m_img;
 }
 
 std::string MutedCell::save() const
