@@ -10,6 +10,27 @@
 namespace opt = boost::program_options;
 typedef boost::filesystem::path path_t;
 
+// Validate functions for boost.program_options
+void validate(boost::any& v, const std::vector<std::string>& values, SDL_Rect* dest, int)
+{
+	static boost::regex reg("(\\d+)[x*](\\d+)");
+
+	using namespace boost::program_options;
+	validators::check_first_occurrence(v);
+	const std::string& s = validators::get_single_string(values);
+
+	boost::smatch match;
+	if( boost::regex_match(s, match, reg) )
+	{
+		SDL_Rect rect;
+		rect.x = boost::lexical_cast<Sint16>(match[1]);
+		rect.y = boost::lexical_cast<Sint16>(match[2]);
+		v = boost::any(rect);
+	}
+	else
+		throw validation_error(validation_error::invalid_option_value);
+}
+
 namespace core
 {
 	Config* cfg;
