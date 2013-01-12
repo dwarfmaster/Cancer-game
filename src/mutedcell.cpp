@@ -13,8 +13,6 @@ SDL_Surface* MutedCell::m_img = NULL;
 
 MutedCell::MutedCell()
 {
-	// TODO constructor
-	
 	if( m_nb == 0 )
 	{
 		std::string path = (core::cfg->gamedir() / "mutedcell.png").string();
@@ -38,8 +36,6 @@ MutedCell::~MutedCell()
 
 	if( m_nb == 0 )
 		SDL_FreeSurface(m_img);
-
-	// TODO destructor
 }
 
 SDL_Surface* MutedCell::getImg() const
@@ -49,7 +45,7 @@ SDL_Surface* MutedCell::getImg() const
 
 std::string MutedCell::save() const
 {
-	// TODO suavegarder
+	// TODO sauvegarder
 }
 
 size_t MutedCell::nbMuted()
