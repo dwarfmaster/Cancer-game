@@ -25,8 +25,9 @@ void validate(boost::any& v, const std::vector<std::string>& values, SDL_Rect* d
 	if( boost::regex_match(s, match, reg) )
 	{
 		SDL_Rect rect;
-		rect.x = boost::lexical_cast<Sint16>(match[1]);
-		rect.y = boost::lexical_cast<Sint16>(match[2]);
+		rect.x = rect.y = 0;
+		rect.w = boost::lexical_cast<Uint16>(match[1]);
+		rect.h = boost::lexical_cast<Uint16>(match[2]);
 		v = boost::any(rect);
 	}
 	else
