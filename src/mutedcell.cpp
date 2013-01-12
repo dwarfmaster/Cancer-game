@@ -64,12 +64,12 @@ MutedCell* MutedCell::load(const std::string& src)
 
 size_t MutedCell::attackers() const
 {
-	// TODO le nombre d'attaquants en préparation
+	return m_attackers.size();
 }
 
 void MutedCell::createAttacker(SaneCell* dest)
 {
-	// TODO créer un attaquant
+	m_attackers.push_front(dest);
 }
 
 void MutedCell::addMuted(MutedCell* nv)
