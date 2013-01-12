@@ -47,7 +47,6 @@ namespace core
 			void setOpts();
 			void processOpts(const boost::program_options::variables_map& vm);
 			sdl::AABB maxSize() const;
-			sdl::AABB parseSize(const std::string& size) const;
 
 			Config(const Config& cp);
 			Config& operator=(const Config& cp);

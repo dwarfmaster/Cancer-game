@@ -6,6 +6,8 @@
 #include <string>
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
+#include <boost/regex.hpp>
+#include <boost/any.hpp>
 
 namespace opt = boost::program_options;
 typedef boost::filesystem::path path_t;
@@ -127,7 +129,7 @@ namespace core
 		// Options
 		opt::options_description graphics( _i("Graphics") );
 		graphics.add_options()
-			("size,s", opt::value<std::string>()->composing(), _i("Set the size of the window, like '800x600'."))
+			("size,s", opt::value<SDL_Rect>()->composing(), _i("Set the size of the window, like '800x600'."))
 			("fullscreen,f", _i("Launch the program in fullscreen mode."))
 			("gtheme,g", opt::value<path_t>(), _i("Set the path to the graphics theme."))
 			;
@@ -163,66 +165,6 @@ namespace core
 			return sdl::makeRect(0, 0, 1600, 900);
 		else
 			return *modes[0];
-	}
-
-	sdl::AABB Config::parseSize(const std::string& size) const
-	{
-		std::string tmp(""); // sert à stocker la string d'un nombre
-		bool cont = true, first = true;
-		SDL_Rect rect;
-		rect.x = rect.y = 0;
-		rect.w = 800;
-		rect.h = 600;
-		for(size_t k = 0; cont; ++k)
-		{
-			if(k >= size.size())
-			{
-				unsigned int nb = 0;
-				nb = sdl::atoi(tmp);
-				if(first)
-					rect.w = nb;
-				else
-					rect.h = nb;
-				cont = false;
-			}
-			else if(size[k] >= '0' 
-					&& size[k] <= '9')
-				tmp += size[k];
-			else if(size[k] == '*' 
-					|| size[k] == 'x')
-			{
-				unsigned int nb = 0;
-				nb = sdl::atoi(tmp);
-				if(first)
-				{
-					rect.w = nb;
-					tmp = "";
-					first = false;
-				}
-				else
-				{
-					rect.h = nb;
-					cont = false;
-				}
-			}
-			else // Peu probable
-			{
-				unsigned int nb = 0;
-				std::istringstream(tmp) >> nb;
-				if(first)
-					rect.w = nb;
-				else
-					rect.h = nb;
-				cont=false;
-			}
-		}
-
-		if( rect.w < 800 )
-			rect.w = 800;
-		if( rect.h < 600 )
-			rect.h = 600;
-
-		return rect;
 	}
 
 	path_t Config::getPath(path_t end) const
@@ -271,7 +213,7 @@ namespace core
 			m_fullscreen = false;
 
 		if( vm.count("size") )
-			m_size = parseSize( vm["size"].as<std::string>() );
+			m_size = vm["size"].as<SDL_Rect>();
 		else if( fullscreen() )
 			m_size = maxSize();
 		else
