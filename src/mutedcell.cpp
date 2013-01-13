@@ -102,7 +102,8 @@ void MutedCell::selfUpdate()
 
 void update(MutedCell* cell)
 {
-	// TODO tout mettre à jour
+	for(MutedCell::all_it it = cell->m_all.begin(); it != cell->m_all.end(); ++it)
+		(*it)->selfUpdate();
 }
 
 
