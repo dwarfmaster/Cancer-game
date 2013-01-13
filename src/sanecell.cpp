@@ -166,7 +166,7 @@ void SaneCell::selfUpdate()
 		if( m_def <= 0
 				|| m_conv >= 100 )
 		{
-			MutedCell::addMuted( toMuted(this) );
+			toMuted(this);
 			return;
 		}
 
