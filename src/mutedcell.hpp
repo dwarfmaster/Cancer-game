@@ -26,7 +26,7 @@ class MutedCell : public Cell
 		static MutedCell* load(const std::string& src);
 
 		size_t attackers() const; // Nombre d'attackers
-		void createAttacker(SaneCell* dest);
+		bool createAttacker(SaneCell* dest);
 
 		size_t mediators() const; // Nombre de mediators
 		bool createMediator(SaneCell* dest); // Retourne true si assez de ressources pour créer mediator

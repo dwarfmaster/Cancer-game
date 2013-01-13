@@ -63,9 +63,11 @@ size_t MutedCell::attackers() const
 	return m_attackers.size();
 }
 
-void MutedCell::createAttacker(SaneCell* dest)
+bool MutedCell::createAttacker(SaneCell* dest)
 {
+	// TODO tester ressources
 	m_attackers.push_front(dest);
+	return true;
 }
 
 void MutedCell::selfUpdate()
