@@ -70,6 +70,31 @@ bool MutedCell::createAttacker(SaneCell* dest)
 	return true;
 }
 
+size_t MutedCell::mediators() const
+{
+	return m_mediators.size();
+}
+
+bool MutedCell::createMediator(SaneCell* dest)
+{
+	// TODO tester ressources
+	AMediator med;
+	med.dest = AMediator::CELL;
+	med.tdest = dest;
+	m_mediators.push_front(med);
+	return true;
+}
+
+bool MutedCell::createMediator(Vessel* dest)
+{
+	// TODO tester ressources
+	AMediator med;
+	med.dest = AMediator::VESSEL;
+	med.tdest = dest;
+	m_mediators.push_front(med);
+	return true;
+}
+
 void MutedCell::selfUpdate()
 {
 	// TODO se mettre à jour
