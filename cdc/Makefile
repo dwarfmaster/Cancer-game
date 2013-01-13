@@ -3,7 +3,7 @@ DEST=pdf
 ifeq ($(DEST),dvi)
 	VIEWER=xdvi
 else
-	VIEWER=evince
+	VIEWER=zathura
 endif
 
 all : $(NAME).$(DEST)
