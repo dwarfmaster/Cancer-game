@@ -6,6 +6,7 @@
 #include <SDL/SDL.h>
 #include "cell.hpp"
 #include "sanecell.hpp"
+#include "vessel.hpp"
 
 class MutedCell;
 void update(MutedCell* cell);
@@ -27,7 +28,9 @@ class MutedCell : public Cell
 		size_t attackers() const; // Nombre d'attackers
 		void createAttacker(SaneCell* dest);
 
-		// TODO mediators
+		size_t mediators() const; // Nombre de mediators
+		bool createMediator(SaneCell* dest); // Retourne true si assez de ressources pour créer mediator
+		bool createMediator(Vessel* dest);
 
 	private:
 		Uint32 m_lastTime;
